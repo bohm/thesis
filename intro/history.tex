@@ -1,0 +1,239 @@
+\section{History}
+
+%\todo{History from journal papers is below.}
+
+\subsection{History of Bin Stretching}
+
+\binstretch (or \textsc{Online scheduling on identical machines with
+known makespan}, if you prefer the scheduling terminology) is a
+natural extension of the \textsc{Online scheduling} problem, but it
+was not investigated until the 1990s.
+
+The first result on \binstretch was a lower bound of $4/3$ for two
+bins and a matching algorithm, which was discovered by Kellerer,
+Kotov, Speranza and Tuza in 1997~\cite{KeKoST97}, in a paper focused
+primarily on semi-online partitioning problems.
+
+The name \binstretch has been proposed by Azar and Regev in
+1998~\cite{azar98,azar01}, in the first paper dedicated to this
+problem. They extended the lower bound of $4/3$ to any number of bins
+and gave an online algorithm with a stretching factor $1.625$.
+
+\paragraph{The first Bin Stretching algorithm.} Let us dive a little
+bit more into the algorithms proposed by Azar and Regev, so that we
+can see how the ideas evolved in subsequent work. Imagine that we are designing
+an algorithm with stretching factor $1+\alpha$, with $\alpha$ being the extra space.
+We can notice that whether a bin is loaded at most $\alpha$ is an important threshold;
+one reason might be because a bin of load at most $\alpha$ can still accept an item of size $1$.
+
+Using that threshold, Azar and Regev design two algorithms:
+
+\begin{algorithm}
+\caption{}
+% \label{alg:bounded}
+\begin{algorithmic}[1]
+\For{the next incoming item $i$}
+\State \algorithmicif\ there is a non-empty bin which stays below $\alpha$ with $i$, pack it there.
+\State \algorithmicif\ there is a bin which is already above $\alpha$ and $i$ fits, pack it there.
+\State \algorithmicif\ there is an empty bin where $i$ fits below $\alpha$, pack it there.
+\State Finally, try packing it into the least-loaded machine where $i$ fits.
+\EndFor 
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{}
+% \label{alg:bounded}
+\begin{algorithmic}[1]
+\For{the next incoming item $i$}
+\State \algorithmicif\ there is \emph{any} bin which stays below $\alpha$ with $i$, pack it there.
+\State \algorithmicif\ there is bin which is already above $\alpha$ and $i$ fits, pack it there.
+\State Finally, try packing it into the least-loaded machine where $i$ fits.
+\EndFor 
+\end{algorithmic}
+\end{algorithm}
+
+Both of these algorithms actually achieve a stretching factor of $5/3$
+(in other words, they never fail when $\alpha \ge 2/3$). A smart
+combination of the two leads to an algorithm with stretching factor
+$1.625$.
+
+\todo{Fix section references.}
+
+The next algorithmic progress came as a consequence of the work of
+Cheng, Kellerer and Kotov in 2003~\cite{cheng2003}. They design an
+online algorithm with a competitive ratio of 1.6 for a more general
+problem that also encompasses \binstretch (see Section~X for the
+definition of the problem). The same algorithm therefore achieves a
+stretching factor of 1.6 for \binstretch.
+
+\paragraph{Classification and bunching techniques.} The next decrease
+of the upper bound on the stretching factor appeared ten years later
+in a result of Kellerer and Kotov \cite{kellerer2013}. Their algorithm
+achieves a stretching factor of $11/7 \approx 1.571$ using two ideas
+that appear in subsequent work as well as our thesis; we focus on them
+now.
+
+% \todo{Make a nicer transition between the paragraphs.}
+
+The first idea is to \emph{classify} items into groups based on their
+size, which in \cite{kellerer2013} are selected as follows:
+
+\begin{center}
+  \begin{tabular}{ l | c | c | r }
+    Class: & Small items & Medium items   & Large items \\ \hline
+    Sizes: & $(0,4/7]$   & $(4/7, 11/14]$ & $(11/14,1]$ \\ 
+  \end{tabular}
+\end{center}
+
+Just looking at the sizes alone, we can infer some properties that may
+be useful: for instance, the upper bound $4/7$ for small items is
+precisely the value of $\alpha$ for an algorithm with stretching
+factor $11/7$. As for the medium items, we can see that a pair of them
+always fits together -- in fact, the upper bound for medium items is
+the largest value for which it is true. Plus, when we pack two of them
+together, we get a load of at least $8/7$, which is allowed for the
+algorithm while these items need to be in separate bins in the optimal
+packing \footnote{This is true for any size above $1/2$, so there must be
+another reason for selecting the lower bound to be $4/7$.}.
+
+Similarly to item classes, Kellerer and Kotov also classify bins based
+on their current load, including one more class that is defined in a
+different way:
+
+\begin{center}
+  \begin{tabular}{ r | c | c | c | c | l }
+    Class: & Tiny bins & Small bins & Medium bins & Large bins & Huge bins \\ \hline
+    Load:  & $(0,2/7]$ & $(2/7, 4/7]$ & $(4/7, 11/14]$ & $(11/14,1]$ & $(1,11/7]$ \\ 
+  \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{ r | l }
+    Class: & Large-item bins \\ \hline
+    Condition: & Contains a large item. \\ 
+  \end{tabular}
+\end{center}
+
+
+The algorithm works in two phases. The algorithm for the \emph{first phase} is the following
+one:
+
+\begin{algorithm}
+\caption{First phase of Kellerer and Kotov}
+% \label{alg:bounded}
+\begin{algorithmic}[1]
+\For{the next incoming item $i$}
+\If{$i$ is small}
+\State \algorithmicif\ $i$ fits into a large-item bin, pack it there.
+\State \algorithmicif\ $i$ fits into a small bin and the bin remains small, pack it there.
+\State Otherwise, put $i$ into an empty bin.
+\EndIf
+\If{$i$ is medium}
+\State If $i$ fits into a medium bin, pack it there.
+\State Otherwise, pack $i$ into an empty bin.
+\EndIf
+\If{$i$ is large}
+\State Pack $i$ into a small bin with the largest load.
+\State \algorithmicif\ none exist, pack $i$ into an empty bin.
+\EndIf
+\If{the ratio of medium $\&$ small bins to empty bins is more than $3:1$}
+\State End the first phase.
+\EndIf
+\EndFor 
+\end{algorithmic}
+\end{algorithm}
+
+We have so far employed just the bin classification; only in the
+\emph{second phase} comes the bunching technique into play. Since the
+first phase ends when the ratio of small and medium bins to non-empty
+bins is higher than $3:1$, the algorithm creates groups (bunches) of 4
+bins and packs incoming items one group at a time; the next group is
+used only when it is impossible to pack into the previous one.
+
+Roughly said, this 3:1 bunching is used to show the following: either
+a fourth big item arrives for this bunch (and fits into the one empty
+bin) or there were more than $4$ units of items put in all four bins
+together and the algorithm must finish correctly.
+
+\todo{Explain the next algorithmic improvement of Gabay, Brauner and
+Kotov.}
+
+\paragraph{Computer lower bounds.} Interestingly, the setting with a
+small fixed number of bins allows better lower bounds on the
+stretching factor. Gabay, Brauner and Kotov~\cite{gabay2013lbv2} give
+a new lower bound of $19/14$ for the setting where there are exactly
+three bins, i.e. $m=3$. \footnote{Subsequently to our work, the
+preprint \cite{gabay2013lbv2} was updated to include the lower bound
+of $19/14$ for $m=4$ as well~\cite{gabay2013lbv3}.}
+
+They create the lower bound instance using a computer search based on
+the ideas which we have described in Section~X and which we will see
+in full detail in Chapter~4, where we also show our extensions to
+their approach.
+
+The lower bounds for $m=3$ cannot be easily translated into a lower
+bound for a larger $m$; for example, if we modify the instance by
+adding new bins and a corresponding number of items of size 1 (that
+must use exactly the new bins in the optimum), the semi-online
+algorithm still could use the additional capacity of $\alpha$ in the
+new bins to its advantage.
+
+\section{Related topics}
+
+\subsection{Bin packing}
+
+The NP-hard offline problem \binpacking was originally proposed by
+Ullman~\cite{ullman71} and Johnson~\cite{johnson73} in the
+1970s. Since then it has seen major interest and progress, see the
+survey of Coffman et al.~\cite{coffman13} for many results on
+classical \textsc{Bin Packing} and its variants. 
+
+\subsection{Online scheduling}
+
+\todo{Fill this section.}
+
+\subsection{Semi-online scheduling}
+
+As noted, \binstretch can be formulated as online scheduling on
+$m$ identical machines with known optimal makespan. Such algorithms
+were studied and are important in designing constant-competitive
+algorithms without the additional knowledge, e.g., for scheduling in
+the more general model of uniformly related
+machines~\cite{AsAFPW97,BeChKa00,EbJaSg09}.
+
+For scheduling, also other types of semi-online algorithms are
+studied. Historically first is the study of ordered sequences with
+non-decreasing processing times~\cite{Graham69}. Most closely related
+is the variant with known sum of all processing times studied
+in~\cite{KeKoST97}. If we know the optimal makespan, we can always pad
+the instance by small items at the end so that the optimal makespan
+remains the same and the sum of processing time equals $m$ times the
+optimal makespan. Thus one could expect that these two quantities are
+interchangeable. However, when the sum of all processing times is
+known, the currently best results are a lower bound of $1.585$ and an
+algorithm with ratio $1.6$, both
+from~\cite{DBLP:journals/tcs/AlbersH12}. This shows, somewhat
+surprisingly, that knowing the actual optimum gives a significantly
+bigger advantage to the semi-online algorithm over knowing just the
+sum of the processing times. See Pruhs et al.~\cite{PST04} for a
+survey of other results on (semi-)online scheduling.
+
+\todo{Add more semi-online results, stochastic optimization and advice optimization.}
+
+% \begin{algorithm}
+% \caption{Algorithm $\chase_{d,r}$ for $r$-bounded instances with $v_0 = 0$}
+% \label{alg:bounded}
+% \begin{algorithmic}[1]
+%   \If {$\hp_k \cap F_i = \emptyset$ for all $k \in [d]$}
+%   \State Let $B(s,r)$ be the minimum-volume ball containing $F_i$
+%   \State Update $B_i \leftarrow B(s,r)$ and $v_i \leftarrow s$
+%   \State Recenter so that $s = 0$
+%   \State Let $v_k(i)$ be location of $\chase_{d-1}(0,r,\hp_k)$ for each $k \in [d]$
+%   \Else
+%   \State Let $k$ be smallest index such that $\hp_k \cap F_i \neq \emptyset$
+%   \State Update $B_i \leftarrow B_{i-1}$ and $v_i \leftarrow v_k(i)$
+%   \EndIf  
+% \end{algorithmic}
+% \end{algorithm}
+

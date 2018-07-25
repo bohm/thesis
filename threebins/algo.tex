@@ -1,0 +1,37 @@
+\section{The algorithm}\label{ssec:FP}
+
+\vspace{1.5ex}
+
+In a way, any algorithm for online bin stretching for three bins must
+be designed so as to avoid several \textit{bad situations:} the two most
+prominent ones being either two items of size $R/2$ or three items of
+size $R/3$, where $R$ is the volume of the remaining items.
+
+Our algorithm -- especially Steps \step{large} and \step{qstep} -- are
+designed to primarily evade such bad situations, while making sure
+that no good situation is missed. This evasive nature gives it its
+name.
+
+\def\itemskip{\hskip 3em}
+\algobox{
+\textbf{Algorithm} \tbalg:\\[-2.5ex]
+% \begin{enumerate}[label=(\arabic*),leftmargin=0.8cm,labelwidth=1.5cm,align=right] % ,topsep=0pt,partopsep=0pt,itemsep=0pt,parsep=0pt]
+\begin{compactenum}
+\item \label{fp:initial} Run \GSFF{$A|_4, B|_4$}.
+\item \label{fp:rename} Rename the bins so that $s(A)\ge s(B)$.
+\item \label{fp:jcheck} If the next item $j$ satisfies $s(j)>6$:
+\item \label{fp:large}  \indentskip Set $p \defeq 6 + s(j)$; apply \GSFF{$A|_p, B|_{4}$}.
+\item \label{fp:wcheck} \indentskip If the next item $w$ fits into $A|_{22}$:
+\item \label{fp:wfits}  \indentskip \indentskip \GSFF{$A|_{22}, B|_{22}, C|_{22}$}.
+\item \label{fp:otherwise} \indentskip Else: 
+\item \label{fp:wwontfit}  \indentskip \indentskip \GSFF{$A|_p, B|_{22}, C|_{22}$}.
+%Y(Recall that $p \defeq 6 + s(j)$.)
+
+\item \label{fp:jelse} Else ($j$ satisfies $s(j) < 4$):
+\item \label{fp:qstep} \indentskiptwodigit \GSFF{$A|_4,B|_q,C|_4$} where
+$q \defeq 9+\frac{1}{2}(s(A)+s(C))$. %\item[] \indentskip
+Whenever $s(A)$ or $s(C)$ change in this step, update $q$ and continue Step~\step{qstep}.
+\item \label{fp:b1}\indentskiptwodigit\GSFF{$A|_4, B|_{22}, C|_{22}$}.
+\item \label{fp:b2}\indentskiptwodigit\GSFF{$A|_{22}, B|_{22}, C|_{22}$}.
+\end{compactenum}
+}

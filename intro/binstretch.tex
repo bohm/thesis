@@ -1,0 +1,198 @@
+\section{The bin stretching problem}\label{sec:binstretchdef}
+
+Let us return to our semi-online container repacking problem from
+Section~\ref{sec:example}, which we now define formally:
+
+\begin{prb}[\binstretch]~
+
+\noindent\textbf{Input:}
+
+\begin{itemize}
+\item An integer $m$ --  the number of allowed bins. All bins are initially empty.
+\item A sequence of items $I=i_1, i_2, \ldots$ given online one by one. Each item has
+a {\it size} $s(i) \in [0,1]$ and must be packed immediately and irrevocably into one of the $m$ bins; the next item
+is revealed only after the previous one is packed.
+\end{itemize}
+
+\noindent\textbf{Parameter:} The {\it stretching factor} $R\geq 1$.
+
+\noindent\textbf{Output:} Partitioning (packing) of $I$ into bins $B_1,\ldots,B_m$
+so that $\sum_{i\in B_j}s(i)\leq R$ for all $j=1,\ldots,m$.
+
+\noindent\textbf{Guarantee:} there exists a packing of all items in $I$ into $m$
+bins of capacity $1$. 
+
+\noindent\textbf{Goal:} Design an online algorithm with the stretching factor $R$
+as small as possible which packs all input sequences satisfying the
+guarantee.
+\end{prb}
+\medskip
+
+The aforementioned stretching factor is just another name for the
+competitive ratio of our algorithm in the standard terminology of
+online algorithms (see Definition~\ref{dfn:compratio}). Still, when designing
+algorithms for \binstretch it makes more sense to think about it as a
+parameter, as a maximum load that we want to ensure in all bins.
+
+As we can see from the nomenclature above -- bins, load, packing -- we
+will think of the problem as if it were related to \binpacking
+(defined in Section~X). This is also how the literature discusses the
+problem.  It is however important to keep in mind that the problem is
+not a variant of \binpacking -- the crucial difference is that we are
+not allowed to open as many bins as we want, which is allowed in
+\binpacking.
+
+In fact, \binstretch is a variant of \scheduling (also defined in
+Section~X). In the scheduling terminology, we would call it
+\textsc{Online Scheduling with Known Optimal Makespan}, and we would
+describe it this way:
+
+ \noindent
+\textbf{Input:}
+
+\begin{itemize}
+\item An integer $m$ -- a number of identical (equally fast) \emph{machines};
+\item A sequence of \emph{jobs} $I=i_1, i_2, \ldots$ given online one by one. Each job has
+a \textit{processing time} $s(i) \in [0,1]$ and must be assigned immediately and irrevocably
+to one of the machines. The jobs cannot be paused or reassigned later.
+\end{itemize}
+
+\noindent
+\textbf{Output:} A \emph{schedule} assigning all input items to $m$ machines, with the
+load of the busiest machine (called \emph{makespan}) being some value
+$R$.
+
+\noindent
+\textbf{Guarantee:} There exists a schedule which assigns all jobs so that
+the makespan is at most $1$.
+
+\noindent
+\textbf{Goal:} Design an online algorithm minimizing the makespan $R$.
+\smallskip
+
+
+\paragraph{A pinch of notation.} For a bin $B$, we define the
+\textit{load of the bin} $s(B) = \sum_{i \in B} s(i)$. Unlike
+$s(i)$, $s(B)$ can change during the course of the algorithm, as we
+pack more and more items into the bin. To easily differentiate between
+items, bins and lists of bins, we use lowercase letters for items
+($i$, $b$, $x$), uppercase letters for bins and other sets of items
+($A$, $B$, $X$), and calligraphic letters for lists of bins ($\calA$,
+$\calC$, $\calL$).
+
+\paragraph{Input scaling.} We have defined \binstretch as a problem
+where all input items are of size between $0$ and $1$; in other words,
+all sizes are set up so that the guaranteed optimum packing is $1$.
+This is natural for a generic definition, but writing and especially
+adding fractions such as $\frac{1}{2}$ and $\frac{7}{16}$ becomes
+tiresome after a while.
+
+Therefore, in all three sections of the thesis, we rescale the
+instance so that the capacity of the bins in the optimum packing
+becomes some positive integer $S \ge 1$ and the capacity of a bin for
+the algorithm will also be some positive integer $R \ge S$. The
+resulting stretching factor will therefore be $R/S$.
+
+It is worthwhile to keep in mind that our rescaling still allows
+fractional values; while bins have integral capacity both for the
+algorithm and for the optimal guarantee, the input item size $s(i)$
+can be any value in the interval $(0,S]$.
+
+\section{Bin Stretching as a game}\label{sec:binstretchgame}
+
+A basic and essential feature of any online problem -- with
+\binstretch being no exception -- is that any online algorithm is
+actually an algorithm for strategy in a two-player game.
+
+What do we mean by that? If we recall the definition of the
+competitive ratio, we see that we measure our algorithm on the actual
+worst case that can happen, and this worst case is actually
+\emph{adapting} to what the algorithm does for the preceeding items.
+
+Therefore, we can see the creator of the worst case as a person who
+plays a game with our algorithm, waiting for its move (in our case,
+where it packs the previous item) and then sending the next item so
+that the algorithm's decision is the worst possible.
+
+In the online algorithm literature, we call this player
+\adversary. The other player, naturally, is called \algo.
+
+\begin{dfn} 
+A \emph{combinatorial two-player game} is a game with two
+players with perfect information (the game state is fully revealed to
+both players). Each player has a set of moves (which does not need to
+be symmetric) and they alternate in selecting one move each.
+
+A set of game states are denoted as winning the game for the first
+player and another set as winning for the second player. The two sets
+are known to both players in advance.
+
+A player \emph{wins} the game if it reaches its own winning state in a
+finite set of moves. A player has a \emph{winning strategy} if
+it can reach a winning state regardless of the moves of the other
+player.
+\end{dfn}
+
+\todo{Find reference for the earliest mention of this.}
+
+\begin{thm}
+Fix a target competitive ratio $c$. An online problem along
+with $c$ corresponds to a combinatorial two-player game between
+players \algo and \adversary. The player \algo has a winning
+strategy if and only if there exists a $c$-competitive algorithm for
+the online problem. The player \adversary has a winning strategy
+if and only if no $c$-competitive algorithm exists.
+\end{thm}
+
+One can argue (in jest) that the main consequence of this theorem is
+that the literature on online algorithms loves to use terminology from
+combinatorial game theory; it is the author's personal experience that
+imagining an adversary and constantly thinking about its moves is
+useful when designing a new online algorithm.
+
+However, the more important consequence for us is that if we can
+evaluate the entire decision tree for a game that corresponds to an
+online problem with a fixed ratio $c$, we can learn whether a
+$c$-competitive algorithm exists or not. There is a classical
+algorithm for evaluating a game tree called \emph{the minimax
+algorithm} which is effective as long as the tree can be somehow
+bounded.
+
+So far, everything we stated about game theory applies in full
+generality, but we will focus on \binstretch exclusively; therefore,
+we restate the game that corresponds to \binstretch:
+
+\begin{dfn}
+Fix a number of bins $B$ and a stretching factor $S$. The \emph{bin stretching game}
+is defined as follows:
+
+\begin{enumerate}
+\item It is a two-player game between \algo and \adversary, and the player \adversary starts.
+\item The player \adversary moves by sending any item $i \in (0,1]$ with the restriction
+that $i$ along with all previous items can be packed into $B$ bins of capacity $1$.
+\item The player \algo moves by selecting a bin where the item is packed.
+\end{enumerate}
+
+The winning states are defined thus:
+\begin{itemize}
+\item A state is winning for \algo if all bins are packed strictly below $S$ and \adversary
+has cannot make any further moves.
+\item A state is winning for \adversary if one bin has total load at least $S$.
+\end{itemize}
+\end{dfn}
+
+As you can see, we have formulated the bin stretching game with the
+player \algo trying to pack strictly below $S$. This way, a winning
+strategy for the player \adversary immediately implies that no online
+algorithm for \binstretch with stretching factor less than $S$ exists.
+
+The two main obstacles to implementing a search of the described two player
+game are the following:
+
+\begin{enumerate}
+\item \adversary can send an item of arbitrary small size;
+\item \adversary needs to make sure that at any time of the game, an offline
+  optimum can pack the items arrived so far into three bins of capacity $1$.
+\end{enumerate}
+
+We discuss our solutions as well as the implementation details in Chapter~\ref{chap:lb}.

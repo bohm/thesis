@@ -1,0 +1,49 @@
+\section{Second phase with huge-item bins}
+In this case, we assume that a huge-item bin exists when the first
+phase ends. By Lemma~\ref{l:1}(\ref{i1:hr}), we know that no regular
+and tiny bins exist. There are no empty bins either, as we end the
+first phase with $3e \le r = 0$. With only a few types of bins
+remaining, the algorithm for this phase is very simple:
+
+\algobox{
+{\bf Algorithm for the second phase with huge-item bins:}
+
+Let the list of bins $\calL$ contain first all the huge-item bins,
+followed by the special bins $L$, $M$, in this order, if they
+exist.
+
+\begin{compactenum}[(1)]
+\item For any incoming item $i$:
+\item \indentskip Pack $i$ using First Fit on the list $\calL$, with
+  all bins of capacity 18. 
+\end{compactenum}
+}
+
+Suppose that we have an instance that has a packing into bins of
+capacity 12 and on which our algorithm fails. 
+%
+We may assume that the algorithm fails on the last item $f$.  By
+considering the total volume, there always exists a bin with size at
+most $12$. Thus $s(f)>6$ and $v(f)\ge2$.
+
+If during the second phase an item $n$ with $s(n)\leq6$ is packed into
+the last bin in $\calL$, we know that all other bins have size more
+than $12$, thus all the remaining items fit into the last bin.
+Otherwise we consider $v(\calL)$. Any complete bin $B$ has
+$v(B)\geq0$ by Lemma~\ref{l:1}(\ref{i1:complete}) and each huge-item
+bin gets nonnegative value, too. Also $v(L)\geq-1$ if $L$
+exists. This shows that $M$ must exist, since otherwise
+$v(\calL)+v(f)\geq-1+2\geq 1$, a contradiction.
+
+Now we know that $M$ exists, furthermore it is the last bin and thus
+we also know that no regular item is packed in $M$. Therefore $M$
+contains only medium items from the first phase and possibly large
+and/or huge items from the second phase. We claim that
+$v(M)+v(f)\geq2$ using the fact that $f$ does not fit into $M$ and $M$
+contains no item $a$ with $v(a)=0$: If $f$ is huge we have $s(M)>6$,
+thus $M$ must contain either two medium items or at least one medium
+item together with one large or huge item and $v(M)\geq -1$.  If $f$
+is large, we have $s(M)>9$; thus $M$ contains either three medium
+items or one medium and one large or huge item and $v(M)\geq 0$. Thus
+we always have $v(\calL)\geq -1+v(M)+v(f)\geq 1$, a contradiction.
+

@@ -1,0 +1,125 @@
+
+\section{First-phase algorithm}
+
+During the algorithm, let $e$ be the current number of empty bins and
+$r$ the current number of regular bins. 
+
+\algobox{{\bf First-phase algorithm:}
+\begin{compactenum}[(1)]
+\item While $r < 3e$, consider the next item $i$ and pack it as
+  follows, using bins of capacity 18; 
+if more bins satisfy a condition, choose among them arbitrarily:
+\item \indentskip If $i$ is regular:
+\item \indentskip \indentskip If there is a huge-item bin, pack $i$ there.
+\item \indentskip \indentskip Else, if there is a regular bin $A$ 
+with $s(A)+s(i)\leq 6$, pack it there.
+\item \indentskip \indentskip Else, if there is a tiny bin $A$
+with $s(A)+s(i)\leq 6$, pack it there.
+\item \indentskip If $i$ is medium and there is a medium-item bin where $i$ fits, pack it there.
+\item \indentskip If $i$ is large and there is a large-item bin where $i$ fits, pack it there.
+\item \indentskip If $i$ is huge:
+\item \indentskip \indentskip If there is a regular bin, pack $i$ there.
+\item \indentskip \indentskiptwodigit Else, if there is a tiny bin, pack $i$ there.
+\item \indentskiptwodigit If $i$ is still not packed, pack it in an
+  empty bin.
+\end{compactenum}
+}
+
+First we observe that the algorithm above is properly defined.  The
+stopping condition guarantees that the algorithm stops when no empty
+bin is available. Thus an empty bin is always available and each item
+$i$ is packed.  We now state the basic properties of the algorithm.
+
+\begin{lem}
+\label{l:1} 
+At any time during the first phase the following holds:
+\begin{compactenum}[\rm(i)]
+\item 
+\label{i1:classify} 
+All bins used by the algorithm are of the types from Definition~\ref{d:types}.
+\item 
+\label{i1:complete} 
+All complete bins $B$ have $v(B)\geq0$.
+\item 
+\label{i1:hr} 
+If there is a huge-item bin, then there is no regular and no tiny bin.
+\item 
+\label{i1:lm} 
+There is at most one large-item bin and at most one medium-item bin.
+\item 
+\label{i1:tiny} 
+There is at most one tiny bin $T$. If $T$ exists, then for any regular
+bin, $s(T)+s(R)>6$. There is at most one regular bin $R$ with
+$s(R)\leq 4$.
+\item 
+\label{i1:er} 
+At the end of the first phase $3e\leq r \leq 3e+3$.
+\end{compactenum}
+\end{lem}
+\begin{proof}
+(\ref{i1:classify})-(\ref{i1:tiny}): We verify that these invariants
+  are preserved when an item of each type arrives and also that the
+  resulting bin is of the required type; the second part is always
+  trivial when packing in an empty bin.
+
+If a huge item arrives and a regular bin exists, it always fits there,
+thus no huge-item bin is created and (\ref{i1:hr}) cannot become
+violated. Furthermore, the resulting size is more than $12$, thus the
+resulting bin is complete. Otherwise, if a tiny bin exists, the huge
+item fits there and the resulting bin is either complete or huge. In
+either case, if the bin is complete, its value is 0 as it contains a
+huge item.
+
+If a large item arrives, it always fits in a large-item bin if it
+exists and makes it complete; its value is at least 1, as it contains
+two large items. Thus a second large-item bin is never
+created and (\ref{i1:lm}) is not violated.
+
+If a medium item arrives, it always fits in a medium-item bin if it
+exists; the bin is then complete if it has size at least 13 and then
+its value is at least 1, as it contains 4 or 5 medium items; otherwise
+the bin type is unchanged. Again, a second medium-item bin is never
+created and (\ref{i1:lm}) is not violated.
+
+If a regular item arrives and a huge-item bin exists, it always fits
+there, thus no regular bin is created and (\ref{i1:hr}) cannot become
+violated. Furthermore, if the resulting size is at least $12$, the bin
+becomes complete and its value is 0 as it contains a huge item; otherwise
+the bin type is unchanged.
+
+In the last case, a regular item arrives and no huge-item bin exists.
+The algorithm guarantees that the resulting bin has size at most 6,
+thus it is regular or tiny. We now proceed to verify
+(\ref{i1:tiny}). A new tiny bin $T$ can be created only by packing an
+item of size at most 3 in an empty bin. First, this implies that no
+other tiny bin exists, as the item would be put there, thus there is
+always at most one tiny bin. Second, as the item is not put in any
+existing regular bin $R$, we have $s(R)+s(T)>6$ and this also holds
+later when more items are packed into any of these bins. A new regular
+bin $R$ with $s(R)\leq 4$ can be created only from a tiny bin; note
+that a bin created from an empty bin by a regular item is either tiny
+or has size in $(4,6]$. If another regular bin with size at most 4
+  already exists, then both the size of the tiny bin and the size of
+  the new item are larger than 2 and thus the new regular bin has size
+  more than 4. This completes the proof of (\ref{i1:tiny}). 
+
+(\ref{i1:er}): Before an item is packed, the value $3e-r$ is at least
+  $1$ by the stopping condition. Packing an item may change $e$ or $r$ (or both) by at most $1$. Thus after
+  packing an item we have $3e-r\geq 1-3-1=-3$, i.e., $r\leq 3e+3$. If
+  in addition $3e\leq r$, the algorithm stops in the next step and
+  (\ref{i1:er}) holds.  \qed
+\end{proof}
+
+\paragraph{Terminating the first phase. } If the algorithm packs all
+input items in the first phase, it stops. Otherwise according to
+Lemma~\ref{l:1}(\ref{i1:hr}) we split the algorithm in two very
+different branches. If there is at least one huge-item bin, follow the
+\emph{second phase with huge-item bins} below. If there is no huge-item bin,
+we follow the \emph{second phase with regular bins}.
+
+Any bin that is complete is not used in the second phase. In addition
+to complete bins and either huge-item bins, or regular and empty bins,
+there may exist at most three \emph{special bins} denoted and ordered
+as follows: the large-item bin $L$, the medium-item bin $M$, and the
+tiny bin $T$.
+

@@ -1,0 +1,24 @@
+\section{Tightness of the analysis}
+
+We note that the analysis of our algorithm is tight, i.e., if we
+reduce the capacity of the bins below 18, the algorithm
+fails. Consider the following instance. Send two items of size 6
+which are in the first phase packed separately into two bins. Then
+send $m-1$ items of size 12. One of them must be put into a bin
+with an item of size 6, i.e., one bin receives items of size 18, while
+all the items can be packed into $m$ bins of size 12.
+
+To decrease the upper bound below $1.5$ seems challenging. In
+particular, the instance above and its modifications with more items
+of size 6 or slightly smaller items at the beginning shows that these
+items need to be packed in pairs. This in turns creates difficulties
+that, in the current approach, lead to new item and bin types; at this
+point we do not know if such an approach is feasible.
+
+% Another possible research direction is to improve the lower bounds, in
+% particular for large $m$. It is quite surprising that there are no
+% lower bounds for $m>5$ larger than the easy bound of $4/3$.
+
+% \noindent{\bf Acknowledgment.} The authors thank Emese Bittner for
+% useful discussions during her visit to Charles University. We also
+% thank to referees for many useful comments.

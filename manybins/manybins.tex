@@ -1,0 +1,88 @@
+\chapter{Algorithmic Results for Many Bins}\label{chap:manybins}
+
+% \addcontentsline{toc}{chapter}{Algorithmic Results for Many Bins}
+
+This chapter describes an algorithm for \binstretch that achieves a
+stretching factor of $1.5$ and works for any number of bins $m$. The
+algorithm follows the \emph{classify and batch} approach as explained
+in Section~Y; this approach has been already used in previous works.
+
+Our main novel technique is applying the amortized analysis approach
+to the batching arguments. With that and other improvements, our
+algorithm is able to reach the stretching factor of $1.5$. The
+goal of this chapter is to prove the following:
+
+\begin{thm}\label{thm:onepointfive}
+There exists an algorithm for \binstretch with a stretching factor of
+$1.5$ for an arbitrary number of bins.
+\end{thm}
+
+As explained in Section~X, we rescale item sizes and bin capacities to
+avoid fractional values in our arguments. Specifically, we scale the
+input so that the optimal bins have capacity 12 and the bins of the
+algorithm have capacity 18.
+
+
+\section{Algorithm overview}\label{chap:2:overview}
+
+In the first phase of the algorithm we try to fill the bins so that
+their size is at most 6, as this leaves space for an arbitrary item in
+each bin. Of course, if items larger than 6 arrive, we need to pack
+them differently, preferably in bins of size at least 12 (since that
+is the size of the optimal bins). We stop the first phase when the
+number of non-empty bins of size at most 6 is three times the number
+of empty bins. In the second phase, we work in blocks consisting of
+three non-empty bins and one empty bin. The goal is to show that we
+are able to fill the bins so that the average size is at least 12,
+which guarantees we are able to pack the total size of $12m$ which is
+the upper bound on the size of all items.
+
+The limitation of the previous results using this scheme was that the
+volume achieved in a typical block of four bins is slightly less than
+four times the size of the optimal bin, which then leads to bounds
+strictly above $3/2$. This is also the case in our algorithm: A
+typical block may have three bins with items of size just above 4 from
+the first phase plus one item of size 7 from the second phase, while
+the last bin contains two items, each of size 7, from the second
+phase---a total of 47 instead of desired $4 \cdot 12$. However, we
+notice that such a block contains five items of size 7 which the
+optimum cannot fit into four bins. To take an advantage of this, we
+cannot analyze each block separately as
+in~\cite{kellerer2013,gabay2013}.  Instead, the rough idea of our
+improved method is to show that a bin with no item of size more than 6
+typically has size at least 13 and amortize among the blocks of
+different types. Technically this is done using a weight function $w$
+that takes into account both the total size of items and the number of
+items larger than 6. This is the main new technical idea of our proof.
+
+There are other complications. We would like to ensure that a typical bin
+of size at most 6 has size at least 4 after the first phase. However,
+this is impossible to 
+guarantee if the items packed there have size between 3 and 4. Larger
+items are fine, as one per bin is sufficient, and the smaller ones are
+fine as well as we can always fit at least two of them.
+It is crucial to consider the items with sizes between 3 and 4 very 
+carefully.
+This motivates
+our classification of items: Only the \emph{regular items} of size in
+$(0,3]\cup(4,6]$ are packed in the bins filled up to size 6. The
+\emph{medium items} of size in $(3,4]$ are packed in their own bins (four or
+five per bin). Similarly, \emph{large items} of size in $(6,9]$ are
+packed in pairs in their own bins. Finally, the \emph{huge items} of size
+larger than $9$ are handled similarly as in the previous papers:
+If possible, they are packed with the regular items, otherwise each in
+their own bin.
+
+The introduction of medium size items implies that we need to
+revisit the analysis of the first phase and also of the case when the
+first phase ends with no empty bin. These parts of the proof are
+similar to the previous works, but due to the new item type we need to
+carefully revisit it; it is now convenient to introduce another 
+function $v$ that counts the items according to their type; we call it
+a value, to avoid confusion with the main weight function $w$. The
+analysis of the second phase when empty bins are present is more
+complicated, as we need to take care of various degenerate cases, and
+it is also here where the novel amortization is used.
+
+% Now we are ready to proceed with the formal definitions, statement of
+% the algorithm, and the proof our main result.

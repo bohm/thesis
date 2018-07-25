@@ -1,0 +1,229 @@
+\section{Good situations}\label{sec:3:gs}
+Before stating the algorithm itself, we list a number of \textit{good
+situations} (GS). These are configurations of the three bins which
+allow us to complete the packing regardless of the following input.
+
+It is clear that the identities of the bins are not important here;
+for instance, in the first good situation, all we need is that
+\emph{any} two bins together have items of size at least 26. We have
+used names only for clarity of presentation and of the proofs.
+
+\begin{dfn}
+A \textit{partial packing} of an input sequence $S$
+is a function $p: S_1 \to \{A,B,C\}$ that assigns a bin to each
+item from a prefix $S_1$ of the input sequence $S$.
+\end{dfn}
+
+
+\begin{goodsit}\label{lem:gs1}
+Given a partial packing such that $s(A) + s(B) \geq 26$, 
+%and $s(C)$ is arbitrary, 
+there exists an online algorithm that can finish
+the packing with capacity $22$.
+\end{goodsit}
+
+\begin{proof}
+Since the optimum can pack into three bins of size $16$, the total
+size of items in the instance is at most $3\cdot 16=48$. If two bins
+have size $s(A) + s(B) \geq 26$, all the remaining items (including
+the ones already placed on $C$) have size at most $22$.  Thus we can
+pack them all into bin $C$.
+\qed
+\end{proof}
+
+\begin{goodsit}\label{lem:gs2}
+Given a partial packing such that $s(A) \in [4, 6]$, 
+%and $s(B)$ and $s(C)$ are arbitrary, 
+there exists an online algorithm that can finish
+the packing with capacity $22$.
+\end{goodsit}
+
+\begin{proof}
+Let $A$ be the bin with size between $4$ and $6$ and $B$ be one of the
+other bins (choose arbitrarily). Put all the items greedily into
+$B$. When an item $x$ does not fit, put it into $A$, where it fits, as
+ $s(A_{\before x})\le 6$. Now $s(B_{\before x})+s(x)>22$. In addition, $s(A_{\before x})\ge 4$ by the assumption.  Together we
+have $s(A_{\before x}) + s(B_{\before x})+s(x) \geq 26$, which is \gs1.
+\qed
+\end{proof}
+
+From now on, we assume that each bin $X\in\{A,B,C\}$ satisfies $s(X) \not\in [4,6]$, otherwise we are in \gs2.
+
+\begin{goodsit}\label{lem:gs3}
+Given a partial packing such that $s(A) \ge 15$ and either
+{\rm(i)} $s(B)+s(C)\ge 22$ or
+{\rm(ii)} $s(C)<4$ and $s(B)$ is arbitrary,
+there exists an online algorithm that can finish the packing with capacity $22$.
+\end{goodsit}
+
+\begin{proof}
+(i) We have
+%If $s(B)+s(C)\ge22$, then 
+$\max(s(B),s(C))\ge11$, so 
+we are in \gs1 on bins
+$A$ and $B$ or on bins $A$ and $C$. %Else, if $s(C)<4$, w
+
+(ii) We pack arriving items into $B$. If $s(B) \geq
+11$ at any time, we apply \gs1 on bins $A$ and $B$. Thus we can
+assume $s(B) < 11$ and we cannot continue packing into $B$ any
+further. This implies that an item $i$ arrives such that $s(i) >
+11$. As $s(C_{\before i})<4$, we pack $i$ into it and apply \gs1 on
+bins $A$ and $C$.\qed
+\end{proof}
+
+\begin{goodsit}\label{lem:gs4}
+Given a partial packing such that 
+$s(A) +s(B) \geq 15+\frac{1}{2}s(C)$, $s(B) < 4$, and $s(C) < 4$,
+there exists an online algorithm that can finish the packing with capacity $22$.
+\end{goodsit}
+
+\begin{proof}
+Let $c$ be the value of $s(C)$ when the conditions of this good situation
+hold for the first time.
+We run the following algorithm until we reach \gs1 or \gs3:
+
+\smallskip
+\algobox{
+\begin{compactenum}[(1)]
+\item \label{gs4:step1} If the incoming item $i$ has $s(i)\ge 11-\frac{1}{2}c$, pack $i$ into~$B$.
+\item Else, if $i$ fits on $A$, pack it there.
+\item Otherwise pack $i$ into $C$.
+\end{compactenum}
+}
+\medskip
+
+If at any time an item is to be packed into $B$ by Step~\ref{gs4:step1} (it always fits since we maintain $s(B) < 4$),
+then $s(A)+s(B)\ge 26$ and we reach \gs1. In the event that no item
+is packed into $B$, we reach \gs3 (with $B$ in the role of $C$) whenever the algorithm brings the size
+of $A$ to or above 15.
+
+The only remaining case is when $s(A)<15$ throughout the algorithm and
+several items with size in the interval $I \defeq
+(22-s(A),11-\frac{1}{2}c)$ arrive. These items are packed into $C$.
+Note that $I \subseteq (7,11)$ and that the lower bound of $I$ may decrease
+during the course of the algorithm.
+
+The first two items with size in $I$ will fit together,
+since $2(11-\frac{1}{2}c) + c = 22$. With two such items packed into $C$, we know that the load $s(A) + s(C)$ is at least $s(A) + 2(22-s(A)) = 44 - s(A) > 29$ and we have reached \gs1, finishing the analysis. \qed
+
+\end{proof}
+
+\begin{goodsit}\label{lem:gs5}
+Given a partial packing such that a new item $a$ with $s(a)>6$ is packed
+into bin $A$, $s(B_{\before a}) \in [3,4)$, and $s(C_{\before a})=0$,
+there exists an online algorithm that can finish the packing with capacity $22$.
+\end{goodsit}
+
+\begin{proof}
+%We have $s(B) \in [3,4)$, otherwise we reach \gs2.
+Pack all incoming items into $A$ as long as it is possible. 
+If at some point $s(A) \geq 12$, we are in \gs4, and so we assume the contrary.
+Therefore, $s(A) < 12$ and an item $i$ arrives which cannot be packed into $A$. 
+
+Place $i$ into $B$. If $s(i) \geq 12$, we apply \gs3. We thus have
+$s(i) \in (10,12)$ and $s(A_{\before i}) > 22 - s(i) > 10$. Continue with \FF
+on bins $B$, $A$, and $C$ in this order. (That is, pack an incoming item into the first bin $X$
+in which the item fits. If there is no such bin, stop.)
+
+We claim that \gs1 is reached at the latest after \FF has
+packed two items, $x$ and $y$, on bins other than $B$. If one of them (say $x$) is
+packed into bin $A$, this holds because $s(x) + s(B_{\before x})>22$
+and $s(A_{\before x})>10$---enough for \gs1.
+If both items do not fit in $A$, they are both larger than 10, since $s(A_{\before i})<12$ and nothing gets packed into $A$ after item $i$.
+We will show by contradiction that this cannot happen.
+
+As $s(A_{\before x}) < 12$ from our previous analysis, we note that $s(x), s(y) > 10$.
+We therefore have three items $i,x,y$ with $s(i),s(x),s(y)>10$ and
+an item $s(a) > 6$ from our initial conditions. These four items
+cannot be packed together by any offline algorithm into three bins of
+capacity 16, and so we have a contradiction with $s(x), s(y) > 10$.
+\qed
+\end{proof}
+
+\begin{goodsit}\label{lem:gs6} 
+If $s(C)<4$, $s(B)>6$ and $s(A)\ge s(B)+ 4-s(C)$, 
+there exists an online algorithm that can finish the packing with capacity $22$.
+\end{goodsit}
+
+\begin{proof}
+Pack all items into $A$, until an item $x$ does not
+fit.  At this point $s(A_{\before x})+s(x)>22$.  If $x$ fits on $B$, we put it there
+and reach \gs1 because $s(B_{\before x})>6$. Otherwise, $x$ definitely fits on $C$
+because $s(C_{\before x})<4$ by assumption.  By the condition on $s(A)$, we have % $s(A)+s(C)-4+x \ge s(B)+x > 22$, so 
+$s(x) + s(A_{\before x})+ s(C) \ge s(x) + s(B)+4>26$, and we are in \gs1 again.
+\qed
+\end{proof}
+
+%\begin{cor}\label{cor:gs6}
+%Suppose 
+%$s(C)\le s(B)< 6< s(A)$. 
+%If an item of size at least $s(A)-s(C)+4-s(B)$ arrives, we reach \gs6
+%by placing it on $B$ or $C$.
+%If an item of size at most $s(A)-s(C)-(4-s(B))$ arrives, it can be placed on $C$; we reach a good situation if $s(C)\ge4$ as a result.
+%\end{cor}
+%
+%\begin{proof}
+%A large enough item can be assigned to $C$ (or $B$) and will bring us to the situation of the
+%last lemma. A small enough item can be placed on $C$.
+%\qed
+%\end{proof}
+
+\begin{goodsit}\label{lem:gs7}
+Consider the arrival of an item $x$.
+If it holds that
+\begin{itemize}
+\item $s(A_{\before x})<4$, 
+\item $s(C_{\before x})<4$, % and $s(B)>6$. If 
+\item $s(B_{\before x})\le 9+\frac{1}{2}(s(A_{\before x})+s(C_{\before x}))$, %and for a new item $x$ we have
+\item and $s(B_{\before x})+s(x)>22$,
+\end{itemize}
+then there exists an online algorithm that packs all remaining items into
+three bins of capacity $22$.
+\end{goodsit}
+
+\begin{proof}
+We have $s(B_{\before x}) > 22 - s(x) > 6$ and 
+\begin{align*}
+s(x) > 22-s(B_{\before x}) &\ge 13 - \frac{1}{2}(s(A_{\before x})+s(C_{\before x}))\\ &\ge s(B_{\before x})+4-s(A_{\before x})-s(C_{\before x}).
+\end{align*}
+
+Placing $x$ on $A$ we increase $s(A)$ to at least $s(B_{\before x})+4-s(C_{\before x})$
+and we reach \gs6. % by Corollary~\ref{cor:gs6}.
+\qed
+\end{proof}
+
+
+\subsection{Good Situation First Fit}\label{sec:3alg}
+
+Throughout our algorithm, we often use a special variant of \FF\/
+which tries to reach good situations whenever possible. This
+variant can be described as follows:
+
+\begin{dfn}\label{dfn:gsff}
+Let $\calL=(X|_k, Y|_l, \ldots)$ denote a list of bins $X,Y, \ldots $ where each
+bin $X$ has an associated capacity $k$ satisfying $s(X)\leq k$.
+% originally the limit $k$ was integral but it doesn't have to be
+\GSFF{$\calL$} (Good Situation First Fit) is an online algorithm for bin stretching that works as follows:
+
+\vspace{1.5ex}
+\algobox{ %TODO PV this box might be written a nicer way
+\textbf{Subroutine \GSFF{$\calL$}:}
+For each item $i$:\\
+If it is possible to pack $i$ into any bin (including bins not in $\calL$, and
+using capacities of 22 for all bins)
+so that a~good situation is reached,
+do so and continue with the algorithm of the %\\
+relevant good situation.\\
+Otherwise, traverse the list $\calL$ in order and pack $i$ into the first bin $X$
+such that $X|_k \in \calL$ and $s(X) + s(i) \leq k$.
+If there is no such bin, stop.
+}
+\end{dfn}
+
+For example, \GSFF{$A|_4, B|_{22}$} checks whether
+either the packing $(A\cup \{i\},B,C)$, $(A,B\cup \{i\},C)$ or $(A,B,C\cup \{i\})$ is a partial packing of any good
+situation. If this is not the case, the algorithm packs $i$ into bin
+$A$ provided that $s(A)+s(i)\leq 4$. If $s(A) + s(i)>4$, the algorithm
+packs $i$ into bin $B$ with capacity $22$. If $i$ cannot be placed
+into $B$, \GSFF{$A|_4, B|_{22}$} halts and another
+online algorithm must be applied to pack $i$ and subsequent items.

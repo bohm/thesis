@@ -1,0 +1,58 @@
+\section{Contributions of this thesis}\label{sec:contrib}
+
+% \todo{Expand this section, too.}
+
+\begin{enumerate}
+\item We present a new algorithm for \binstretch
+with a stretching factor of $1.5$.  We build on the two-phase approach
+which appeared previously in~\cite{kellerer2013,gabay2013}. In this
+approach, the first phase tries to fill some bins close to $R-1$ and
+achieve a fixed ratio between these bins and empty bins, while the
+second phase uses the bins in blocks of fixed size and analyzes each
+block separately. 
+
+To reach $1.5$, we needed to significantly improve the analysis using
+amortization techniques (represented by a weight function in our
+presentation) to amortize among blocks and bins of different types.
+
+This section uses results and text from the published paper
+
+\noindent\textit{Böhm, Sgall, van Stee, Veselý: "A two-phase algorithm
+for bin stretching with stretching factor 1.5." Journal of
+Combinatorial Optimization 34.3 (2017): 810-828.}
+
+\item We present a specialized algorithm for the subproblem where the
+number of bins is fixed to be 3. Our algorithm achieves stretching
+factor of $11/8 = 1.375$.  This is the first improvement of the
+stretching factor $1.4$ of Azar and Regev~\cite{azar98}.
+
+This section uses results and text from the published paper
+
+\noindent\textit{Böhm, Sgall, van Stee, Veselý: "Online bin
+stretching with three bins." Journal of Scheduling 20.6 (2017):
+601-621.}
+
+\item We present a new lower bound of $45/33 = 1.\overline{36}$ for
+\binstretch on three bins, along with a lower bound of $19/14$ on four
+and five bins which is the first non-trivial lower bound for four and
+five bins. We build on the paper of Gabay et al.~\cite{gabay2013lbv2}
+but significantly change the implementation, both technically and
+conceptually. The lower bound of $19/14$ for four bins is
+independently shown in \cite{gabay2013lbv3}.
+
+This section uses results and text from the conference paper:
+
+\noindent\textit{Böhm: "Lower Bounds for Online Bin Stretching with
+Several Bins." SOFSEM (Student Research Forum Papers/Posters) (2016).}
+
+\item We extend the implementation of the lower bound by adding
+parallelization, which allows us to go quite a bit beyond our original
+lower bounds. In particular, in the setting with three bins, we give a
+new lower bound of $112/82 \approx 1.366$. We also extend the lower
+bound of $19/14$ to six, seven, eight and nine bins, which strongly
+suggests that this might be a good candidate for a general lower
+bound.
+
+These results first appear in this thesis.
+
+\end{enumerate}

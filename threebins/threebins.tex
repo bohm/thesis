@@ -1,0 +1,72 @@
+\chapter{An Algorithm Fine-Tuned for Three Bins}
+\label{chap:threebins}
+% \addcontentsline{toc}{chapter}{Algorithms Fine-Tuned for Three Bins}
+
+In this section, we focus on instances with exactly three bins. 
+We prove the following:
+
+\begin{thm}\label{thm:3binsalgo}
+There exists an algorithm that solves
+\binstretch for three bins with stretching factor $1+3/8=1.375$.
+\end{thm}
+
+Our final online algorithm uses several subroutines, one of which is
+the classical online algorithm \FF:
+
+\smallskip
+\algobox{
+\textbf{Subroutine \FF:}
+\begin{compactenum}[(1)]
+\item Set an ordering of your bins. 
+\item For every incoming item $i$:
+\item \indentskip Pack $i$ into the first bin where $i$ fits below or to the limit $t$.
+\item \indentskip If no such bin exists, report failure.
+\end{compactenum}
+}
+\smallskip
+
+The three bins of our setting are named $A$, $B$, and $C$.  We
+exchange the names of bins sometimes during the course of the
+algorithm.
+
+Throughout the proof, we will need to argue about loads of the bins
+$A$, $B$, $C$ before various items arrived. The following notation
+will help us in this endeavour:
+
+Suppose that $A$ is a bin and $x$ is an item that gets packed at some
+point of the algorithm (not necessarily into $A$).  Then $A_{\before
+x}$ will indicate the set of items that are packed into $A$ just
+before $x$ arrived.
+
+We scale the input sizes by $16$. The stretched bins in our setting
+therefore have capacity $22$ and the optimal offline algorithm can
+pack all items into three bins of capacity $16$ each.
+
+\section{Algorithm overview}\label{sec:3:algoverview}
+
+If we were to design a new algorithm from scratch, we would probably
+start with trying to pack first all items in a single bin, as long as
+possible. In general, this is the strategy that the final algorithm
+will also follow. However, somewhat surprisingly, it turns out that
+from the very beginning we need to put items in two bins even if the
+items as well as their total size are relatively small.
+
+It is clear that we have to be very cautious about exceeding a load of
+6. For instance, if we put 7 items of size 1 in bin $A$, and 7 such items in $B$,
+then if two items of size 16 arrive, the algorithm will have a load of 
+at least 23 in some bin. Similarly, we cannot assign too much to a single bin:
+putting 20 items of size 0.5 all in bin $A$ gives a load of 22.5 somewhere if 
+three items of size 12.5 arrive next. (Starting with items of size 0.5
+guarantees that there is an optimal solution with bins of capacity 16.) 
+
+On the other hand, it is useful to keep one bin empty for some time; many
+problematic instances end with three large items such that one of them has
+to be placed in a bin that already has high load. Keeping one bin free ensures
+that such items must have size more than 11 (on average), which limits the
+adversary's options, since all items must still fit into bins of size 16.
+
+Deciding when exactly to start using the third bin and when to cross the
+threshold of 6 for the first time was the biggest challenge in designing
+this algorithm: both of these events should preferably be postponed as long
+as possible, but obviously they come into conflict at some point.
+

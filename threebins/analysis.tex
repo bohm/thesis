@@ -1,0 +1,62 @@
+\section{Analysis}
+
+\subsection{Initial steps}
+Let us start the analysis of the algorithm \tbalg in Step
+\step{jcheck}, where the algorithm branches on the size of the item
+$j$.
+
+\smallskip
+We first observe that our algorithm can be in two very different
+states, based on whether $s(j) > 6$ or $s(j) < 4$. Note that the case
+$s(j) \in [4,6]$ is immediately settled using \gs2, and that in either
+case it must be true that $s(j) > 2$; an item $j$ with a smaller size
+would either fit into $A|_4$, $B|_4$ or trigger \gs2.
+
+\begin{obs}
+\label{obs:1a}
+Assume that $2 < s(j) <4$. We have that $s(A_{\before j}) \in (3,4)$
+%, $s(B_{\before j}) + s(j) \le s(A_{\before j})+4$,
+and $s(B_{\before j}) + s(j) \in(6,8)$
+where $A$ and $B$ are bins after renaming in Step~{\rm \step{rename}}.
+Thus both $A$ and $B$ received some items during Step~{\rm \step{initial}}.
+Moreover, there is at most one item either in $A_{\before j}$, or in $B_{\before j}$.
+\end{obs}
+
+\begin{proof}
+Since $s(j)<4$ and $s(B_{\before j})<4$, 
+the item $j$ is assigned to $B$ in Step~\step{qstep}, which by Step~\step{rename} is
+the least loaded bin among $A$ and $B$ after Step~\step{initial}.
+For this bin, we have $s(B_{\before j}) > 2$. If the opposite were
+true, we would either reach \gs2 by packing $j$ into $B_{\before j}$,
+or $j$ fits into $B|_4$, a contradiction with the definition of~$j$.
+
+This implies that both $A$ and $B$ received items in Step~\step{initial}, so $s(A_{\before j})+s(B_{\before j})>6$,
+else a good situation would have been reached before $j$ arrived.
+% We therefore have $s(B)<s(A)+4$ and $s(A)>3$ after renaming the bins.
+It follows that $s(A_{\before j})\in(3,4)$ and $s(B_{\before j}) + s(j) \in (6,8)$.
+
+Since any item that is put into $B$ during Step~\step{initial} must have size
+of more than two (otherwise it fits into $A|_6$), only one such item can be packed into $B$
+which proves the last statement.\qed
+\end{proof}
+
+Contrast the preceding observation with the next one, which considers $s(j) > 6$:
+
+\begin{obs}
+\label{obs:1b}
+Assume that $s(j) > 6$. Then, $s(A_{\before j}) < 3$, $s(B_{\before j}) = 0$.
+\end{obs}
+
+\begin{proof} If $s(A_{\before j}) \ge 3$ we reach \gs5 by packing
+$j$ into $B$.  However, if $s(A_{\before j}) < 3$ then $s(A_{\before j}) + s(B_{\before j}) < 6$
+which can be true only if $s(B_{\before j}) = 0$; indeed, we would have never packed an item $z$ into
+ a previously empty bin $B$ if it were true that $s(A_{\before z}) + s(z) < 6$, $s(z) < 3$ and $s(A_{\before z}) < 3$. \qed
+\end{proof}
+
+Both the analysis and the algorithm differ quite a lot based on the
+size of $j$. If it holds that $s(j) > 6$, we enter the \emph{large
+case} of the analysis, while $2 < s(j) < 4$ will be analyzed as the
+\emph{standard case}. Intuitively, if $s(j) > 6$, the offline optimum
+is now constrained as well; for instance, no three items of size $10$
+can arrive in the future. This makes the analysis of
+the large case comparatively simpler.

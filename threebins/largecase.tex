@@ -1,0 +1,115 @@
+\subsection{The large case}
+We now assume that $s(j) > 6$. Our goal in both the large case and the
+standard case will be to show that in the near future either a good
+situation is reached or several large items arrive, but \tbalg is able
+to pack them nonetheless.
+
+Let us start by recalling the relevant steps of the algorithm:
+
+\smallskip
+\algobox{
+\step{large} Set $p \defeq 6 + s(j)$; apply \GSFF{$A|_p, B|_{4}$}.\\
+\step{wcheck} If the next item $w$ fits into $A|_{22}$:\\
+\step{wfits}  \indentskip \GSFF{$A|_{22}, B|_{22}, C|_{22}$}.\\
+\step{otherwise} Else: \\
+\step{wwontfit}  \indentskip \GSFF{$A|_p, B|_{22}, C|_{22}$}
+%, where $p \defeq 6 + s(j)$.
+}
+
+By choosing the limit $p$ to be $s(j)+6$ in Step \step{large}, we make
+enough room for $j$ to be packed into $A$. We also ensure that
+any item $i$ larger than $6$ that cannot be placed into $A$ with
+capacity 22 must satisfy $s(i) + s(j) > 16$ and so $i$ cannot be with
+$j$ in the same bin in the offline optimum packing.
+
+Let us define $A_S$ as the set of items in $A$ of size less than $6$
+(packed before or after $j$).  We note the following:
+
+\begin{obs}\label{obs:nothingonc}
+
+\leavevmode
+\begin{enumerate}
+\item During Step {\rm \step{large}}, if $B$ contains any item, it is true that
+$s(A_S) + s(B) > 6$.
+\item If no good situation is reached, the item $w$ ending Step {\rm \step{large}} satisfies $s(w) > 6$.
+\end{enumerate}
+
+\end{obs}
+
+\begin{proof}
+The first point follows immediately from our choice of $p$ and \GSFF{$A|_p, B|_4$}.
+
+For the second part of the observation, consider the item $w$ that
+ends Step~\step{large} and assume $s(w) \le 6$. The possibility that
+$s(w) \in  [4,6]$ is excluded due to \gs2. The case $s(B_{\before w}) \ge  3$ is
+also excluded, as this would imply \gs5 with $j$ in $A$.
+
+Since $s(B_{\before w}) + s(w) > 6$, the only remaining possibility is $s(B_{\before w}) \in  [2,3), s(w) \in 
+(3,4)$. Even though $w$ does not fit into $A|_p$, if we were to pack
+$w$ into $A|_{22}$, we can use the first point of this observation and get
+$s(A) + s(B) \ge  s(j) + \big(s(A_S) + s(B_{\before w})\big) + s(w) > 6 + 6 + 3 = 15$, enough for \gs4 as $s(C) = 0$. The algorithm
+\GSFF{$A|_{p}, B|_{4}$} in Step \step{large} will notice this
+possibility and will pack $w$ into $A$, where it will always fit, as
+$s(A_{\before w}) < 15$ by \gs4. \qed
+
+\end{proof}
+
+We now split the analysis based on which branch is entered in Step \step{wcheck}:
+
+\smallskip
+\noindent
+{\bf Case 1:} Item $w$ fits into bin $A$; we enter Step \step{wfits}.
+
+We first note that $s(A)+s(B)<15$, else we are in \gs4 since $C$ is still empty. This inequality also
+implies $s(B) =~0$, otherwise we have
+\[s(A) + s(B) = s(w) + s(j) + (s(A_S) +s(B)) > 18\]
+via Observation~\ref{obs:nothingonc} and this is enough for \gs4.
+
+We continue with Step~\step{wfits} until we reach a good situation or
+the end of input.  Suppose three items $x,y,z$ arrive such that none of them 
+can be packed into $A$ and we do not reach a good situation. We will prove that
+this cannot happen. We make several quick observations about those items:
+
+\begin{enumerate}
+\item We have $s(x) > 7$ because $s(A_{\before x}) < 15$ or we reach \gs4. The item $x$ is packed into $B$.
+\item At any point, $B$ contains at most one item, otherwise $s(A) + s(B) > 22 + 7 > 26$, reaching \gs1.
+\item We have $s(y) > 9$ because $\min(s(A_{\before y}), s(B_{\before y})) < 13$ by \gs1. The item $y$ is packed into $C$.
+\item The bin $C$ contains also at most one item, similarly to $B$.
+\item Again, we have $s(z) > 9$ similarly to $y$. The item $z$ does not fit into any bin.
+\end{enumerate}
+
+From our observations above, we get $s(x) + s(y) > 22$, $s(x) + s(z) >
+22$, $s(y) + s(z) > 22$. Therefore, at least two of the items
+$\{x,y,z\}$ are of size at least $11$ and the third one is larger than 6.
+However, both items $j$ and $w$ have size at least $6$,
+and there is no way to pack $j,w,x,y,z$ into three bins of capacity $16$, a contradiction.
+
+\smallskip
+\noindent \textbf{Case 2:} Item $w$ does not fit into bin $A|_{22}$. The choice
+of $p$ gives us $s(j)+s(w)>16$. Item $w$ is placed on $B$.
+
+The limit $p$ gives us an upper bound on the volume of small items
+$A_S$ in $A$, namely $s(A_S) \le 6$.  An easy argument gives us a similar bound on $B$,
+namely if $B_S \defeq B \setminus \{w\}$, then $s(B_S) < 4$. Indeed, we have
+$26 > s(A) + s(B) > 22 + s(B_S)$, the first inequality implied by not
+reaching \gs1.
+
+In Case 2, it is sufficient to consider two items $x,y$ that do not
+fit into $A|_{p}$ or $B|_{22}$. We have:
+
+\begin{enumerate}
+\item Using $s(B_S)<4$, we have $s(x) + s(w) > 18$ and $s(y) + s(w) > 18$.
+\item None of the items $x,y$ fits into $A|_{22}$. If say $x$ did fit, then we
+use the fact that $x$ does not fit into $B|_{22}$ and get
+$s(B) + s(A) = \big(s(B_{\before x}) + s(x)\big) + s(A_{\before x}) > 22 + s(j) > 26$ and we reach \gs1.
+\item The choice of the limit $p$ on $s(A)$ implies $s(x) + s(j) > 16$ and $s(y) + s(j) > 16$.
+\item Since $\min(s(A),s(B)) < 13$ at all times by \gs1, we have $s(x)>9$ and $s(y) > 9$.
+\item The items $x$ and $y$ do not fit together into $C$, or we would have
+$s(C) + s(A) > 22 + s(y) > 26$.  This implies $s(x) + s(y) > 22$.
+
+\end{enumerate}
+
+From the previous list of inequalities and using $s(j) + s(w) > 16$,
+we learn that no two items from the set $\{j,w,x,y\}$ can be together
+in a bin of size $16$. Again, this is a contradiction with the
+assumptions of \binstretch.

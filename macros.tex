@@ -1,0 +1,177 @@
+%%% This file contains definitions of various useful macros and environments %%%
+%%% Please add more macros here instead of cluttering other files with them. %%%
+
+%%% Minor tweaks of style
+
+% These macros employ a little dirty trick to convince LaTeX to typeset
+% chapter headings sanely, without lots of empty space above them.
+% Feel free to ignore.
+\makeatletter
+\def\@makechapterhead#1{
+  {\parindent \z@ \raggedright \normalfont
+   \Huge\bfseries \thechapter. #1
+   \par\nobreak
+   \vskip 20\p@
+}}
+\def\@makeschapterhead#1{
+  {\parindent \z@ \raggedright \normalfont
+   \Huge\bfseries #1
+   \par\nobreak
+   \vskip 20\p@
+}}
+\makeatother
+
+% This macro defines a chapter, which is not numbered, but is included
+% in the table of contents.
+\def\chapwithtoc#1{
+\chapter*{#1}
+\addcontentsline{toc}{chapter}{#1}
+}
+
+% Draw black "slugs" whenever a line overflows, so that we can spot it easily.
+\overfullrule=1mm
+
+%%% Macros for definitions, theorems, claims, examples, ... (requires amsthm package)
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{clm}[thm]{Claim}
+\newtheorem{obs}[thm]{Observation}
+\newtheorem{goodsit}{Good Situation}
+\newtheorem{gengoodsit}{Good Situation} % to avoid pdftex warning about duplicate labels
+
+\theoremstyle{definition}
+\newtheorem{dfn}{Definition}
+\newtheorem{prb}{Problem}
+
+\theoremstyle{remark}
+\newtheorem*{cor}{Corollary}
+\newtheorem*{rem}{Remark}
+\newtheorem*{example}{Example}
+
+%%% An environment for proofs
+
+%%% FIXME %%% \newenvironment{proof}{
+%%% FIXME %%%   \par\medskip\noindent
+%%% FIXME %%%   \textit{Proof}.
+%%% FIXME %%% }{
+%%% FIXME %%% \newline
+%%% FIXME %%% \rightline{$\square$}  % or \SquareCastShadowBottomRight from bbding package
+%%% FIXME %%% }
+
+%%% An environment for typesetting of program code and input/output
+%%% of programs. (Requires the fancyvrb package -- fancy verbatim.)
+
+\DefineVerbatimEnvironment{code}{Verbatim}{fontsize=\small, frame=single}
+
+%%% The field of all real and natural numbers
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+
+%%% Useful operators for statistics and probability
+\DeclareMathOperator{\pr}{\textsf{P}}
+\DeclareMathOperator{\E}{\textsf{E}\,}
+\DeclareMathOperator{\var}{\textrm{var}}
+\DeclareMathOperator{\sd}{\textrm{sd}}
+
+%%% Transposition of a vector/matrix
+\newcommand{\T}[1]{#1^\top}
+
+%%% Various math goodies
+\newcommand{\goto}{\rightarrow}
+\newcommand{\gotop}{\stackrel{P}{\longrightarrow}}
+\newcommand{\maon}[1]{o(n^{#1})}
+\newcommand{\abs}[1]{\left|{#1}\right|}
+\newcommand{\dint}{\int_0^\tau\!\!\int_0^\tau}
+\newcommand{\isqr}[1]{\frac{1}{\sqrt{#1}}}
+
+%%% Various table goodies
+\newcommand{\pulrad}[1]{\raisebox{1.5ex}[0pt]{#1}}
+\newcommand{\mc}[1]{\multicolumn{1}{c}{#1}}
+
+
+% custom macros
+
+\newcommand\binstretch{{\sc Online Bin Stretching}\xspace}
+\newcommand\binpacking{{\sc Bin Packing}\xspace}
+\newcommand\scheduling{\textsc{Online Scheduling}\xspace}
+\newcommand\Nat{\mathbb{N}}
+
+\newcommand\eps\varepsilon
+\newcommand\calA{{\mathcal A}}
+\newcommand\Cprime{{\mathcal C'}}
+\newcommand\calB{{\mathcal B}}
+\newcommand\calC{{\mathcal C}}
+\newcommand\calD{{\mathcal D}}
+\newcommand\calE{{\mathcal E}}
+\newcommand\calF{{\mathcal F}}
+\newcommand\calH{{\mathcal H}}
+\newcommand\calI{{\mathcal I}}
+\newcommand\calL{{\mathcal L}}
+\newcommand\calR{{\mathcal R}}
+\newcommand\Aprime{{\mathcal A'}}
+\newcommand{\hmodfour}{{h}}
+\newcommand{\before}{\leftarrow}
+
+\newcommand{\Rbar}{R_{\mbox{\rm\scriptsize first}}}
+\newcommand\mycase[1]{\vspace{0.4ex}\noindent{\bf #1}}
+\newcommand\mycasesp[1]{\vspace{1ex}\noindent{\bf #1}}
+
+\def\indentskip{\hskip 1.5em}
+\def\indentskiptwodigit{\hskip 1em}
+
+\newcommand\algobox[1]{\begin{center}
+\fbox{\parbox[c]{0.95\textwidth}{#1}}
+\end{center}
+}
+
+\def\O{{\mathcal{O}}}
+\let\csc=\textsc
+\def\GSFF#1{{\rm\csc{GSFF(#1)}}}
+\def\FF{{\rm\csc{First Fit}}\xspace}
+\def\tbalg{\textsc{Evasive}\xspace}
+\def\SP{{\textsc{Large Item Early}}\xspace}
+\def\enumparams{\itemsep1pt \parskip0pt}
+
+\def\step#1{{\ref{fp:#1}}}
+\def\eq#1{{(\ref{eq:#1})}}
+\def\gs#1{GS\ref{lem:gs#1}}
+
+% box related macros
+\def\frombox#1{\hbox to 1em{{\bf #1}\hss}}
+\def\tobox#1{\hbox to 2.3em{{\bf #1}\hss}}
+\def\arrow{\hbox to 1.5em{$\rightarrow$}}
+
+\makeatletter
+\newcommand*{\defeq}{\mathrel{\rlap{%
+                     \raisebox{0.3ex}{$\m@th\cdot$}}%
+                     \raisebox{-0.3ex}{$\m@th\cdot$}}%
+                     =}
+\makeatother
+
+
+\newcommand\ALG{\mathrm{ALG}}
+\newcommand\OPT{\mathrm{OPT}}
+% macros for the lower bound chapter
+\renewcommand\Game{{\mathrm{BSG}}}
+\newcommand\algo{\textsc{Algorithm}\xspace}
+\newcommand\adversary{\textsc{Adversary}\xspace}
+\newcommand\evaladv{\textsc{EvaluateAdversary}\xspace}
+\newcommand\evalalg{\textsc{EvaluateAlgorithm}\xspace}
+\newcommand\minimax{\textsc{Minimax}\xspace}
+\newcommand\Main{\textsc{Main}\xspace}
+\newcommand\Sequential{\textsc{Sequential}\xspace}
+
+\newcommand\Test{\textsc{Test}\xspace}
+\newcommand\DynprogMax{\textsc{DynprogMax}\xspace}
+\newcommand\Query{\textsc{Query}\xspace}
+\newcommand\MaxFeas{\textsc{MaxFeas}\xspace}
+\newcommand\bfd{\textsc{Best Fit Decreasing}\xspace}
+\newcommand\obf{\textsc{Online Best Fit}\xspace}
+\newlength{\elseskiplen}
+\settowidth{\elseskiplen}{Else: }
+\newcommand\elseskip{\hskip\elseskip}
+
+
+\newcommand\todo[1]{\textcolor{red}{#1}}

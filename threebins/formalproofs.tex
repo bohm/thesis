@@ -1,0 +1,204 @@
+\section{Formal proofs from Section~\ref{sec:profOfClaim}}\label{app:proofOfClaim}
+
+For completeness, we provide full proofs of lemmas in Section~\ref{sec:profOfClaim}
+which are shown using infeasible linear programs. Recall that these lemmas are parts of the
+proof of Claim~\ref{clm:nobigitems}.
+We use the notation introduced in Definition~\ref{dfn:fouritems} and Equations~\eq{0}-\eq{9}.
+
+\begin{lem}[Lemma~\ref{lem:onej}]
+Assume that no good situation is reached until Step~{\rm \step{b1}}. Then
+it holds that during Step~{\rm \step{qstep}}, only $j$ is packed into $B$.
+\end{lem}
+
+\begin{proof}
+
+We first prove that no two additional items $j_2, j_3$ can be packed into $B$
+during Step~\step{qstep}. Assuming the contrary, we get $s(B_{\before j_2}) +
+s(j_2) + s(j_3) > 6 + 2 + 2 = 10$. With that load on $B$, we consider
+the packing at the end of Step~\step{qstep}, when the item $x$ arrived. If
+$s(x) + s(C_{\before x}) < 9$, we get \gs6 by placing $x$ into $C$ since $s(A)>3$, so it must be true
+that $s(x) + s(C_{\before x}) > 9$, which means $s(x) >
+5$. This is enough for us to place $x$ into $B|_{22}$
+(where it fits, otherwise we are in \gs7) and reach \gs3.
+
+This contradiction gives us that at most one additional item $j_2$ can
+be packed into $B$ during Step \step{qstep}. We will now prove that
+even $j_2$ does not exist.
+
+We split the analysis into two cases depending on which of $j_2$ and $r$ arrives first.
+
+\smallskip
+\noindent \textbf{Case 1.} The item $r$ is packed
+before $j_2$, meaning $s(B_{\before x}) = s(B_{\before r}) + s(j_2)$.
+
+We start with inequalities \eq{3}, \eq{6} and \eq{8b} in the following form:
+
+\begin{align*}
+9 + \frac{s(A_{\before r})}{2} &< s(B_{\before r}) + s(r) \\
+s(B_{\before r}) + s(j_2) + s(x) + s(A_{\before x}) &< 15 + \frac{s(r)}{2} \\
+s(B_{\before r}) + s(j_2) &< s(A_{\before x}) + s(x) + \big(4 - s(r)\big)
+\end{align*}
+
+We sum twice \eq{3} with \eq{6} and \eq{8b}:
+
+\begin{align*}
+&18 + s(A_{\before r}) + s(B_{\before r}) + s(j_2) + s(x) + s(A_{\before x}) + s(B_{\before r}) + s(j_2) \\
+&< 2s(B_{\before r}) + 2s(r) + 15 + \frac{s(r)}{2} + s(A_{\before x}) + s(x) + 4 - s(r)
+\end{align*}
+\[ s(A_{\before r}) + 2s(j_2) < \frac{3s(r)}{2} + 1\]
+
+Using $s(A_{\before r}) \ge s(A_{\before j})$ ($r$ arrives after $j$)
+with $s(A_{\before j}) > 3$ from Observation \ref{obs:1a} and $s(r) < 4$ gives us:
+
+\begin{align*}
+3 + 2s(j_2) &< 7 \\
+s(j_2) &< 2
+\end{align*}
+
+which is a contradiction, since $s(A_{\before j_2}) < 4$ and $j_2$ did not fit into $A|_{6}$.
+
+\smallskip
+
+\noindent \textbf{Case 2.} In the remaining case, $j_2$ arrives before $r$, which means
+\[ s(B_{\before x}) = s(B_{\before r}) = s(B_{\before j}) + s(j) + s(j_2). \]
+
+
+We start by summing \eq{4} and \eq{6}. We get:
+\begin{align}
+s(B_{\before r}) + s(B_{\before x}) + s(x) + s(r) &\nonumber\\
++ s(A_{\before x}) + s(A_{\before r}) &< 30 + \frac{s(r)}{2} \nonumber \\ 
+2s(B_{\before j}) + 2s(j) + 2s(j_2) + s(x) + s(r) &\nonumber\\
++ s(A_{\before r}) + s(A_{\before x}) &< 30 + \frac{s(r)}{2}. \label{eq:result1}
+\end{align}
+
+Keeping \eq{result1} in mind for later use, we continue
+by considering \eq{1}, \eq{2} and \eq{9} in the
+following form:
+
+\begin{align}
+s(B_{\before j}) + s(j) &> 6 \label{eq:1applied}\\
+s(A_{\before j_2}) + s(j_2) &> 6 \label{eq:2applied}\\
+s(r) + s(x) + (4 - s(A_{\before x})) &> s(B_{\before x}) = s(B_{\before j}) + s(j) + s(j_2) \nonumber
+\end{align}
+
+Summing the three inequalities gives us:
+\begin{align}
+s(B_{\before j}) + s(j) + s(A_{\before j_2}) + s(j_2) &\nonumber\\
++ s(r) + s(x) + (4 - s(A_{\before x})) &> 12 + s(B_{\before j}) + s(j) + s(j_2)\nonumber\\
+s(r) + s(x) + \left( s(A_{\before j_2}) - s(A_{\before x}) \right) &> 8 \nonumber\\ 
+s(r) + s(x) &> 8\label{eq:result3}
+\end{align}
+
+Summing two times \eq{1applied}, two times
+\eq{2applied} and once \eq{result3} gives us:
+
+\begin{equation}\label{eq:result2}
+2s(B_{\before j}) + 2s(j) + 2s(j_2) + 2s(A_{\before j_2}) + s(r) + s(x) > 32.
+\end{equation}
+
+Using $s(A_{\before j_2}) \le s(A_{\before r}) \le s(A_{\before x})$ (which is only true here
+in Case 2, where $r$ arrived later) and recalling
+\eq{result1} along with \eq{result2}, we get $30 +
+s(r)/2 > 32$ and $s(r) > 4$, which is a contradiction with $r$ fitting into
+$C|_4$. \qed
+
+\end{proof}
+
+\begin{lem}[Lemma~\ref{lem:eplusr}]
+Suppose that $e$ and $r$ are items as described in Definition \ref{dfn:fouritems} and suppose
+also that no good situation was reached during Step~{\rm \step{qstep}} of the algorithm \tbalg.
+Then, $s(e) + s(r) \ge  s(B_{\before j}) + s(r) > 6.8$.
+\end{lem}
+
+\begin{proof}
+First of all, it is important to note that the item $e$ may be
+packed on $A$ or on $B$.
+Since either $B_{\before j}$, or $A_{\before j}$ contains solely $e$
+by Observation~\ref{obs:1a}, we get that either $s(B_{\before j}) = s(e)$,
+or $s(B_{\before j}) \le s(A_{\before j}) = s(e)$. Thus it is sufficient to prove
+$s(B_{\before j}) + s(r) > 6.8$.
+
+We start the proof of $s(B_{\before j}) + s(r) > 6.8$ by restating \eq{3}, \eq{7},
+and \eq{8} in the following form:
+
+\begin{align*}
+s(B_{\before j}) + s(j) + s(r) &> 9 + \frac{s(A_{\before r})}{2} \\
+s(B_{\before j}) + s(j) + s(x) &> 9 + \frac{s(A_{\before x}) + s(r)}{2} \\
+s(B_{\before j}) + s(j) + (4 - s(r)) &> s(A_{\before x}) + s(x). 
+\end{align*}
+
+Before summing up the inequalities, we multiply the first one by 8, the
+second by 2 and the third by 2. % The multiplied equations are:
+In total, we have:
+\begin{align*}
+12s(B_{\before j}) + 12s(j) + 8 + 6s(r) + 2s(x) &> 90 + 3s(A_{\before x}) + 4s(A_{\before r})\\
+&+ s(r) + 2s(x). \\
+\end{align*}
+We know that $s(B_{\before j}) \leq s(A_{\before x})$ and $s(B_{\before j}) \leq s(A_{\before r})$, allowing us to cancel out the terms:
+
+\[ 5s(B_{\before j}) + 5s(r) + 12s(j) > 82. \]
+
+Finally, using the bound $s(j) < 4$ and noting that $(82 - 48)/5 = 6.8$, we get
+
+\[ s(B_{\before j}) + s(r) > 6.8. \qquad \qed\]
+\end{proof}
+
+\begin{lem}[Lemma~\ref{lem:eplusj}]
+Suppose that $e$ and $j$ are items as described in Definition \ref{dfn:fouritems} and suppose
+also that no good situation was reached by the algorithm \tbalg.
+Then, $s(e) + s(j) \ge  s(B_{\before j}) + s(j) > 7.6$.
+\end{lem}
+
+\begin{proof}
+
+The same argument as in Lemma \ref{lem:eplusr} gives us $s(e) + s(j) \ge  s(B_{\before j}) + s(j)$.
+We therefore aim to prove $s(B_{\before j}) + s(j) > 7.6$. Summing up \eq{7}
+and \eq{9b} and using $s(B_{\before x}) = s(B_{\before j}) + s(j)$, we get
+
+\[ 2s(B_{\before j}) + 2s(j) + s(x) + 4 - s(A_{\before x}) > 9 + \frac{s(A_{\before x}) + s(r)}{2} + s(r) + s(x)\]
+\[ 2s(B_{\before j}) + 2s(j) > 5 + \frac32 \big(s(A_{\before x})  + s(r)\big).\]
+
+We now apply the bound $s(A_{\before x}) + s(r) \ge  s(B_{\before j}) + s(r) > 6.8$, the second inequality being Lemma \ref{lem:eplusr}. We get:
+
+\[ 2s(B_{\before j})+ 2s(j) > 5+ 10.2, \]
+and finally $s(B_{\before j}) + s(j) > 7.6$, completing the proof.\qed
+
+\end{proof}
+
+%\begin{lem}\label{lem:rplusj}
+%Suppose that $j$ and $r$ are items as described in Definition \ref{dfn:fouritems} and suppose
+%also that no good situation was reached by the algorithm \tbalg. Then, $s(r) + s(j) > 7$.
+%\end{lem}
+%
+%\begin{proof}
+%Starting with \eq{3}:
+%
+%\[ s(B_{\before j}) + s(j) + s(r) > 9 + \frac{s(A_{\before r})}{2}  \]
+%and using $s(B_{\before j})\le s(A_{\before j})\le s(A_{\before r})$ together with $s(B_{\before j}) < 4$, we have:
+%\[ s(j) + s(r) > 9 + \left( \frac{s(A_{\before r})}{2} - s(B_{\before j}) \right) \ge  9 - \frac{s(B_{\before j})}{2} > 7. \qquad \qed \]
+%
+%\end{proof}
+
+\begin{lem}[Lemma~\ref{lem:boundonB}]
+Suppose the algorithm \tbalg reaches no good situation during Step~{\rm \step{qstep}}.
+Then, after placing $x$ into $B$ in Step~{\rm \step{b1}}, it holds that $s(B) < 12.8$.
+\end{lem}
+
+\begin{proof}
+As before, we will use our inequalities to derive the desired
+bound. As we have argued above, Lemma \ref{lem:eplusr} gives us that
+$s(r) > 2.8$.
+
+We sum up inequalities \eq{6} and \eq{9b}, getting:
+\begin{align*}
+ s(B_{\before j}) + s(j) + 2s(x) + s(A_{\before x}) + s(r) &< 15 + \frac{s(r)}{2} + s(B_{\before j})\\
+&+ s(j) + 4 - s(A_{\before x})\\ 
+2s(x) + 2s(A_{\before x}) &< 19 - \frac{s(r)}{2}. \\
+s(x) + s(A_{\before x}) &< 9.5 - \frac{s(r)}{4}. 
+\end{align*}
+To finish the bound we need $s(B_{\before j}) \le s(A_{\before j}) \le s(A_{\before x})$ (this is true because we reorder the bins
+$B$, $A$ in Step~\step{rename}), $s(r) > 2.8$ and $s(j) < 4$. Plugging them in, we get:
+
+\[ s(B) = s(B_{\before j}) + s(j) + s(x) \le s(A_{\before x}) + s(j) + s(x) \]
+\[ < 9.5 - \frac{s(r)}{4} + s(j) < 9.5 - 0.7 + 4 < 12.8. \qquad \qed\]
+\end{proof}

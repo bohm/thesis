@@ -1,0 +1,443 @@
+\subsection{The standard case}
+From now on, we can assume that $s(j) < 4$, $j$ is packed into $B$ and
+Step \step{qstep} of \tbalg is reached. Recall that by Observation~\ref{obs:1a}
+$s(A_{\before j}) \in  (3,4)$, $s(B_{\before j}) + s(j) \in(6,8)$, and
+there is exactly one item either in $A$, or in $B$; we denote this item by $e$.
+We repeat the steps done by \tbalg in the standard case:
+
+\smallskip
+\algobox{
+\step{qstep} \GSFF{$A|_4,B|_q,C|_4$} where
+$q \defeq 9+\frac{1}{2}(s(A)+s(C))$. %\item[] \indentskip
+Whenever $s(A)$ or $s(C)$ change in this step, update $q$ and continue Step~\step{qstep}.\\
+\step{b1} \GSFF{$A|_4, B|_{22}, C|_{22}$}.\\
+\step{b2} \GSFF{$A|_{22}, B|_{22}, C|_{22}$}.
+}
+
+Recall that $s(A) > 3$ by Observation~\ref{obs:1a}. Assuming
+that no good situation is reached before Step \step{qstep}, we
+observe the following:
+
+% \smallskip
+
+\begin{obs}
+\label{obs:6-b}
+In Step {\rm \step{qstep}}, as long as $C$ is empty,
+packing any item of size at least $4$ leads to a good
+situation. Thus while $C$ is empty, all items that 
+arrive in Step {\rm \step{qstep}} and are not put on $A$ 
+have size in $(6-s(A),4)$.
+\end{obs}
+\begin{proof}
+Any item with size in $[4-s(A),6-s(A)]\cup[4,6]$ leads to \gs2. 
+Any item with size more than 6 is assigned to $B$ if it fits there,
+reaching \gs5, and else to $A$ or $C$, reaching \gs7 since $s(B)\le9+\frac{1}{2}(s(A)+s(C))$. The only remaining
+possible sizes of items that are not packed into $A$ are $(6-s(A),4)$.\qed
+\end{proof}
+
+\begin{cor}
+\label{obs:c}
+After Step {\rm \step{qstep}}, $C$ contains exactly one item $r$ and $s(A)+s(C)>6$.
+\end{cor}
+
+\begin{proof}
+From the previous observation it is clear that $C$ receives at least one item $r$ in Step \step{qstep}. No second
+item $r_2$ can be packed into $C|_4$ in Step~\step{qstep} as $s(r) + s(r_2)$ would be at least $2(6 - s(A)) > 4$. \qed
+\end{proof}
+
+
+Step \step{qstep} terminates with a new item $x$ which fits into %PV: observation for further reference?
+$B|_{22}$ (otherwise we would reach \gs7),
+but not below the limit $q = 9 + \frac{1}{2}(s(A)+s(C))$. We pack $x$
+into $B$ in Step~\step{b1}, getting $s(B) > 9 + \frac{1}{2}(s(A)+s(C)) > 12$.
+
+A possible bad situation for our current packing is when three items $b_1,
+b_2, b_3$ arrive, where the items are such that no two items
+of this type fit together into any bin, and no single item of this
+type fits on the largest bin, which is $B$ in our case. In fact, we
+will prove later that this is the only possible bad situation.
+
+We claim that this potential bad situation cannot
+occur:
+
+\begin{clm}\label{clm:nobigitems}
+Suppose that the algorithm \tbalg reaches no good situation in the standard case. Then,
+$s(C)\ge s(r)>2.8$ and after placing $x$ into B in Step~{\rm \step{b1}} it holds that
+\[s(B)<12.8.\]
+
+Furthermore, suppose that among items that arrive after $x$, there are three items $b_1, b_2, b_3$ such that 
+\[\min( s(b_1), s(b_2), s(b_3)) > 8.\] Then, it holds that 
+\[\min(s(b_1),s(b_2),s(b_3)) < 9.2. \]
+
+% Martin: s(r) > 2.8 is not actually the best bound we can derive; later we can show that s(r)>3.
+% However, s(r) > 2.8 is trivially true and it is enough for our calculations.
+\end{clm}
+
+We now show how Claim \ref{clm:nobigitems} finishes the analysis of \tbalg.
+After that we show the claim using linear programming; a formal proof is in
+Section~\ref{app:proofOfClaim}.
+
+After Step \step{qstep}, assuming no good situation is reached, the
+algorithm places $x$ into $B|_{22}$ and moves to Step~\step{b1},
+which is \GSFF{$A|_4, B|_{22}, C|_{22}$}. Claim \ref{clm:nobigitems}
+gives us $s(B) < 12.8$ after placing $x$, while the fact that we exited
+Step \step{qstep} means that $s(B) > q = 9 + \left( s(A)+s(C) \right)/2 > 12$.
+
+Consider the first item $b_1$ that does not fit into $A|_4$. We have
+that $s(b_1)>2$, otherwise \gs2 is
+reached. However, any item that fits into $B$ (as long as $s(C) \le 4$) triggers
+\gs4, because $s(A) + s(B) + s(b_1) \ge  6 + 12 > 15 + s(C)/2$.
+
+We now know that the first item $b_1$ does not fit into both $A|_{4}$ and $B|_{22}$.
+We place it into $C$, noting that $s(b_1) > 22 - s(B) \ge  22 - 12.8 = 9.2$.
+
+We keep packing items into $A|_{4}$, waiting for the second item $b_2$
+that does not fit into $A|_4$ in Step~\step{b1}. Again, $s(b_2) >
+2$. Suppose that $b_2$ fits into $B|_{22}$ or $C|_{22}$. Claim \ref{clm:nobigitems}
+gives us $s(r)>2.8$; we thus sum up bins $B$ and $C$ and get $s(B_{\before b_2}) +
+s(b_2) + s(r) + s(b_1) > 12 + 2 + 2.8 + 9.2 = 26$, which is enough for
+\gs1.  Our assumption was false, the item $b_2$ does 
+fit into neither $B|_{22}$ nor $C|_{22}$, in particular we have that $s(b_2)>9.2$.
+
+We move to Step~\step{b2}, pack $b_2$ into $A|_{22}$ and continue
+with \GSFF{$A|_{22}, B|_{22}, C|_{22}$}. If at any time $s(A) \ge  14$, we
+enter \gs1 on $A$ and $B$. Otherwise, if an item $b_3$ does not fit into $A|_{22}$,
+it must satisfy $s(b_3) > 8$.
+
+We now apply the full strength of Claim \ref{clm:nobigitems}. The
+smallest item of $b_1$, $b_2$, $b_3$ must have size less than $9.2$,
+and because of our argument, it must be $b_3$ -- but this means it
+fits into $B$, as $s(B)<12.8$. \gs1 on bins $A$ and $B$ finishes the
+packing, since $s(A) + s(b_3) + s(B_{\before b_3}) > 22 + 12 > 26$.
+
+\subsubsection{Proof of Claim \ref{clm:nobigitems}}\label{sec:profOfClaim}
+
+Our current goal is to prove Claim \ref{clm:nobigitems}.
+As in the large case, we would now like to appeal to the offline
+layout of the larger items currently packed. Unlike the large case,
+none of the items we have packed before Step~\step{b1} is guaranteed to be over $6$.
+
+Sidestepping this obstacle, we will argue about the offline layout of
+the smaller items. We now list several items that are packed before Step~\step{b2} and will be important in our analysis:
+
+\begin{dfn}\label{dfn:fouritems} The four items $e,j,r,x$ are defined as follows:
+\begin{enumerate}
+\item The item $e, 2 < s(e) < 4$: the only item packed into $B$ in Step~{\rm \step{initial}}
+by Observation~\ref{obs:1a}.
+(Note that $e$ might end up on $A$ after renaming the bins.)
+\item The item $j, 2 < s(j) < 4$, defined in Step~{\rm \step{jcheck}}.
+\item The item $r, 2 < s(r) < 4$, placed into $C$ in Step~{\rm \step{qstep}} by Observation~\ref{obs:c}; $r$ is the only item in $C$ until Step~{\rm \step{b1}}.
+\item The item $x$ which terminated Step~{\rm \step{qstep}}.
+\end{enumerate}
+
+\end{dfn}
+
+There are four such items and only three bins, meaning that in the
+offline optimum layout with capacity $16$, two of them are packed in
+the same bin.  We will therefore argue about every possible pair,
+proving that each pair is of size more than $6.8$.
+
+Our main tool in proving the mentioned lower bounds are the
+inequalities that must be true during various stages of algorithm
+\tbalg, since a good situation was not reached. We now list
+all the major inequalities that we will use.
+
+\iffalse
+\begin{align}
+\label{eq:0}
+s(A_{\before j}) &> 3 
+& \mbox{Observation \ref{obs:1a}}\\
+\label{eq:1}
+s(B_{\before j}) + s(j) &> 6
+& \mbox{Beginning of Step~\step{qstep}}\\
+\label{eq:2}
+s(A_{\before i}) + s(i) &> 6 
+& \mbox{\gs2 not reached in Step~\step{qstep}}\\
+\label{eq:3}
+s(B_{\before r})+ s(r) &> 9 + \frac{s(A_{\before r})}{2} 
+& \mbox{$r$ does not fit into $B|_q$}\\
+\label{eq:4}
+\left(s(B_{\before r}) + s(r) \right) + s(A_{\before r}) &< 15 
+& \mbox{No \gs4 if $r$ packed into $B$}\\
+\label{eq:5}
+\left(s(B_{\before x}) + s(x) \right) + s(r) &< 15 + \frac{s(A_{\before x})}{2} 
+& \mbox{No \gs4 when $x$ packed into $B|_{22}$}\\
+\label{eq:6}
+\left(s(B_{\before x})+ s(x) \right) + s(A_{\before x}) &< 15 + \frac{s(r)}{2}
+& \mbox{No \gs4 when $x$ packed into $B|_{22}$}\\
+\label{eq:7}
+9 + \frac{s(A_{\before x}) + s(r)}{2} & < s(B_{\before x}) + s(x) 
+ & \mbox{$x$ does not fit into $B|_{q}$}\\
+\label{eq:8}
+s(B_{\before x}) + (4 - s(r))  & > s(A_{\before x}) + s(x) 
+& \mbox{No \gs6 if $x$ packed into $A$}\\
+\label{eq:8b}
+s(A_{\before x}) + s(x) + \big(4 - s(r)\big) &> s(B_{\before x}) 
+& \mbox{No \gs6 if $x$ packed into $A$}\\
+\label{eq:9b}
+s(B_{\before x}) + \big(4 - s(A_{\before x})\big)  & > s(r) + s(x) 
+& \mbox{No \gs6 if $x$ packed into $C$}\\
+\label{eq:9}
+s(r) + s(x) + (4 - s(A_{\before x})) & > s(B_{\before x})
+& \mbox{No \gs6 if $x$ packed into $C$}
+\end{align}
+\fi
+
+% We modify the display skip for more compact list
+% of equations.
+\newdimen\ads
+\newdimen\bds
+\ads=\abovedisplayskip
+\bds=\belowdisplayskip
+\setlength{\abovedisplayskip}{3pt}
+\setlength{\belowdisplayskip}{3pt}
+
+\begin{itemize}
+\item Observation \ref{obs:1a}:
+\begin{equation}\label{eq:0}
+s(A_{\before j}) > 3.
+\end{equation}
+
+\item Beginning of Step~\step{qstep}:
+\begin{equation}\label{eq:1}
+s(B_{\before j}) + s(j) > 6.
+\end{equation}
+
+\item \gs2 not reached in Step~\step{qstep}:
+\begin{equation}\label{eq:2}
+s(A_{\before i}) + s(i) > 6.
+\end{equation}
+
+\item $r$ does not fit into $B|_q$:
+\begin{equation}\label{eq:3}
+s(B_{\before r})+ s(r) > 9 + \frac{s(A_{\before r})}{2}.
+\end{equation}
+
+\item No \gs4 if $r$ packed into $B$:
+
+\begin{equation}\label{eq:4}
+\left(s(B_{\before r}) + s(r) \right) + s(A_{\before r}) < 15.
+\end{equation}
+
+\item No \gs4 when $x$ packed into $B|_{22}$:
+% \item When $x$ got packed into $B|_{22}$ in Step~\step{b1}, it did not
+% cause \gs4 when summing $B$ with $C$:
+
+\begin{equation}\label{eq:5}
+\left(s(B_{\before x}) + s(x) \right) + s(r) < 15 + \frac{s(A_{\before x})}{2}. 
+\end{equation}
+
+\item No \gs4 when $x$ packed into $B|_{22}$:
+% \item The item $x$ also did not cause \gs4 when summing $B$ with $A$:
+
+\begin{equation}\label{eq:6}
+\left(s(B_{\before x})+ s(x) \right) + s(A_{\before x}) < 15 + \frac{s(r)}{2}. 
+\end{equation}
+
+\item $x$ does not fit into $B|_{q}$:
+\begin{equation}\label{eq:7}
+s(B_{\before x}) + s(x) > 9 + \frac{s(A_{\before x}) + s(r)}{2}.
+\end{equation}
+
+\item No \gs6 if $x$ packed into $A$:
+% \item The item $x$ cannot start \gs6 when packed into $A$. Comparing bin $A$ to $B$, we get:
+\begin{equation}\label{eq:8}
+s(A_{\before x}) + s(x) < s(B_{\before x}) + (4 - s(r)).
+\end{equation}
+
+\item No \gs6 if $x$ packed into $A$:
+% We get a similar but slightly different inequality when comparing $B$ to $A$ instead:
+\begin{equation}\label{eq:8b}
+s(B_{\before x}) < s(A_{\before x}) + s(x) + \big(4 - s(r)\big).
+\end{equation}
+
+\item No \gs6 if $x$ packed into $C$:
+% \item \gs6 could not be reached when the algorithm
+% considered packing $x$ into bin $C$, comparing the bin $C$
+% to $B$:
+\begin{equation}\label{eq:9b}
+s(r) + s(x) < s(B_{\before x}) + \big(4 - s(A_{\before x})\big).
+\end{equation}
+
+\item No \gs6 if $x$ packed into $C$:
+% Again as in inequality \eq{8b} we can compare bin $B$ to $C$ and get:
+\begin{equation}\label{eq:9}
+s(B_{\before x}) < s(r) + s(x) + (4 - s(A_{\before x})). 
+\end{equation}
+\end{itemize}
+
+% Reverting to original display skip values.
+\setlength{\abovedisplayskip}{\ads}
+\setlength{\belowdisplayskip}{\bds}
+\goodbreak
+
+We first show the claim using infeasible linear programming (LP)
+instances formed by the above inequalities.  The specific instances
+can be found in Section~\ref{app:LP} and online at \url{http://github.com/bohm/binstretch/}.
+
+We write our LPs in the GNU MathProg language, thus they can be
+verified using GNU Linear Programming Kit\footnote{One can also use
+online solver at \url{https://www3.nd.edu/~jeff/mathprog/}.}.  In
+Section~\ref{app:proofOfClaim} we provide formal proofs of these
+lemmas for completeness.
+
+In our LPs we use a variable \texttt{i} for $s(i)$, the size of item $i$,
+and \texttt{X} for $s(X)$ where $X$ is a bin. Instead of $s(X_{\before i})$
+we write \texttt{X\_i}.
+
+Since our inequalities are mostly strict and LPs cannot
+contain strict inequalities, we add a non-negative variable \texttt{eps} (epsilon)
+which allows us to turn strict inequalities to non-strict.
+More precisely, we change an inequality of type \texttt{A < B} into \texttt{A + eps <= B}
+and we maximize the value of \texttt{eps}; we can do this, because our LPs
+do not need another objective function. If the optimal value of \texttt{eps} 
+is zero, or if the LP is infeasible, then also the original system or strict inequalities
+is infeasible as well. Otherwise, if the optimal value of \texttt{eps} is positive,
+then all the strict inequalities can be satisfied.
+
+Our first lemma establishes that $j$ is actually the only item that
+is packed into $B$ during Step~\step{qstep}, which intuitively means that
+$j$ is not too small:
+
+\begin{lem}\label{lem:onej}
+Assume that no good situation is reached until Step~{\rm \step{b1}}. Then
+it holds that during Step~{\rm \step{qstep}}, only $j$ is packed into $B$.
+\end{lem}
+
+\begin{proof}
+We first prove that no two additional items $j_2, j_3$ can be packed into $B$
+during Step~\step{qstep}. Assuming the contrary, we get $s(B_{\before j_2}) +
+s(j_2) + s(j_3) > 6 + 2 + 2 = 10$. With that load on $B$, we consider
+the packing at the end of Step~\step{qstep}, when the item $x$ arrived. If
+$s(x) + s(C_{\before x}) < 9$, we get \gs6 by placing $x$ into $C$ since $s(A)>3$, so it must be true
+that $s(x) + s(C_{\before x}) > 9$, which means $s(x) >
+5$. This is enough for us to place $x$ into $B|_{22}$
+(where it fits, otherwise we are in \gs7) and reach \gs3.
+
+This contradiction gives us that at most one additional item $j_2$ can
+be packed into $B$ during Step \step{qstep}. We will now prove that
+even $j_2$ does not exist, again by contradiction.
+
+We split the analysis into two cases depending on which of $j_2$ and $r$ arrives first.
+
+\smallskip
+\noindent \textbf{Case 1.} The item $r$ is packed
+before $j_2$, meaning $s(B_{\before x}) = s(B_{\before r}) + s(j_2)$.
+We create a linear program from inequalities \eq{0}, \eq{3}, \eq{6}, \eq{8b} 
+and $s(A_{\before r}) \ge s(A_{\before j})$ (since $r$ arrives after $j$).
+We also add $s(r)<4$ and $s(j_2) > 2$, since
+$s(A_{\before j_2}) < 4$ and $j_2$ did not fit into $A|_{6}$.
+We obtain LP1 for which the optimal value is 0, a contradiction.
+
+\smallskip
+
+\noindent \textbf{Case 2.} In the remaining case, $j_2$ arrives before $r$.
+We create an LP from \eq{1}, \eq{2}, \eq{4}, \eq{6}, \eq{9}, $s(r) < 4$,
+$s(A_{\before j_2}) \le s(A_{\before r}) \le s(A_{\before x})$,
+and $s(B_{\before x}) = s(B_{\before r}) = s(B_{\before j}) + s(j) + s(j_2)$
+(the last two are only true here in Case 2, where $r$ arrived later than $j_2$).
+The resulting LP2 is infeasible.\qed
+\end{proof}
+
+Having established that only one item $j$ is packed into $B$ during
+Step \step{qstep}, we can start deriving lower bounds on pairs of
+items from the set $\{e,j,r,x\}$. We will prove these bounds similarly
+to Lemma \ref{lem:onej} by infeasible LPs from bounds that arise from
+evading various good situations.
+
+\begin{lem}\label{lem:eplusr}
+Suppose that $e$ and $r$ are items as described in Definition \ref{dfn:fouritems} and suppose
+also that no good situation was reached during Step~{\rm \step{qstep}} of the algorithm \tbalg.
+Then, $s(e) + s(r) \ge  s(B_{\before j}) + s(r) > 6.8$.
+\end{lem}
+
+\begin{proof}
+First of all, it is important to note that the item $e$ may be
+packed on $A$ or on $B$.
+% Regardless, if we prove $s(B_{\before j}) + s(r) >
+% 6.8$, we will be done: $j$ is placed on top of $B_{\before j}$
+% and we have $s(B_{\before j}) \le s(A_{\before j})$ by Step~\step{rename}.
+Since either $B_{\before j}$, or $A_{\before j}$ contains solely $e$
+by Observation~\ref{obs:1a}, we get that either $s(B_{\before j}) = s(e)$,
+or $s(B_{\before j}) \le s(A_{\before j}) = s(e)$. Thus it is sufficient to prove
+$s(B_{\before j}) + s(r) > 6.8$.
+
+We use \eq{3}, \eq{7}, \eq{8}, $s(j) < 4$, \[s(B_{\before j}) \le s(A_{\before j}) \le s(A_{\before r}) \le s(A_{\before x}),\]
+and a converse of the claim and obtain LP3 with the optimal value equal to 0. \qed
+\end{proof}
+
+\begin{lem}\label{lem:eplusj}
+Suppose that $e$ and $j$ are items as described in Definition \ref{dfn:fouritems} and suppose
+also that no good situation was reached by the algorithm \tbalg.
+Then, $s(e) + s(j) \ge  s(B_{\before j}) + s(j) > 7.6$.
+\end{lem}
+
+\begin{proof}
+The same argument as in Lemma \ref{lem:eplusr} gives us $s(e) + s(j) \ge  s(B_{\before j}) + s(j)$.
+We therefore aim to prove $s(B_{\before j}) + s(j) > 7.6$. 
+We create LP4 from \eq{7}, \eq{9b}, $s(B_{\before j}) + s(r) > 6.8$ by Lemma \ref{lem:eplusr},
+and $s(B_{\before j} \leq s(A_{\before x})$ for which 0 is the optimum again.
+\qed
+\end{proof}
+
+\begin{lem}\label{lem:rplusj}
+Suppose that $j$ and $r$ are items as described in Definition \ref{dfn:fouritems} and suppose
+also that no good situation was reached by the algorithm \tbalg. Then, $s(r) + s(j) > 7$.
+\end{lem}
+
+\begin{proof} % PV: this seems to be simple enough to have the old proof
+Starting with \eq{3}:
+\[ s(B_{\before j}) + s(j) + s(r) > 9 + \frac{s(A_{\before r})}{2}  \]
+and using $s(B_{\before j})\le s(A_{\before j})\le s(A_{\before r})$ with $s(B_{\before j}) < 4$, we have:
+\begin{align*}
+s(j) + s(r) &> 9 + \left( \frac{s(A_{\before r})}{2} - s(B_{\before j}) \right) \\
+            & \ge  9 - \frac{s(B_{\before j})}{2} > 7. \qquad \qed 
+\end{align*}
+\end{proof}
+
+\begin{lem}\label{lem:xplus}
+Suppose that $x,e,j,r$ are items as described in Definition \ref{dfn:fouritems}.
+Suppose also that no good situation was reached by the algorithm \tbalg.
+Then,
+\[ s(x) > 4 \quad \text{and} \quad s(x) + \min(s(j),s(e),s(r)) > 6.8. \]
+\end{lem}
+
+\begin{proof}
+With all the previous lemmas in place, the proof is simple enough. We first
+observe that $s(x) > 4$; this is true because $s(B_{\before j}) + s(j) < 4+4 = 8$ and
+$s(B_{\before x}) + s(x) > q \geq 12$.
+
+Since the sizes of the remaining three items $\{e,r,j\}$ are bounded from above
+by $4$ but their pairwise sums are always at least $6.8$, we have
+that $\min\{e,r,j\} > 2.8$, which along with $s(x) > 4$ gives us the
+required bound.\qed
+\end{proof}
+
+From Lemmas \ref{lem:eplusr}, \ref{lem:eplusj}, \ref{lem:rplusj} and
+\ref{lem:xplus} we get a portion of Claim \ref{clm:nobigitems}: if
+three big items $b_1, b_2, b_3$ exist in the offline layout, then one of these
+items needs to be packed together with at least two items from the set
+$\{e,j,r,x\}$, and therefore $\min(s(b_1),s(b_2),s(b_3)) < 9.2$. The
+second bound $s(r) > 2.8$ follows from Lemma \ref{lem:eplusr} and the
+fact that $s(e) < 4$.
+
+All that remains is to prove the bound on $s(B)$, which we do in the following lemma:
+
+\begin{lem}\label{lem:boundonB}
+Suppose that no good situation was reached in the algorithm \tbalg during Step~{\rm \step{qstep}}.
+Then, after pla\-cing $x$ into $B$ in Step~{\rm \step{b1}}, it holds that $s(B) < 12.8$.
+\end{lem}
+
+\begin{proof}
+
+As before, we will use our inequalities to derive an LP showing the desired
+bound. As we have argued above, Lemma \ref{lem:eplusr} gives us that
+$s(r) > 2.8$. We also use inequalities \eq{6}, \eq{9b},
+$s(B_{\before j}) \le s(A_{\before j}) \le s(A_{\before x})$
+(this is true because we reorder the bins $B$, $A$ in Step~\step{rename}),
+and $s(j) < 4$ to get LP5 with 0 being the optimal value.\qed
+\end{proof}
+
+With Lemma \ref{lem:boundonB} proven, we have finished the proof of Claim \ref{clm:nobigitems}
+and completed the analysis of the algorithm \tbalg.
+

@@ -1,0 +1,86 @@
+\section{Linear programs used in the proofs}\label{app:LP}
+LP1
+\begin{verbatim}
+var A_j; var A_r; var A_x; var B_r; var B_x;
+var j_2; var r; var x;
+var eps >= 0;
+
+maximize obj: eps;
+
+AjLessThanAr: A_j <= A_r;
+Bx: B_x = B_r + j_2;
+eq1: A_j >= 3 + eps;
+eq4: B_r + r >= 9 + A_r/2 + eps;
+eq7: B_x + x + A_x <= 15 + r/2 - eps;
+eq10: B_x <= A_x + x + (4 - r) - eps;
+j2notSmall: j_2 >= 2 + eps;
+rNotBig: r <= 4 - eps;
+\end{verbatim}
+LP2
+\begin{verbatim}
+var A_j_2; var A_r; var A_x; var B_r; var B_x; var B_j;
+var r; var j_2; var x; var j;
+var eps >= 0;
+
+maximize obj: eps;
+
+Aj2LessThanAr: A_j_2 <= A_r;
+ArLessThanAx: A_r <= A_x;
+BxEqBr: B_x = B_r;
+BrEq: B_r = B_j + j + j_2;
+eq2: B_j + j >= 6 + eps;
+eq3: A_j_2 + j_2 >= 6 + eps;
+eq5: B_r + r + A_r <= 15 - eps;
+eq7: B_x + x + A_x <= 15 + r/2 - eps;
+eq12: B_x <= r + x + (4 - A_x) - eps; 
+rNotBig: r <= 4 - eps;
+\end{verbatim} 
+LP3
+\begin{verbatim}
+var A_r; var A_x; var B_j; var B_r; var B_x; 
+var r; var x; var j;
+var eps >= 0;
+
+maximize obj: eps;
+
+BrEq: B_r = B_j + j;
+BxEq: B_x = B_r;
+eq4: B_r + r >= 9 + A_r/2 + eps;
+eq8: B_x + x >= 9 + (A_x + r)/2 + eps;
+eq9: A_x + x <= B_x + (4 - r) - eps;
+BjLessThanAx: B_j <= A_x;
+BjLessThanAr: B_j <= A_r;
+jNotBig: j <= 4 - eps;
+contradiction: B_j + r <= 6.8;
+\end{verbatim}
+LP4
+\begin{verbatim}
+var A_x; var B_j; var B_x; 
+var r; var x; var j;
+var eps >= 0;
+
+maximize obj: eps;
+
+BxEq: B_x = B_j + j;
+eq8: B_x + x >= 9 + (A_x + r)/2 + eps;
+eq11: r + x <= B_x + (4 - A_x) - eps;
+BjPlus_rBound: B_j + r >= 6.8 + eps;
+BjLessThanAx: B_j <= A_x;
+contradiction: B_j + j <= 7.6;
+\end{verbatim}
+LP5
+\begin{verbatim}
+var A_x; var B_j; var B_x; 
+var r; var x; var j;
+var eps >= 0;
+
+maximize obj: eps;
+
+BjLessThanAx: B_j <= A_x;
+BxEq: B_x = B_j + j;
+eq7: B_x + x + A_x <= 15 + r/2 - eps;
+eq11: r + x <= B_x + (4 - A_x) - eps; 
+jNotBig: j <= 4 - eps;
+rBound: r >= 2.8 + eps;
+contradiction: B_j + j + x >= 12.8;
+\end{verbatim}

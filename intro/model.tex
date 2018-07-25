@@ -1,0 +1,188 @@
+\section{The online model of computation}
+
+Before we continue with the investigation of the problem of repacking
+containers, we specify the model of computation that we are
+considering.
+
+For those not in the know of the theoretical computer science
+terminology, an \textit{online algorithm} conjures an image of a
+program which is hosted on a server on the internet. This may indeed
+be so, but the definition actually predates the internet and goes to
+the 1970s, where the word ``online'' implied something arriving
+literally ``on a line'', such as on a conveyor belt.
+
+In the online model, the input to the algorithm is not known in
+advance, but it arrives sequentially, one by one -- exactly like
+luggage on the conveyor belt. After each part of the input arrives,
+the algorithm must \textit{immediately} and \textit{irrevocably}
+decide what to do with this particular piece of the input. Most
+commonly, the decision is where to send a packet, which processor core
+should be selected for the current task, or which container should be
+used to pack the incoming item. As mentioned, after a decision is
+made, it cannot be reverted. 
+
+Only after a decision is made, the next item in the sequence is
+revealed to the algorithm, and the same decision process is repeated;
+of course even if two items arrive which are exactly the same, the
+algorithm can decide differently on them, since it knows the history
+of the instance.
+
+After the entire input is processed, we look at the whole output of
+the algorithm and consider it a \emph{solution} of the online problem.
+Naturally, the resulting solution is also a valid solution for the
+original non-online optimization problem, but usually is worse than
+what a normal polynomial-time algorithm for that optimization problem
+would produce.
+
+\begin{dfn}
+An \emph{online problem} is an optimization problem where some part of
+the input instance arrives sequentially, one by one. After each part
+arrives, it must be processed immediately and irrevocably, and the
+next part of the input instance arrives only after the processing of
+the previous part is complete.
+
+An \emph{online algorithm} is an algorithm that outputs some solution
+of an online problem. Given an instance $I$ of the online problem, we
+can measure the performance of the online algorithm by its output's
+\emph{value} on the function being optimized. We denote its value on
+instance $I$ as $\ALG(I)$.
+\end{dfn}
+
+As examples of online problems, we can list the two that are arguably
+the most well-studied: scheduling and bin packing.
+
+\begin{prb}[\scheduling]~
+\smallskip
+
+\noindent\textbf{Input:}
+\begin{itemize}
+\item A number $m$ -- the number of available equal-speed machines.
+\item A sequence $j_1, j_2, …, j_n$ of jobs, arriving online (one by one). Each job $j$ has its own non-negative \emph{processing time} $p(j)$. The processing time is revealed when the job arrives. The number of jobs $n$ is not known in advance.
+\item Once a job appears, the algorithm must assign the job to one machine; the next job is revealed after the decision is made.
+\end{itemize}
+
+\noindent\textbf{Output:} A schedule (assignment) of jobs to machines,
+along with the makespan, which is the sum of the processing times on
+the busiest machine.
+
+\noindent\textbf{Goal:} Design an online algorithm that minimizes the
+makespan.
+\end{prb}
+
+\begin{prb}[\binpacking]~
+\smallskip
+
+\noindent\textbf{Input:}
+\begin{itemize}
+\item A sequence $i_1, i_2, …, i_n$ of items, arriving online (one by one). Each item $i$ has its own non-negative \emph{size} $s(i), s(i) \le 1$. The size is revealed when the item arrives.
+\item Once an item appears, it must be assigned to a \emph{bin} such that the total load of the bin after the assignment is at most $1$. The algorithm can open a new bin (with load $0$) at any time, and can open any number of bins.
+\end{itemize}
+
+\noindent\textbf{Output:} A number of bins used by the algorithm $B$, as well as
+the assignment of all input items into these bins.
+
+\noindent\textbf{Goal:} Design an online algorithm that minimizes the number of bins $B$.
+\end{prb}
+
+\medskip
+
+The goal of algorithm designers is not only designing algorithms that
+perform well in practice, but also those that \emph{verifiably}
+perform well. Since online algorithms are designed only for
+optimization problems, one could suggest to compute the value of the
+best possible online algorithm for the problem and compare our
+algorithm to that value. This is actually quite hard, since in almost
+all cases there is no good way to compute the value of the optimal
+online algorithm.
+
+Instead, we compare our algorithm's performance to an optimum that
+actually is not online at all, but has access to the whole input at
+the same time. We define it as follows: 
+
+\begin{dfn}\label{dfn:compratio}
+An \emph{offline optimal algorithm} is an algorithm that optimally
+solves the online problem when given the entirety of the instance at the start
+of the program. On an instance $I$, we denote its value as $\OPT(I)$.
+
+For a minimization problem, we say an online algorithm has
+\emph{competitive ratio $c$}, if for all instances $I$,
+
+\[ \ALG(I) \le c \cdot \OPT(I). \]
+
+For a maximization problem, we say an online algorithm has
+\emph{competitive ratio $c$} if for all $I$,
+
+\[ \OPT(I) \le c \cdot \ALG(I). \]
+
+\end{dfn}
+
+It might seem confusing to some readers that the competitive ratio is
+differently defined for minimization and maximization problems; this
+is done so chiefly to make sure that the competitive ratio $c$ is
+always in the interval $[1,\infty]$ of real numbers.
+
+So far we have not spoken at all about the running time of online
+algorithms. This was intentional: there are no time or space
+restrictions on their computation. All we need is that they are
+algorithms, i.e., they finish in finite time. Despite this relaxed
+view of algorithmic runtime, almost all online algorithms turn out to
+run in polynomial time, many even in linear time.
+
+% \todo{Mention that the computational complexity is unlimited. Also check
+% the definitions.}
+
+\section{Knowing a little in advance: the semi-online model}
+
+As we discussed above, an online algorithm cannot work with any assumptions
+about the input or its order -- which means that if an online algorithm works
+excellently on larger input instances but poorly on a sequence of short length,
+its performance will be judged exactly on those short sequences.
+
+One can easily see that ``assuming nothing'' is both a great advantage
+and at the same time a big disadvantage of the online computation
+model. Consider for instance the internet -- while our algorithms
+should behave well under any scenario, it is not true that the very
+worst scenario will always come true. Indeed, many routing and
+scheduling algorithms make use of previously computed statistics and
+assumptions about the data to behave well only in an average case or
+even just as a \textit{heuristic}, i.e. without any provable guarantees.
+
+If we wish to make our rule of ``assuming nothing'' weaker, we have
+several different options, all already studied in literature:
+
+\begin{enumerate}
+
+\item We could assume that the incoming items are not random, but
+are coming from a probabilistic distribution whose parameters we know.
+This is called \textit{stochastic online optimization}.
+
+\item We could assume that we are given some advice from an entity
+that has knows much more about the input than we do (a likely
+candidate for such an oracle would be NSA). While this entity can give
+us any advice at all, the information must be relatively small, for
+the model to make sense. After our algorithm receives this arbitrary
+but limited advice, it must make use of it to solve the online problem
+in an effective way. This model is called \textit{online optimization
+with advice}.
+
+\item There is a common sense weakening of the \textit{optimization
+with advice} model from the previous point, and we can describe it
+with an example. Suppose that our online algorithm is packing a
+sequence of apples into crates as best as it can. If we assume any
+advice at all, the algorithm could receive some information about the
+average curvature of the current batch of apples. The curvature may
+be potentially useful for packing, but clearly in real life there is no
+way an apple orchard can provide such an oddly specific piece of data.
+
+A much more reasonable request would be to provide the total number of
+apples, the total weight of the apples, or the estimated quality of
+the current season's fruit. In other words, in this model, we get a
+reasonable and pre-defined piece of information about the instance in
+advance, but our algorithms still need to solve the instance in an
+online way.
+
+This model is called \textit{semi-online optimization}, and it is the
+one we focus on in this thesis. We mention the other two models briefly
+in Section~X. \todo{Mention related work section.}
+
+\end{enumerate}
