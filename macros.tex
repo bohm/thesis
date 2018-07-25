@@ -34,20 +34,20 @@
 %%% Macros for definitions, theorems, claims, examples, ... (requires amsthm package)
 
 \theoremstyle{plain}
-\newtheorem{thm}{Theorem}
-\newtheorem{lem}[thm]{Lemma}
+\newtheorem{thm}{Theorem} \numberwithin{thm}{chapter}
+\newtheorem{lem}[thm]{Lemma} 
 \newtheorem{clm}[thm]{Claim}
 \newtheorem{obs}[thm]{Observation}
 \newtheorem{goodsit}{Good Situation}
 \newtheorem{gengoodsit}{Good Situation} % to avoid pdftex warning about duplicate labels
 
 \theoremstyle{definition}
-\newtheorem{dfn}{Definition}
-\newtheorem{prb}{Problem}
+\newtheorem{dfn}{Definition} \numberwithin{dfn}{chapter}
+\newtheorem{prb}{Problem} \numberwithin{prb}{chapter}
 
 \theoremstyle{remark}
-\newtheorem*{cor}{Corollary}
-\newtheorem*{rem}{Remark}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{rem}[thm]{Remark}
 \newtheorem*{example}{Example}
 
 %%% An environment for proofs

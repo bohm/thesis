@@ -1,0 +1,74 @@
+\section{Monotonicity}\label{sec:monotonicity}
+
+One of the new heuristics that enables us to go from a lower bound of
+$19/14$ on $5$ bins to $9$ bins is iterating on lower bounds by
+monotonicity. We define it as follows:
+
+\begin{dfn}
+A winning strategy for \adversary has \emph{monotonicity} $k$ if it is true
+that for any two items $i,j$ such that $j$ is sent immediately after
+$i$, we have $s(j) \ge s(i) - k$.
+\end{dfn}
+
+Using this concept, we can iterate over $k$ from $0$ (non-decreasing
+instances) to $S-1$ (full generality) to find the smallest value of
+monotonicity which leads to a lower bound, if any.
+
+A potential downside of iterating over monotonicity is that it can
+introduce an $S$-fold increase in elapsed time in the case that no
+lower bound exists. Additionally, it is quite likely that monotonicity
+becomes less useful as the scaling factor $T$ increases, as the item
+of relative size $1$ gets smaller and smaller.
+
+Still, solving decision trees of low monotonicity is much faster than
+solving the full tree, and we have empirically observed that lower
+bounds of lower monotonicity are fairly common; see
+Tables~\ref{tab:results3} and \ref{tab:resultsmulti} for our empirical
+results.
+
+\paragraph{Monotonicity caveats.} There are two important notes
+regarding monotonicity that need to be discussed. First, it is now
+true that bin configuration is not enough to describe one state of the
+bin stretching game. To see this, consider monotonicity $1$. If the
+first three input items are $1,2,3$, the next item needs to be of size
+$2$ or larger. However, if the three input items are $1,3,2$ (which is
+permissible for monotonicity $1$), the next item on input can be of
+size $1$ and above. This means that the two states are not equivalent,
+even though their bin configuration is the same.
+
+Notice that this problem is absent in the general case (where any item
+can be sent at any time, assuming it satisifies the optimum packing
+guarantee) and also in the case of monotonicity $0$ (where the last
+item can be inferred from the bin configuration, as it is always the
+item with the largest size).
+
+To remedy this, we mark in the bin configuration which item arrived
+last in the input sequence, which is sufficient for a fixed value of
+the monotonicity.
+
+When increasing monotonicity by one and re-running our algorithm, we
+need to update our cached results (Section~\ref{sec:4:caching}) as
+some previously losing bin configurations may become winning for the
+player \adversary with a less monotone input. We could erase the
+entire cache, but it is not necessary -- as any feasible bin
+configuration stays feasible and any bin configuration that is winning
+for \adversary stays winning when monotonicity increases. Therefore,
+we only erase the infeasible configurations and the bin configurations
+winning for the player \algo.
+
+The second caveat concerns combining other adversarial pruning
+(defined later in Section~\ref{sec:4:advpruning}) with monotonicity.
+
+When pruning the game tree, we enable all adversarial pruning tests
+including those that send items that would break the monotonicity
+constraints.
+
+There is no structural problem when doing so, since monotonicity is
+only restricting \adversary to reduce the tree size; giving \adversary
+some power back is therefore allowed. However, we must take this into
+account when reading the results of Tables~\ref{tab:results3} and
+\ref{tab:resultsmulti}. For example, a lower bound of monotonicity $1$
+may actually allow sending any item in the last few steps of the
+instance, provided this leads immediately to \algo packing one bin
+fully to its capacity $S$.
+

@@ -1,0 +1,89 @@
+\section{Description of the finite game}
+
+We now formulate precisely the scaling parameter and other main
+concepts of the game we wish to solve. First of all, for scaling
+purposes, we rescale the guaranteed load of the optimum packing from
+$1$ in the original definition to $S \in \Nat$. Therefore, if the
+algorithm must fill at least one bin to capacity $R$, the lower bound
+on the stretching factor will be $R/S$.
+
+Next, we formalize what will be one state of our game:
+
+\begin{dfn}\label{dfn:binconf}
+  Assume we fix three integral parameters: $m$ (the number of bins), $R$ (capacity of bins of the algorithm)
+and $S$ (size of the optimal bin). Then, we define a \emph{bin configuration} to be a pair
+  $(\calL,\calI)$, where
+  \begin{compactitem}
+    \item $\calL$ is a tuple of $m$ non-negative integers, sorted in descending order. These denoting the current sorted loads of the bins.
+    \item $\calI$ is a multiset with ground set $\{1,2,\ldots,S\}$ which contains the items used in the bins.
+  \end{compactitem}
+
+  Additionally, for every bin configuration, it must hold:
+  \begin{compactitem}
+    \item that there exists a packing of items from $\calI$ into $m$ bins with loads exactly in $\calL$;
+    \item that there exists a packing of items from $\calI$ into $m$ bins that does not exceed capacity $S$ in any bin.
+  \end{compactitem}  
+\end{dfn}
+
+To illustrate the definition, consider a configuration
+$((4,3,2,0),\{1,1,2,2,3\})$ -- a situation where four items arrived,
+one bin is loaded to size $4$, one to size $3$ and one to size $2$,
+leaving one more bin empty. Notice that the bin configuration does not
+capture the entire history of the game, but only its current state --
+indeed, we do not know in which order the items arrived, or even
+whether the bin of size $4$ is filled as an item of size $3$ plus an
+item of size $1$, or $2$ plus $2$.
+
+Losing information about history might seem like a bad idea at first,
+but it becomes more advantageous later, as it makes caching more
+efficient.
+
+It is clear that every bin configuration is a valid state of the game
+with \adversary as the next player. We may also observe that the
+existence of an online algorithm for \binstretch implies an existence
+of an oblivious algorithm with the same stretching factor that has
+access only to the current bin configuration $m$ and the incoming item
+$i$.
+
+In the following easy observation, we make sure that bin configuration
+captures all we need for both players:
+
+\begin{obs} Fix parameters $m$,$R$ and $S$.
+\begin{enumerate}
+\item There exists a lower bound adversarial strategy for \binstretch if and only if there exists a strategy
+that receives a bin configuration and returns the next item in the lower bound.
+\item There exists an algorithm for \binstretch if and only if there exists an algorithm which receives
+a bin configuration and a new item and returns a new bin configuration where the new item is packed.
+\end{enumerate}
+\end{obs}
+
+We are now able to formally define the game we investigate:
+
+\begin{dfn}
+For a given $m \in \Nat, R \in \Nat$ and $S \in \Nat$, the \emph{bin stretching game} $\Game(m,R,S)$ is the following two-player game:
+
+\begin{enumerate}
+\item There are two players named \adversary and \algo. The player \adversary starts.
+\item Each turn of the player \adversary is associated with a bin configuration $C = (\calL,\calI)$.
+The start of the game is associated with the bin configuration $((0,0,\ldots,0),\emptyset)$.
+\item The player \adversary receives a bin configuration $C$. Then,
+\adversary selects an integer $i$ such that the multiset $\calI \cup
+\{i\}$ can be packed by an offline optimum into $m$ bins of
+capacity $S$. The pair $(C,i)$ is then sent to the player \algo.
+\item The player \algo receives a pair $(C,i)$. The player \algo has
+to pack the item $i$ into the $m$ bins as described in $C$ so that
+each bin has load \emph{strictly less than} $R$. \algo then updates the
+configuration $C$ into a new bin configuration, denoted $C'$. \algo
+then sends $C'$ to the player \adversary.
+\item If the player \algo receives a pair $(C,i)$ such that it cannot pack
+the item according to the rules, the bin configuration $C$ is won for player \adversary.
+\item If the player \adversary has no more items $i$ that it can send from a
+configuration $C$, the bin configuration $C$ is won for player \algo.
+\end{enumerate}
+\end{dfn}
+
+\begin{dfn}
+We say that a game $\Game(m,R,S)$ is a \emph{lower bound} if the player
+\adversary has a winning strategy when starting from the bin configuration
+$((0,0,\ldots,0),\emptyset)$.
+\end{dfn}

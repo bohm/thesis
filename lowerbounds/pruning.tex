@@ -1,0 +1,184 @@
+\section{Tree pruning}\label{sec:4:pruning}
+
+Alongside the extensive caching described in Subsection
+\ref{sec:4:caching}, we also prune some bin configurations where it is
+possible to prove that a simple online algorithm is able to finalize
+the packing. Such a bin configuration is then clearly won for player
+\algo, as it can follow the output of the online algorithm.
+
+\subsection{Algorithmic pruning}\label{sec:4:gs}
+
+Recall that in the game $\Game(m,R,S)$, the player \algo is trying to
+pack all items into $m$ bins with load at most $R-1$. If the search
+algorithm can quickly deduce that a bin configuration leads to a
+successful packing, we can immediately evaluate the configuration as
+winning for the player \algo and thus prune the tree.
+
+This may remind us of the \emph{good situations} of
+Chapter~\ref{chap:threebins} (specifically Section~\ref{sec:3:gs}).
+Indeed, in the case of $3$ bins, we can use the good situations of
+Section~\ref{sec:3:gs} directly.
+
+For general $m$, we restate some of the good situations for a general
+instance of $\Game(m,R,S)$ such that $(R-1)/S \ge 1/3$. Recall that $\alpha$
+is the extra space in a stretched bin; in the situations below, $\alpha = (R-1) -S$,
+as the player \algo is packing only to capacity $R-1$.
+
+We omit the proofs of the good situations; they follow the same
+arguments as in the proofs in Section~\ref{sec:3:gs}.
+
+% \todo{I feel bad for omitting them, but time doesn't seem to be on my side.}
+
+\setcounter{goodsit}{0}
+
+\begin{goodsit}\label{lem:gs1generic}
+Given a bin configuration $(\calL,\calI)$ such that the total load
+of all but the last bin is at least $(m-1)\cdot S - \alpha$,
+there exists an online algorithm that packs all remaining items into
+$m$ bins of capacity $R-1$.
+\end{goodsit}
+
+\begin{goodsit}\label{lem:gs2generic}
+Given a bin configuration $(\calL,\calI)$ such that there exist
+two bins $A,B$ such that $s(A) \le \alpha$ and
+$s(\calL \setminus \{A,B\}) \ge (m-2)\cdot S - 2\alpha - 1 $,
+there exists an online algorithm that packs all remaining items into
+$m$ bins of capacity $R-1$.
+\end{goodsit}
+
+% \todo{Fix good situations 3 and 4.}
+
+\begin{goodsit}\label{lem:gs3generic}
+Consider a bin configuration $(\calL,\calI)$. Define the following
+sizes:
+
+\begin{enumerate}
+\item Let $s$ be the sum of loads of all bins excluding the last two.
+\item Let $r$ (the \emph{last bin load requirement}) be
+the smallest load such that if the currently last bin $B_m$ has load at least $r$,
+GS\ref{lem:gs1generic} is reached (after reordering the bins).
+\item Let $o$ (the \emph{overflow}) be defined as $R-r$.
+\end{enumerate}
+
+Then, if $r \le R-1$ and:
+
+\begin{itemize}
+\item either the second-to-last bin $B_{m-1}$ has load at most $\alpha$
+and above $(m-1)\cdot S - \alpha - o - s$;
+\item or the last bin $B_m$ has load at most $\alpha$
+but above $(m-1)\cdot S - \alpha - o - s$;
+\end{itemize}
+
+there exists an online algorithm that packs all remaining items into
+$m$ bins of capacity $R-1$.
+\end{goodsit}
+
+\begin{goodsit}\label{lem:gs4generic}
+
+Suppose that for a bin configuration $(\calL, \calI)$ it holds that
+the last two bins are loaded up to $\alpha$. 
+
+Define the following sizes:
+
+\begin{enumerate}
+\item Let $r$ be the last bin load requirement as above.
+\item Let $c$ (\emph{critical value for $B_{m-1}$}) be equal to $r - s(B_{m-1})$.
+In other words, if an item of size in $[c,S]$ is packed into $B_{m-1}$, GS\ref{lem:gs1generic}
+is reached.
+\end{enumerate}
+
+Then, for every item size in the interval $[1,c-1]$, we check the following
+constraint:
+
+Then, if it is true that for every item size in the interval $[1,c-1]$
+we can pack enough of these items into $B_{m}$ such that
+$GS\ref{lem:gs1generic}$ is reached on all bins except $B_{m-1}$,
+there exists an online algorithm that packs all remaining items into
+$m$ bins of capacity $R-1$.
+
+\end{goodsit}
+
+Interestingly, the last good situation (Good Situation
+\ref{lem:gs4generic} above) has no fixed threshold like its original
+form (GS\ref{lem:gs4}) but is \emph{algorithmic} in the sense that we
+can check it for each item size separately with an algorithm and gain
+a good situation if all its conditions are met.
+
+\subsection{Adversarial pruning}\label{sec:4:advpruning}
+
+Compared to our fairly strong algorithmic pruning, we have only few
+tools to quickly detect that a bin configuration is winning for the
+player \adversary. More specificaly, we use only the following two
+criteria:
+
+\paragraph{Large item heuristic.} Once any bin has load at least $R-S$,
+an item of size $S$ packed into that bin would cause it to reach load
+$R$, which is a victory for the player \adversary. Suppose that the
+$k$-th bin reaches load $l \ge R-S$. We compute the size of the
+smallest item $i$ such that
+
+\begin{enumerate}
+\item $s(i) + l \ge R$;
+\item For any bin $b$ in the interval $[(k+1), m]$ it holds
+that $s(i) + 2l \ge R$; in other words, \algo cannot pack
+two items of size $l$ into any bin starting from the $(k+1)$-st.
+\end{enumerate}
+
+Finally, we check if \adversary can send $m-k+1$ copies of the item of
+size $l$. If so, it is a winning bin configuration for this player and
+we prune the tree.
+
+Notice that there may be multiple different values of $l$ for one bin
+configuration; for instance, in the setting of $19/14$, for three bins
+with loads $11,9,0$, we should check whether we can send $2$ items of
+size $10$ or $3$ items of size $8$. Therefore, in the implementation,
+we compute for each bin its own candidate value of $l$ and then check
+whether at least one is feasible using the dynamic programming test
+described in Section~\ref{subsec:test}.
+
+\paragraph{Five/nine heuristic.} We use a specific heuristic for the
+case of $19/14$, as it is a good candidate for a general lower
+bound. This heuristic was observed to slightly compress the size of
+the output tree in this setting.
+
+This heuristic comes into play once there is a bin of load at least
+$5$. The item sizes $5$ and $9$ are complementary in the sense that
+one of each can fit together in the optimal packing of capacity 14,
+but the two of them cannot be packed together into a bin that already
+has load at least $5$. Additionally, if there are too many bins of
+load at least $5$ but not much more, a subsequent input of several
+items of size $14$ will again force a bin of load at least $19$.
+
+We apply this heuristic only when it is true that at all times, $m$
+items of size $9$ can arrive on input without breaking the adversarial
+guarantee. While this is true, it must be true that all bins are of
+load strictly less than $10$.
+
+Our heuristic considers repeatedly sending items of size $5$. If at
+any point there are only $p$ bins left with load strictly less than
+$5$ and at the same time $p+1$ items of size $14$ can arrive on input,
+the configuration is winning for the player \adversary. On the other
+hand, if at any point there is a bin of load at least $10$ and the
+invariant that $m$ items of size $9$ can still arrive holds, we are
+also in a winning state for \adversary.
+
+If it is true that by repeatedly sending items of size $5$ we
+eventually reach at least one of the aforementioned two situations,
+we mark the initial bin configuration as winning for the player
+\adversary.
+
+\paragraph{A note on performance.} While both of our heuristics reduce
+the number of tasks in our tree and the number of considered vertices,
+we were unable to evaluate them in every single vertex of the game
+tree without a performance penalty. Even the large item heuristic,
+which can be implemented with just one additional call to the dynamic
+programming procedures of Section~\ref{subsec:test} slows the program
+down considerably.
+
+This is likely due to the fact that caching outputs of the dynamic
+programming calls of Section~\ref{subsec:test} leads to some vertices
+that do not need to call any dynamic programming procedure, and with
+our heuristics they are forced to call at least one.
+
+% We explain the details of our caching strategies in the following
+% section.

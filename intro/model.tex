@@ -51,7 +51,7 @@ instance $I$ as $\ALG(I)$.
 As examples of online problems, we can list the two that are arguably
 the most well-studied: scheduling and bin packing.
 
-\begin{prb}[\scheduling]~
+\begin{prb}[\scheduling]~\label{prb:scheduling}
 \smallskip
 
 \noindent\textbf{Input:}
@@ -69,7 +69,7 @@ the busiest machine.
 makespan.
 \end{prb}
 
-\begin{prb}[\binpacking]~
+\begin{prb}[\binpacking]~\label{prb:binpacking}
 \smallskip
 
 \noindent\textbf{Input:}
@@ -157,17 +157,19 @@ are coming from a probabilistic distribution whose parameters we know.
 This is called \textit{stochastic online optimization}.
 
 \item We could assume that we are given some advice from an entity
-that has knows much more about the input than we do (a likely
-candidate for such an oracle would be NSA). While this entity can give
-us any advice at all, the information must be relatively small, for
-the model to make sense. After our algorithm receives this arbitrary
-but limited advice, it must make use of it to solve the online problem
-in an effective way. This model is called \textit{online optimization
-with advice}.
+that knows much more about the input than we do (a likely candidate
+for such an oracle would be NSA). While this entity can give us any
+advice at all, the information must be relatively small, for the model
+to make sense. After our algorithm receives this arbitrary but limited
+advice (that can depend on the instance), it should make use of it to
+solve the online problem in an effective way. This model is called
+\textit{online optimization with advice}. A typical question in this
+model is what is the competitive ratio which can be achieved with $1/
+O(1) / O(\log n)$ bits of advice.
 
 \item There is a common sense weakening of the \textit{optimization
-with advice} model from the previous point, and we can describe it
-with an example. Suppose that our online algorithm is packing a
+with advice} model from the previous point, and we describe it
+via an example. Suppose that our online algorithm is packing a
 sequence of apples into crates as best as it can. If we assume any
 advice at all, the algorithm could receive some information about the
 average curvature of the current batch of apples. The curvature may
@@ -183,6 +185,7 @@ online way.
 
 This model is called \textit{semi-online optimization}, and it is the
 one we focus on in this thesis. We mention the other two models briefly
-in Section~X. \todo{Mention related work section.}
+in Section~\ref{sec:1:related}.
+% \todo{Mention related work section.}
 
 \end{enumerate}

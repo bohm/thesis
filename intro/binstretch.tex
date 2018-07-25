@@ -30,25 +30,40 @@ guarantee.
 
 The aforementioned stretching factor is just another name for the
 competitive ratio of our algorithm in the standard terminology of
-online algorithms (see Definition~\ref{dfn:compratio}). Still, when designing
-algorithms for \binstretch it makes more sense to think about it as a
-parameter, as a maximum load that we want to ensure in all bins.
+online algorithms (see Definition~\ref{dfn:compratio}). Still, when
+designing algorithms for \binstretch it makes more sense to think
+about it as a parameter, as a maximum capacity that we want to
+maintain in all bins.
+
+An attentive reader might object to the fact that we have defined
+\binstretch as a semi-online problem, as there is no tangible advice
+given to an input instance -- the only thing we know is that some
+optimal packing exists.
+
+The advice given is hidden in the fact that we actually only consider
+scaled instances where the unknown optimal packing is into $m$ bins of
+capacity $1$. If we go back to our example with repacking containers,
+we can see that the advice is actually the original load of the
+containers (e.g. that every container was at most $75\%$ full).
 
 As we can see from the nomenclature above -- bins, load, packing -- we
-will think of the problem as if it were related to \binpacking
-(defined in Section~X). This is also how the literature discusses the
-problem.  It is however important to keep in mind that the problem is
-not a variant of \binpacking -- the crucial difference is that we are
-not allowed to open as many bins as we want, which is allowed in
-\binpacking.
+will think of the problem as if it is related to \binpacking
+(Problem~\ref{prb:binpacking}). This is also how the literature
+discusses the problem.  It is however important to keep in mind that
+the problem is not a variant of \binpacking -- the crucial difference
+is that we are not allowed to open as many bins as we want, which is
+legal in \binpacking.
 
-In fact, \binstretch is a variant of \scheduling (also defined in
-Section~X). In the scheduling terminology, we would call it
-\textsc{Online Scheduling with Known Optimal Makespan}, and we would
-describe it this way:
+In fact, \binstretch is more closely related to the problem \scheduling
+(Problem~\ref{prb:scheduling}). In the scheduling terminology, we
+would call it \textsc{Online Scheduling with Known Optimal Makespan},
+and we would describe it this way:
+\goodbreak
 
- \noindent
-\textbf{Input:}
+\begin{prb}[\binstretch / \textsc{Online Scheduling with Known Optimal Makespan}]~
+\smallskip
+
+\noindent\textbf{Input:}
 
 \begin{itemize}
 \item An integer $m$ -- a number of identical (equally fast) \emph{machines};
@@ -69,7 +84,7 @@ the makespan is at most $1$.
 \noindent
 \textbf{Goal:} Design an online algorithm minimizing the makespan $R$.
 \smallskip
-
+\end{prb}
 
 \paragraph{A pinch of notation.} For a bin $B$, we define the
 \textit{load of the bin} $s(B) = \sum_{i \in B} s(i)$. Unlike

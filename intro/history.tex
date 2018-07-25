@@ -1,4 +1,4 @@
-\section{History}
+\section{History}\label{sec:1:history}
 
 %\todo{History from journal papers is below.}
 
@@ -179,9 +179,9 @@ must use exactly the new bins in the optimum), the semi-online
 algorithm still could use the additional capacity of $\alpha$ in the
 new bins to its advantage.
 
-\section{Related topics}
+\section{Related topics}\label{sec:1:related}
 
-\subsection{Bin packing}
+\subsection{Bin packing}\label{sec:1:binpackinghistory}
 
 The NP-hard offline problem \binpacking was originally proposed by
 Ullman~\cite{ullman71} and Johnson~\cite{johnson73} in the
@@ -189,9 +189,25 @@ Ullman~\cite{ullman71} and Johnson~\cite{johnson73} in the
 survey of Coffman et al.~\cite{coffman13} for many results on
 classical \textsc{Bin Packing} and its variants. 
 
-\subsection{Online scheduling}
+\subsection{Online scheduling}\label{sec:1:schedulinghistory}
 
-\todo{Fill this section.}
+Alongside \binpacking, \scheduling is probably the other most
+well-known problem for the online computational model. The first
+algorithm for \scheduling was given by Graham~\cite{Graham66},
+achieving a competitive ratio of $2-\frac{1}{m}$ for $m$ machines.
+
+This ratio was later improved to a constant factor independent on $m$;
+the currently best online algorithm for \scheduling is
+$1.9201$-competitive \cite{}, and there is a lower bound showing that
+no online algorithm for \scheduling can be better than
+$1.88$-competitive \cite{}.
+
+Since \scheduling clearly belongs to the greater research area of
+scheduling theory, there are incredibly many variants that study
+different performance metrics, special job sizes, machines with
+varying properties and much more. See the survey of Albers
+\cite{alberssurvey} on \scheduling for many more results and open
+problems in the area.
 
 \subsection{Semi-online scheduling}
 

@@ -1,0 +1,162 @@
+\section{Verifying the offline optimum guarantee}\label{subsec:test}
+
+When we evaluate a turn of the \adversary, we need to create the list
+$L = \{0,1,\ldots,y\} \subseteq \{0,1,\ldots,T\}$ of items that
+\adversary can actually send while satifying the \binstretch
+guarantee. We employ the following steps:
+
+\begin{algorithm}
+\caption{Procedure $\MaxFeas$}
+\noindent Input is a bin configuration $C = (\calL,\calI)$ with $n$ items and $m$ bins.
+\begin{algorithmic}[1]
+\State Calculate an upper bound $UB$ on the value $y$.
+\State Calculate a lower bound $LB$ on the value $y$ using an online best fit algorithm (Section~\ref{sec:4:dynprogbounds}).
+\If{$LB < UB$}
+\State Do a linear search on the interval $\{UB,UB-1,\ldots,LB\}$
+using a procedure $\Query$($\calI \cup \{i\})$ that queries the cache
+whether $\calI \cup \{i\}$ is feasible or not (Section~\ref{sec:4:caching}).
+\State Update $LB, UB$ to be the best values confirmed feasible/infeasible by $\Query$.
+\EndIf
+\If{$LB < UB$}
+\State Update $LB$ using the (offline) algorithm \bfd.
+\EndIf
+\If{$LB < UB$}
+\State Compute the exact value of $y$ using a dynamic program $\DynprogMax$ (Section~\ref{sec:4:dynprogmax}).
+\EndIf
+\State \Return $y = LB = UB$.
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Upper and lower bounds}\label{sec:4:dynprogbounds}
+
+If we wish to compute the value $y$ directly, we need to call the
+dynamic program $\DynprogMax$, whose complexity is $O(n \cdot S^m)$ in
+the worst case (and that is if we ignore potential slowdowns via
+hashing).
+
+This is polynomial when $m$ is a constant, but already for $m=3$ and
+especially when $4 \le m \le 9$ such a call per every game state
+becomes prohibitively expensive. Therefore we employ several tricks
+that help us avoid computing $\DynprogMax$ in some game states.
+
+First, we compute a lower and upper bound on the maximum feasible item
+size $y$; if they match, we have found the correct value of $y$.  The
+upper bound will be $UB \defeq \min(y', m\cdot S - t)$, where $y'$ is
+the maximum feasible value that was computed in the previous vertex of
+\adversary's turn, and $t$ is the total size of all items in the
+instance. The second term is therefore the sum of all items that can
+arrive in this instance.
+
+\paragraph{Online Best Fit.} To find the first lower bound on $y$ quickly, we
+employ an online bin packing algorithm \obf. This algorithm maintains
+a packing of items $\calI$ to $m$ bins of size $S$ during the
+evaluation of the algorithm $\Sequential$, packing each item as it is
+selected by the player \adversary. The algorithm \obf packs each item
+$i$ into the most-loaded bin where the item fits.
+
+Once the algorithm $\Sequential$ selects a different item $i'$ and
+evaluates a different branch of the game tree, the online algorithm
+removes $i$ from its bin and inserts $i'$ to the most-loaded bin
+where $i'$ fits.
+
+As \obf maintains just one packing, which may not be optimal, it can
+happen that \obf is unable to pack the next item $i$ even though $i$
+is a feasible item. In that case, we mark the packing as inconsistent
+and do not use the lower bound from \obf until its online packing
+becomes feasible again.
+
+If the packing maintained by \obf is still feasible, we return as the
+lower bound value $LB$ the amount of unused space on the least-loaded
+bin.
+
+The main advantage of \obf is that it takes at most $O(m)$ time per
+each step, and especially for the earlier stages of the evaluation its
+returned value can match the value of $y$.
+
+\paragraph{Checking the cache.} Next, if a gap still remains between
+$LB$ and $UB$, we try to tighten it by calling a procedure \Query
+which queries the cache of feasible and infeasible item multisets.
+The procedure has a ternary answer -- either an item multiset $\calI
+\cup \{j\}$ was previously computed to be feasible, or it was computed
+to be infeasible, or this item set is not present in the cache at all.
+
+We update $LB$ to be the largest value which is confirmed to be
+feasible, and update $UB$ to be $1$ less than the smallest value
+confirmed to be infeasible.
+
+\paragraph{Best Fit Decreasing.} If the values $LB$ and $UB$ are still
+unequal, we employ a standard offline bin packing algorithm called
+\bfd. \bfd takes items from $\calI$ and first sorts them in decreasing
+order of their sizes. After that it considers each item one by one in
+this order, packing it into a bin where it ``fits best'' -- where it
+minimizes the empty space of a bin. We can also interpret it as first
+sorting the items in decreasing order and then applying the algorithm
+\obf defined above.
+
+As for its complexity, \bfd takes in the worst case $O(m \cdot \calI)$
+time. It does not need to sort items in $\calI$, as the internal
+representation of $\calI$ keeps the items sorted.
+
+As with \obf, the lower bound $LB$ will updated to the maximum empty
+space over all $m$ bins, after \bfd has ended packing. Such an item
+can always be sent without invalidating the \binstretch guarantee.
+
+\subsection{Procedure $\DynprogMax$}\label{sec:4:dynprogmax}
+
+Procedure \DynprogMax is a sparse modification of the standard dynamic
+programming algorithm for \textsc{Knapsack}. Given a multiset $\calI,
+|\calI| = n$ on input, our task is to find the largest item $y$
+which can be packed together with $\calI$ into $m$ bins (knapsacks) of
+capacity $S$ each.
+
+% Note that using this formulation it can happen that $|y| = 0$ or even
+% that $\calI$ itself is infeasible; however, neither case can happen in
+% our actual use of the procedure.
+
+We use a queue-based algorithm that generates a queue $Q_i$ of all
+valid $m$-tuples $(a,b,c,\ldots)$ that can arise by packing the first
+$i$ items. We do not need to remember where the items are packed, only
+the loads of the bins represented by the $m$-tuple.
+
+To generate a queue $Q_{i+1}$, we initialize it to be an empty queue.
+Next, we traverse the old queue $Q_i$ and add the new item
+$\calI[i+1]$ to all bins as long as it fits, creating up to $m$ new
+tuples that need to be added to $Q_{i+1}$.
+
+Unsurprisingly, we wish to make sure that we do not add the same tuple
+several times during one step. We can use an auxiliary $\{0,1\}$ array
+for this purpose, but we have ultimately settled on a hash-based
+approach.
+
+We use a small array $A$ of $64$-bit integers (of approximately $2^{10} -
+2^{13}$ elements). When considering a tuple $t'$ that arises from
+adding $i$ to one of the bins in the tuple $t$, we first compute the
+hash $h(t')$ of the tuple $t'$. Since we use Zobrist hashing (see
+Section~\ref{sec:4:caching}), this operation takes only constant time.
+
+Next, we consider adding $t'$ to the queue $Q_{i+1}$. We use the first
+$10-13$ bits of $h(t')$ (let $f$ denote their value) and add $t'$ to
+$Q_{i+1}$ when $A[f] \neq h(t')$ -- in other words, when the small
+array $A$ contains something other than the hash of $t'$ at the
+position $f$. We update $A[f]$ to contain $h(t')$ and continue.
+
+While our hashing technique clearly can lead to duplicate entries in
+the queue, note that this does not hurt the correctness of our
+algorithm, only its running time in the worst case.
+
+We continue adding new items to the tuples until we do $n$ steps and
+all items are packed. In the final pass of the queue, we look at the
+empty space $e$ in the least-loaded bin. The output of $\DynprogMax$
+and the value of $y$ is the maximum value of $e$ over all tuples in
+the final pass.
+
+Ignoring the collisions of the hashing scheme (which can happen but
+will not play a big role if we compute the expected running time based
+on our randomized hashing function), the time complexity of the
+procedure \MaxFeas is quite high in the worst case: $\O(|\calI|\cdot
+S^m)$.
+
+Nonetheless, we are convinced that our approach is much faster than
+implementing \MaxFeas using integer linear programming or using a CSP
+solver (which has been done in \cite{gabay2013lbv2}) and contributes
+to the fact that we can solve much larger instances.

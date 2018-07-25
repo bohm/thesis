@@ -1,0 +1,70 @@
+\section{Parallelization}\label{subsec:para}
+
+Up until now, we have described a single-threaded minimax algorithm
+with caching and pruning. We have used this single-threaded version in
+\cite{bohm16} to improve on the results of Gabay, Brauner and Kotov
+\cite{gabay2013lbv2} and reach a lower bound of $45/33 =
+1.\overline{36}$ for $3$ bins and a lower bound of $19/14$ for up to
+$5$ bins.
+
+In the pursuit of an improved bound for $3$ bins as well as a general
+lower bound for $m$ bins, we have subsequently implemented a parallel
+version of the minimax search algorithm.
+
+\paragraph{Technology.} We have settled on using a combination
+of OpenMPI \cite{openmpi} and standard thread library as provided
+by the C++ programming language. We have tried implementing
+
+
+\paragraph{Tasks.} Our evaluation of the game tree proceeds in the
+following way: First, we start evaluating the game tree on the main
+computer (which we internally call \emph{queen}) until a vertex
+corresponding to \adversary's next move meets a certain threshold (for
+instance, sufficient depth). After that, we designate this adversarial
+vertex as a \emph{task}.
+
+Alongside the queen, we have processes whose job is to evaluate the
+tasks -- we call them the \emph{workers}. Workers which run on the
+same machine will have a common cache that they access via atomic
+primitives in order to maintain consistency. Workers on separate
+machines do not share information.
+
+Due to the mixed environment of standard Unix threads and MPI
+processes, we also have a single \emph{overseer} per each physical
+machine. This overseer handles the MPI communication as well as
+spawning the individual worker threads.
+
+The tasks are all generated in advance by the queen. After that, their
+bin configurations are synchronized with all overseers running. The
+queen then assign tasks to overseers online, namely by assigning a
+batch of 250-500 tasks to an overseer. The overseer reports each value
+of a finished task immediately to the queen. When an overseer is
+finished processing a batch, it requests and receives a new one.
+
+We have selected this communication strategy for two reasons:
+
+\begin{enumerate}
+\item To minimize congestion in the processing phase through the fact
+that the bin configurations are synchronized beforehand and only
+identifiers are shared in the online assignment phase.
+\item To allow the queen to evaluate and prune unfinished tasks and
+therefore avoid some unnecessary processing by the workers.
+\end{enumerate}
+
+\paragraph{Task selection.}
+\todo{Finish this paragraph.}
+
+\paragraph{Saplings.} Our implementation also allows us to pre-select
+some initial strategy for the player \adversary in advance. This way
+we can use our (so far limited) intuitive understanding of what is a
+good initial move and decrease the time needed to evalate the whole
+tree.
+
+A particularly good strategy for the lower bound of $19/14$ seems to
+be sending an item of size $5$ as the first item, followed by $m-1$
+items of size $1$. This adversarial strategy leads to a lower bound
+instance for $6,7,8$ and $9$ bins.
+
+\todo{Finish this paragraph.}
+
+

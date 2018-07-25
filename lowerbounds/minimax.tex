@@ -1,0 +1,62 @@
+\section{Minimax algorithm}\label{sec:4:minimax}
+Let us recall the bin stretching game, as defined in the introduction:
+
+\begin{dfn}
+Fix a number of bins $m$ and a stretching factor $R$. The \emph{bin stretching game}
+is defined as follows:
+
+\begin{enumerate}
+\item It is a two-player game between \algo and \adversary, and the player \adversary starts.
+\item The player \adversary moves by sending any item $i \in (0,1]$ with the restriction
+that $i$ along with all previous items can be packed into $m$ bins of capacity $1$.
+\item The player \algo moves by selecting a bin where the item is packed.
+\end{enumerate}
+
+The winning states are defined thus:
+\begin{itemize}
+\item A state is winning for \algo if all bins are packed strictly below $R$ and \adversary
+has cannot make any further moves.
+\item A state is winning for \adversary if one bin has total load at least $R$.
+\end{itemize}
+\end{dfn}
+
+Our main goal is learning whether there exists an algorithm for
+\binstretch with stretching factor strictly below $R$, or whether
+every algorithm needs a stretching factor of at least $R$. This
+directly corresponds to existence of a winning strategy for the player
+\algo or \adversary, respectively.
+
+A ``gold standard'' algorithm for evaluating a given combinatorial
+two-player game is the \emph{minimax algorithm}, which we can
+summarize as follows:
+
+\begin{algorithm}
+\caption{Algorithm \textsc{Minimax}$(s)$ for a state $s$}
+% \label{alg:bounded}
+\begin{algorithmic}[1]
+\State \algorithmicif\ the state is defined as winning for any player, return.
+\For{every move $m$ of the current player}
+\State Construct the state $t$ by applying the move $m$ to the current state $s$.
+\State Run \textsc{Minimax}$(t)$.
+\State \algorithmicif\ $t$ is winning for the current player, return.
+\EndFor
+\State \Return the fact that the state $s$ is winning for the other player.
+\end{algorithmic}
+\end{algorithm}
+
+
+As we also mentioned in the introduction, the two main obstacles to
+implementing \minimax for \binstretch are the following:
+
+\begin{enumerate}
+\item \adversary can send an item of arbitrary  size;
+\item \adversary needs to make sure that at any time of the game, an offline
+  optimum can pack the items arrived so far into $m$ bins of capacity $1$.
+\end{enumerate}
+
+To overcome the first problem, it makes sense to create a sequence of
+games based on the granularity of the items that can be packed.  The
+second problem increases the complexity of every game turn of the
+\adversary, as it needs to run a subroutine to verify the guarantee
+for the next item it wishes to place.
+

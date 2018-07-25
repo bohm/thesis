@@ -1,0 +1,61 @@
+\section{The sequential algorithm}\label{sec:minimax}
+
+Our implemented algorithm is a parallel, multi computer implementation
+of the minimax game search algorithm. We now describe a pseudocode of
+its sequential version. The pecularities of our algorithm (caching,
+pruning, parallelization) are described in the following sections.
+
+One of the differences between our algorithm and the algorithm of
+Gabay et al. \cite{gabay2013lbv2} is that our algorithm makes no use
+of alpha-beta pruning -- indeed, as either \algo or \adversary have a
+winning strategy from each bin configuration, there is no need to use
+this type of pruning.
+
+\begin{algorithm}
+\caption{Procedure $\evaladv$}
+Input is a bin configuration $C = (\calL, \calI)$.
+% \label{alg:bounded}
+\begin{algorithmic}[1]
+\State \algorithmicif\ the configuration is cached (Section~\ref{sec:4:caching}), \Return the value found in cache.
+% \item\label{step:heuristics} Apply \adversary-based heuristics (Section \ref{subsec:heuristics}).
+\State Create a list $L$ of items which can be sent as the next step of the player \adversary (Section \ref{subsec:test}).
+\For{every item size $i$ in the list $L$}
+\State Recurse by running $\evalalg(C,i)$.
+\State \algorithmicif\ $\evalalg(C,i)$ returns $0$ (the configuration is winning for player \adversary), stop the cycle and \Return $0$.
+\EndFor
+% \State \algorithmicelse\ continue with the next item size.
+\State \algorithmicif\ the evaluation reaches this step, store the configuration in the cache and \Return $1$ (player \algo wins).
+
+\end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}
+\caption{Procedure $\evalalg$}
+Input is a bin configuration $C = (\calL,\calI)$ and item $i$.
+\begin{algorithmic}[1]
+\State Prune the tree using known algorithms (Section \ref{sec:4:gs}).
+\For{any one of the $m$ bins}
+\If{$i$ can be packed into the bin so that its load is at most $R-1$}
+\State Create a configuration $C'$ that corresponds to this packing.
+\State Run $\evaladv(C')$.
+\State \algorithmicif\ $\evaladv(C')$ returns 1, \Return 1 as well.
+\EndIf
+\EndFor
+\State \algorithmicif\ we reach this step, no placement of $i$ results in victory of \algo; \Return 0.
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Procedure $\Sequential$}
+\noindent Input is a bin configuration $C = (\calL,\calI)$. 
+\begin{algorithmic}[1]
+\State Fix parameters $m,R,S$.
+\State Run $\evaladv(C)$.
+\If{$\evaladv(C)$ returns $0$}
+\State \Return success (a lower bound exists).
+\Else
+\State \Return failure.
+\EndIf
+\end{algorithmic}
+\end{algorithm}
