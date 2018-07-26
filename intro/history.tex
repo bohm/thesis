@@ -211,15 +211,16 @@ problems in the area.
 
 \subsection{Semi-online scheduling}
 
-As noted, \binstretch can be formulated as online scheduling on
-$m$ identical machines with known optimal makespan. Such algorithms
-were studied and are important in designing constant-competitive
+We have already learned that \binstretch can be formulated as online
+scheduling on $m$ identical machines with known optimal makespan
+(Problem~\label{prb:binstretchscheduling}). Algorithms for the semi-online
+setting are often essential in designing constant-competitive
 algorithms without the additional knowledge, e.g., for scheduling in
 the more general model of uniformly related
 machines~\cite{AsAFPW97,BeChKa00,EbJaSg09}.
 
-For scheduling, also other types of semi-online algorithms are
-studied. Historically first is the study of ordered sequences with
+For scheduling, other types of semi-online algorithms are
+studied as well. Historically first is the study of ordered sequences with
 non-decreasing processing times~\cite{Graham69}. Most closely related
 is the variant with known sum of all processing times studied
 in~\cite{KeKoST97}. If we know the optimal makespan, we can always pad
@@ -234,6 +235,10 @@ surprisingly, that knowing the actual optimum gives a significantly
 bigger advantage to the semi-online algorithm over knowing just the
 sum of the processing times. See Pruhs et al.~\cite{PST04} for a
 survey of other results on (semi-)online scheduling.
+
+\subsection{Stochastic optimization}
+
+\subsection{Online algorithms with advice}
 
 \todo{Add more semi-online results, stochastic optimization and advice optimization.}
 

@@ -1,2 +1,118 @@
-\chapter*{Conclusion}
-\addcontentsline{toc}{chapter}{Conclusion}
+\chapter{Conclusion}\label{chap:conclusion}
+% \addcontentsline{toc}{chapter}{Conclusion}
+
+
+\section{Summary of results}
+
+\todo{Finish the summary.}
+
+\section{What next?}
+
+We now move on to discuss several open questions related to
+\binstretch and problem areas which the author of this thesis believes
+to be interesting. If you are interested in any one of them, feel free
+to contact the author of this thesis for collaboration or for
+answering any questions.
+
+\subsection{The low-hanging fruit}
+
+First, let us list a few problems which we believe can be achieved in
+a month or two of work by an undergraduate or a graduate student.
+
+\begin{enumerate}
+
+\item \textit{Use more computing power to get better lower bounds.}
+Our choice of a cluster of 109 cores was limited by the processing
+capabilities of our institute. Additionally, several of the used
+machines were desktops and we did not want to use them longer than
+overnight when they were not in use by colleagues.
+
+\paragraph{Why isn't it included in this thesis?} We needed to stop
+tinkering with the lower bound search program and start writing the
+thesis at some point. We are quite convinced that one can get tighter
+bounds on the stretching factor for $3 \le m \le 10$ by adding more
+processing power or a few more pruning rules.
+
+\item \textit{Determine the exact stretching factor for three bins.}
+We now know that the best stretching factor achieved by any algorithm
+for \binstretch lies somewhere in the interval $[1.3659,1.375]$. It
+would be nice to discover the best algorithm for this setting as well
+as a matching lower bound.
+
+It is always hard to guess what the right number should be, but based
+on the sequence of positive lower bound results, a good candidate (in
+the author's opinion) for the optimal stretching factor is
+$\frac{41}{30} = 1.3\overline{6}$.
+
+\paragraph{Why isn't it included in this thesis?} To design an
+algorithm with a stretching factor below $1.375$ will probably require
+either a new good situation or a fresh look at the algorithm design
+for \binstretch on $3$ bins, free from the good situations that we
+introduce.
+
+We were originally hopeful that a lower bound of $\frac{41}{30}$ can
+be found within a reasonable time, but since we were not able to show
+it, we have not tried improving the algorithmic part either.
+\end{enumerate}
+
+\subsection{The sweeter fruit}
+
+We now list open questions which, in our opinion, are much more
+interesting to the online algorithm community as a whole, even though
+their solution probably requires more time or manpower compared to the
+ones above.
+
+\begin{enumerate}
+
+\item \textit{Design a lower bound higher than $4/3$ for any number of
+bins.} It is still true that the lower bound of $4/3$ is the best
+known lower bound for the stretching factor of \binstretch with $m$
+bins ($m$ being part of the input). Our experimental results seem to
+indicate that $19/14$ is a good candidate, as it holds for $m \in
+\{3,4,\ldots,9\}$. 
+
+\paragraph{Why isn't it included in this thesis?} This problem was the
+main motivation for our extensions to the lower bound search
+algorithm. As it stands, the fact that we can get results for $m \le
+9$ is promising, but we need many more adversarial cuts and
+simplifications of the game tree before the lower bound tree for $m =
+9$ became human-readable. Even then, we expect more fresh ideas to be
+needed before the general lower bound can be shown.
+
+\item \textit{Apply the same lower bound minimax approach to more
+problems.} We are not convinced that \binstretch is the only online
+problem where computer search can help finding better lower bounds.
+It can be argued that many other online problems are notorious for the
+configuration space being very large and no reasonable simplification
+being known.
+
+\paragraph{Why isn't it included in this thesis?} Simply put, we have
+not yet found the right problem where our lower bound search technique
+would clearly produce new lower bounds. We will keep this technique in
+mind for other problems, and we kindly ask the reader to keep an eye
+for an application of this lower bound technique as well.
+
+\item \textit{Can machine learning help wdesign good online
+algorithms?} There is much excitement in the broader programming
+community regarding the recent progress of machine learning / deep
+learning in designing winning strategies for positional and other
+two-player games (e.g. chess \cite{alphago} or poker \cite{poker}).
+
+Already at the very beginning of this thesis (in
+Section~\ref{sec:1:game}) we have observed that every online algorithm
+corresponds to a strategy for a two-player game between \algo and
+\adversary. Our questions are: Can we use the recent improvements to
+machine learning to design either algorithms that perform well for an
+online problem such as \binstretch? Also, can we use the good (if not
+perfect) strategies produced by the machine learning algorithms to
+prune a lower bound tree faster, similar to what we do in
+Section~\ref{sec:4:pruning}?
+
+\todo{Citations.}
+\paragraph{Why isn't it included in this thesis?} We did not have
+enough machine learning/AI expertise to confidently answer this
+question in a positive or a negative way. We still believe it is
+possible, but it certainly requires a researcher well-versed in
+current machine learning techniques.
+
+\end{enumerate}
