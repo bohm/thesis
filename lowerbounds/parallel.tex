@@ -11,11 +11,6 @@ In the pursuit of an improved bound for $3$ bins as well as a general
 lower bound for $m$ bins, we have subsequently implemented a parallel
 version of the minimax search algorithm.
 
-\paragraph{Technology.} We have settled on using a combination
-of OpenMPI \cite{openmpi} and standard thread library as provided
-by the C++ programming language. We have tried implementing
-
-
 \paragraph{Tasks.} Our evaluation of the game tree proceeds in the
 following way: First, we start evaluating the game tree on the main
 computer (which we internally call \emph{queen}) until a vertex
@@ -51,8 +46,40 @@ identifiers are shared in the online assignment phase.
 therefore avoid some unnecessary processing by the workers.
 \end{enumerate}
 
-\paragraph{Task selection.}
-\todo{Finish this paragraph.}
+\paragraph{Task selection.} As mentioned above, an important decision
+to be made by the lower bound algorithm designer is where to split a
+vertex of the game tree into a task and send it to be processed in the
+parallel environment.
+
+Based on our experiments, it seems that maintaining a right balance of
+the number of tasks as well as their running time is crucial to good
+performance. When the tasks are too shallow, the performance of the
+algorithm is dominated by the elapsed time of the most difficult task
+in the list, which diminishes the gains coming from the parallel
+implementation.
+
+On the other hand, if there are millions of tasks, the algorithms will
+still work correctly but we might lose performance from diminishing
+advantages of individual caching as well as due to pruning happening
+later in the process.
+
+Previously, we have only used \emph{task depth} as the principal
+guideline -- when $k$ items arrived on input (with $k$ usually in the
+range of $\{4,5,6\}$), we mark the bin configuration as a new task.
+
+However, experimenting with running time has shown us that the
+presence of a larger item makes the evaluation process faster a lot
+more than we assumed it will. Therefore, we have ultimately settled an
+a mixed task threshold function which takes into account both the task
+depth $k$ and also the \emph{task load} $l$, which is the sum of sizes
+of all items arrived so far in the instance. We split off a task when
+its task load is above $l$, and failing that when its task depth is
+below $k$.
+
+We have settled on setting $k \in \{5,6,7\}$ and $l$ to be around
+$20-40\%$ of the optimal bin capacity $T$. This way we get deeper bin
+configurations for very small items which experimentally seems to
+imply a shorter running time and a similar amount of tasks.
 
 \paragraph{Saplings.} Our implementation also allows us to pre-select
 some initial strategy for the player \adversary in advance. This way
@@ -65,6 +92,66 @@ be sending an item of size $5$ as the first item, followed by $m-1$
 items of size $1$. This adversarial strategy leads to a lower bound
 instance for $6,7,8$ and $9$ bins.
 
-\todo{Finish this paragraph.}
+We have therefore implemented a way to pre-select items to be sent in
+the first few rounds of the game. Given such a list of items, we
+compute all possible moves of the player \algo and create a queue of
+bin configurations that we each evaluate sequentially. We call such
+configurations \emph{saplings}, as they are used to grow a full game
+tree.
 
+The fact that already this linear, non-adaptive strategy of sending
+$5,1,1,1,\ldots$ is enough to get a lower bound of $19/14$ for $9$
+bins was a pleasant surprise to us. We believe this fact is due to the
+size of the sequence being already non-trivial (the item $5$ alone
+occupies slightly more than $25\%$ of one stretched bin).
+
+A natural extension is to allow the user to input a partial game tree
+(an adaptive strategy for the player \adversary) and have the
+algorithm evaluate it sequentially; this can be easily added to our
+implementation once we learn more about which items should be the
+among the first to send.
+
+\paragraph{Generating the game tree.} So far we have only described
+how to learn whether a game tree is winning for the player \adversary
+(and thus is a valid lower bound) or winning for \algo. Naturally, our
+program does more than that: When a lower bound is found, it generates
+the game tree corresponding to the right choices of the player
+\adversary.
+
+To facilitate this, our main evaluation process (the queen) stores the
+game tree up to the tasks in memory as a direct representation. Unlike
+the worker processes, the queen does not use caching, and so the top
+of the tree is represented in its entirety.
+
+When all tasks are evaluated by the workers and a lower bound has been
+confirmed, we keep the part of the tree that corresponds to the right
+choices of the player \algo in the first few steps, up to the task
+configurations.
+
+After that, we fix all the remaining vertices in the tree, increase
+the values of $k$ and $l$ (the task load and the task depth above) and
+call the generating process again on the top of the tree. When the
+generating process reaches a fixed vertex with outdegree non-zero, it
+will not generate other moves for this vertex and will only do so for
+the vertices which were tasks.
+
+This way we will generate new tasks which are deeper in the game tree;
+these tasks are sent to the worker processes again and we repeat our
+trimming and fixing process above.
+
+\paragraph{Technology.} We have settled on using a combination of
+OpenMPI \cite{openmpi} and standard thread library as provided by the
+C++ programming language. In our setting, OpenMPI is used to provide
+inter-computer communication API for sending and receiving tasks as
+described above. We employ the standard Unix threads to spawn the
+worker processes themselves; this way they can easily share one large
+cache for evaluated bin configurations.
+
+We have originally considered using only OpenMPI processes for both
+inter-computer communication as well as memory sharing on one physical
+computer; this functionality is present in the latest version of the
+MPI standard, MPI-3.0. However, after implementing the shared memory
+functionality, we have noticed some slowdown of the worker processes
+when the shared memory was large (more than 1 gigabyte). This forced
+us into the heterogenous model that we use right now.
 

@@ -1,0 +1,23 @@
+\section{Verification of the results}\label{sec:4:verification}
+
+\todo{Rewrite this.}
+
+We give a compact representation of our game tree for the lower bound
+of $45/33$ for $m=3$, which can be found in Appendix
+\ref{sec:appendix}. The fully expanded representation, as given by our
+algorithm, is a tree on 11053 vertices.
+
+%TODO: exact number of vertices
+For our lower bounds of $19/14$ for $m=4$ and $m=5$, the sheer size of
+the tree (e.g. 4665 vertices for a compact representation for $m = 5$) prevents us from
+presenting the game tree in its entirety.
+
+We include the lower bound along with the implementations, publishing
+it online at
+\url{https://github.com/bohm/binstretch/}.
+
+We have implemented a simple independent C++ program which verifies
+that a given game tree is valid and accurate. While verifying our
+lower bound manually may be laborious, verifying the correctness of
+the C++ program should be manageable. The verifier is available along
+with the rest of the programs and data.
