@@ -1,23 +1,23 @@
-\section{Verification of the results}\label{sec:4:verification}
+\subsection{Verification}
 
-\todo{Rewrite this.}
+For our lower bounds of $19/14$ for $4 \le m \le 9$ we do not have a
+printable version of the game tree, as it contains too many vertices.
 
-We give a compact representation of our game tree for the lower bound
-of $45/33$ for $m=3$, which can be found in Appendix
-\ref{sec:appendix}. The fully expanded representation, as given by our
-algorithm, is a tree on 11053 vertices.
-
-%TODO: exact number of vertices
-For our lower bounds of $19/14$ for $m=4$ and $m=5$, the sheer size of
-the tree (e.g. 4665 vertices for a compact representation for $m = 5$) prevents us from
-presenting the game tree in its entirety.
-
-We include the lower bound along with the implementations, publishing
-it online at
+However, we include the lower bounds in the \texttt{graphviz}
+representation as part of our software appendix. We have published the
+lower bound software and the lower bound data at
 \url{https://github.com/bohm/binstretch/}.
 
-We have implemented a simple independent C++ program which verifies
-that a given game tree is valid and accurate. While verifying our
-lower bound manually may be laborious, verifying the correctness of
-the C++ program should be manageable. The verifier is available along
-with the rest of the programs and data.
+Our lower bound implementation is extremely large in terms of number
+of lines of code and we cannot in good faith vouch for it to not
+contain any errors. At the same time, we do not expect the reader
+to check all the lower bound trees by hand, even though it is possible
+for a smaller tree such as the one in the next section.
+
+To that end, we have implemented a simple independent C++ program
+which verifies that a given game tree is valid winning strategy for
+the player \adversary and that all possible options of player \algo
+are present. While verifying our lower bound manually may be
+laborious, erifying the correctness of the C++ program should be
+manageable. The verifier is available along with the lower bound
+search code and lower bound data.

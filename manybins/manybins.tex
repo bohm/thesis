@@ -5,7 +5,8 @@
 This chapter describes an algorithm for \binstretch that achieves a
 stretching factor of $1.5$ and works for any number of bins $m$. The
 algorithm follows the \emph{classify and batch} approach as explained
-in Section~Y; this approach has been already used in previous works.
+in Section~\ref{sec:1:history}; this approach has been already used in
+previous works.
 
 Our main novel technique is applying the amortized analysis approach
 to the batching arguments. With that and other improvements, our
@@ -17,10 +18,10 @@ There exists an algorithm for \binstretch with a stretching factor of
 $1.5$ for an arbitrary number of bins.
 \end{thm}
 
-As explained in Section~X, we rescale item sizes and bin capacities to
-avoid fractional values in our arguments. Specifically, we scale the
-input so that the optimal bins have capacity 12 and the bins of the
-algorithm have capacity 18.
+As explained in Section~\ref{sec:1:binstretchdef}, we rescale item
+sizes and bin capacities to avoid some fractional values in our
+arguments. Specifically, we scale the input so that the optimal bins
+have capacity 12 and the bins of the algorithm have capacity 18.
 
 
 \section{Algorithm overview}\label{chap:2:overview}

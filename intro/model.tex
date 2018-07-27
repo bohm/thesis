@@ -158,14 +158,15 @@ This is called \textit{stochastic online optimization}.
 
 \item We could assume that we are given some advice from an entity
 that knows much more about the input than we do (a likely candidate
-for such an oracle would be NSA). While this entity can give us any
-advice at all, the information must be relatively small, for the model
-to make sense. After our algorithm receives this arbitrary but limited
-advice (that can depend on the instance), it should make use of it to
-solve the online problem in an effective way. This model is called
-\textit{online optimization with advice}. A typical question in this
-model is what is the competitive ratio which can be achieved with $1/
-O(1) / O(\log n)$ bits of advice.
+for such an oracle would be NSA). This advice can be based on our
+algorithm (so that the advice is exactly what our algorithm expects)
+as well as the input instance. The only requirement is that the
+information must be relatively small in order for the model to make
+sense. After our algorithm receives this arbitrary but limited advice,
+it should make use of it to solve the online problem in an effective
+way. This model is called \textit{online optimization with advice}. A
+typical question in this model is what is the best competitive ratio
+which can be achieved with $1/ O(1) / O(\log n)$ bits of advice.
 
 \item There is a common sense weakening of the \textit{optimization
 with advice} model from the previous point, and we describe it

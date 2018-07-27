@@ -118,26 +118,33 @@ program does more than that: When a lower bound is found, it generates
 the game tree corresponding to the right choices of the player
 \adversary.
 
-To facilitate this, our main evaluation process (the queen) stores the
-game tree up to the tasks in memory as a direct representation. Unlike
-the worker processes, the queen does not use caching, and so the top
-of the tree is represented in its entirety.
+To facilitate this, our main evaluation process (the queen) creates a
+vertex representing all states in the top of the tree which it has in
+memory. Unlike the worker processes, the queen does not use caching,
+and so the top of the tree is represented in its entirety.
 
-When all tasks are evaluated by the workers and a lower bound has been
-confirmed, we keep the part of the tree that corresponds to the right
-choices of the player \algo in the first few steps, up to the task
-configurations.
+As the tasks are evaluated by the workers, the queen receives
+information about winning and losing tasks, it prunes the top of the
+tree and removes the moves which are winning for \algo, meaning that
+at the end of the evaluation, only a small part of the original tree
+top remains -- the one directly corresponding to a winning strategy
+for the player \adversary.
 
-After that, we fix all the remaining vertices in the tree, increase
-the values of $k$ and $l$ (the task load and the task depth above) and
-call the generating process again on the top of the tree. When the
-generating process reaches a fixed vertex with outdegree non-zero, it
-will not generate other moves for this vertex and will only do so for
-the vertices which were tasks.
+After the evaluation is finished, we mark all the remaining vertices
+in the top of the tree as \emph{fixed}, meaning we will not remove
+them or edit them anymore. We increase the values of $k$ and $l$ (the
+task load and the task depth above) and call the generating process
+again on the root of the tree.
 
-This way we will generate new tasks which are deeper in the game tree;
-these tasks are sent to the worker processes again and we repeat our
-trimming and fixing process above.
+When the generating process reaches a fixed vertex with outdegree
+non-zero, it will just move along the created out-edges and will not
+create a new ones.
+
+Once it reaches a vertex with oudegree zero (a task in the previous
+iteration) it will again start generating all possible items allowed
+to be sent by the player \adversary, up until the new task thresholds
+are reached. We send these tasks are sent to the worker processes
+again and we repeat our trimming and fixing process above.
 
 \paragraph{Technology.} We have settled on using a combination of
 OpenMPI \cite{openmpi} and standard thread library as provided by the

@@ -1,4 +1,4 @@
-\section{The bin stretching problem}\label{sec:binstretchdef}
+\section{The bin stretching problem}\label{sec:1:binstretchdef}
 
 Let us return to our semi-online container repacking problem from
 Section~\ref{sec:example}, which we now define formally:
@@ -114,7 +114,7 @@ fractional values; while bins have integral capacity both for the
 algorithm and for the optimal guarantee, the input item size $s(i)$
 can be any value in the interval $(0,S]$.
 
-\section{Bin Stretching as a game}\label{sec:binstretchgame}
+\section{Bin Stretching as a game}\label{sec:1:game}
 
 A basic and essential feature of any online problem -- with
 \binstretch being no exception -- is that any online algorithm is
@@ -136,7 +136,7 @@ In the online algorithm literature, we call this player
 \begin{dfn} 
 A \emph{combinatorial two-player game} is a game with two
 players with perfect information (the game state is fully revealed to
-both players). Each player has a set of moves (which does not need to
+both players). Each player has a set of moves (which do not need to
 be symmetric) and they alternate in selecting one move each.
 
 A set of game states are denoted as winning the game for the first
@@ -206,7 +206,7 @@ The two main obstacles to implementing a search of the described two player
 game are the following:
 
 \begin{enumerate}
-\item \adversary can send an item of arbitrary small size;
+\item \adversary can send an item of arbitrarily small size;
 \item \adversary needs to make sure that at any time of the game, an offline
   optimum can pack the items arrived so far into three bins of capacity $1$.
 \end{enumerate}

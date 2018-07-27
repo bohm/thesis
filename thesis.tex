@@ -26,14 +26,16 @@
 % \let\openright=\cleardoublepage
 
 %% Generate PDF/A-2u
-% \usepackage[a-2u]{pdfx}
+\usepackage[a-2u]{pdfx}
 %% Character encoding: usually latin2, cp1250 or utf8:
 \usepackage[utf8]{inputenc}
 
-\usepackage[unicode]{hyperref}
+\usepackage[pdfa]{hyperref}
 
 %% Prefer Latin Modern fonts
 \usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
 
 %% Further useful packages (included in most LaTeX distributions)
 \usepackage{amsmath}        % extensions for typesetting of math
@@ -45,6 +47,8 @@
 \usepackage{graphicx}       % embedding of pictures
 \usepackage{fancyvrb}       % improved verbatim environment
 % \usepackage{natbib}         % citation style AUTHOR (YEAR), or AUTHOR [NUMBER]
+% \usepackage[style=numeric,maxbibnames=99,defernumbers=true,sorting=none,hyperref=true]{biblatex}
+
 \usepackage[nottoc]{tocbibind} % makes sure that bibliography and the lists
 			    % of figures/tables are included in the table
 			    % of contents
@@ -59,6 +63,7 @@
 %\usepackage{thmtools, thm-restate}
 \algnewcommand{\IIf}[1]{\State\algorithmicif\ #1 \algorithmicthen}
 \algnewcommand{\EndIIf}{\unskip\ \algorithmicend\ \algorithmicif}
+
 
 %%% Basic information on the thesis
 
@@ -75,7 +80,7 @@
 % Name of the department or institute, where the work was officially assigned
 % (according to the Organizational Structure of MFF UK in English,
 % or a full name of a department outside MFF)
-\def\Department{Computer Science Institute}
+\def\Department{Computer Science Institute of Charles University}
 
 % Is it a department (katedra), or an institute (ústav)?
 \def\DeptType{Institute}
@@ -84,7 +89,7 @@
 \def\Supervisor{prof. RNDr. Jiří Sgall, DrSc.}
 
 % Supervisor's department (again according to Organizational structure of MFF)
-\def\SupervisorsDepartment{Computer Science Institute}
+\def\SupervisorsDepartment{Computer Science Institute of Charles University}
 
 % Study programme and specialization
 \def\StudyProgramme{Computer Science}
@@ -92,11 +97,6 @@
 
 % An optional dedication: you can thank whomever you wish (your supervisor,
 % consultant, a person who lent the software, etc.)
-% \def\Dedication{%
-% 
-%\todo{Paste the dedication here in the final version.}
-% }
-
 \def\Dedication{%
 
 The first person to thank must immediately and irrevocably be my PhD
@@ -140,7 +140,7 @@ Abstract.
 
 % 3 to 5 keywords (recommended), each enclosed in curly braces
 \def\Keywords{%
-{bin stretching}, {online scheduling}, {bin packing}, {online algorithms}, {computer search}. }
+{bin stretching} {online scheduling} {bin packing} {online algorithms} {computer search} }
 
 %% The hyperref package for clickable links in PDF and also for storing
 %% metadata to PDF (including the table of contents).
@@ -160,74 +160,61 @@ Abstract.
 \tableofcontents
 
 %%% Each chapter is kept in a separate file
-\include{intro/preface}
-\include{intro/model}
-\include{intro/binstretch}
-\include{intro/history}
-\include{intro/contributions}
+\newpage
+\input{intro/preface}
+\input{intro/model}
+\input{intro/binstretch}
+\input{intro/history}
+\newpage
+\input{intro/contributions}
 
-\include{manybins/manybins}
-\include{manybins/classification}
-\include{manybins/firstphase}
-\include{manybins/huge}
-\include{manybins/regular}
-\include{manybins/conclusion}
+\newpage
+\input{manybins/manybins}
+\input{manybins/classification}
+\input{manybins/firstphase}
+\input{manybins/huge}
+\input{manybins/regular}
+\input{manybins/conclusion}
 
-\include{threebins/threebins}
-\include{threebins/gs}
-\include{threebins/algo}
-\include{threebins/analysis}
-\include{threebins/largecase}
-\include{threebins/standardcase}
-\include{threebins/lps}
-\include{threebins/formalproofs}
+\newpage
+\input{threebins/threebins}
+\input{threebins/gs}
+\input{threebins/algo}
+\input{threebins/analysis}
+\input{threebins/largecase}
+\input{threebins/standardcase}
+\input{threebins/lps}
+\input{threebins/formalproofs}
 
-\include{lowerbounds/lowerbound}
-\include{lowerbounds/minimax}
-\include{lowerbounds/game}
-\include{lowerbounds/algorithm}
-\include{lowerbounds/dynprog}
-\include{lowerbounds/caching}
-\include{lowerbounds/pruning}
-\include{lowerbounds/monotonicity}
-\include{lowerbounds/parallel}
-\include{lowerbounds/results}
-\include{lowerbounds/instance}
-\include{lowerbounds/verification}
+\newpage
+\input{lowerbounds/lowerbound}
+\input{lowerbounds/minimax}
+\input{lowerbounds/game}
+\input{lowerbounds/algorithm}
+\input{lowerbounds/dynprog}
+\input{lowerbounds/caching}
+\input{lowerbounds/pruning}
+\input{lowerbounds/monotonicity}
+\input{lowerbounds/parallel}
+\input{lowerbounds/results}
+\input{lowerbounds/instance}
+\input{lowerbounds/verification}
 
-\include{epilogue/epilog}
+\newpage
+\input{epilogue/epilog}
 
 %%% Bibliography
 \include{bibliography}
 
 %%% Figures used in the thesis (consider if this is needed)
+% 
+\renewcommand*\listfigurename{List of figures}
 \listoffigures
 
-%%% Tables used in the thesis (consider if this is needed)
-%%% In mathematical theses, it could be better to move the list of tables to the beginning of the thesis.
-% \listoftables
-
-%%% Abbreviations used in the thesis, if any, including their explanation
-%%% In mathematical theses, it could be better to move the list of abbreviations to the beginning of the thesis.
-% \chapwithtoc{List of Abbreviations}
-
 %%% Doctoral theses must contain a list of author's publications
-\chapwithtoc{List of publications}
 
-%%% Attachments to the doctoral thesis, if any. Each attachment must be
-%%% referred to at least once from the text of the thesis. Attachments
-%%% are numbered.
-%%%
-%%% The printed version should preferably contain attachments, which can be
-%%% read (additional tables and charts, supplementary text, examples of
-%%% program output, etc.). The electronic version is more suited for attachments
-%%% which will likely be used in an electronic form rather than read (program
-%%% source code, data files, interactive charts, etc.). Electronic attachments
-%%% should be uploaded to SIS and optionally also included in the thesis on a~CD/DVD.
-%%% Allowed file formats are specified in provision of the rector no. 72/2017.
-% \appendix
-% \chapter{Attachments}
-% \section{First Attachment}
+\chapwithtoc{List of publications}
+\input{publications}
 
 \openright
 \end{document}

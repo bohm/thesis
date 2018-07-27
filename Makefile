@@ -5,7 +5,6 @@ all: thesis.pdf
 # LaTeX must be run multiple times to get references right
 thesis.pdf: thesis.tex $(wildcard *.tex) $(wildcard */*.tex) thesis.xmpdata
 	pdflatex $<
-#	bibtex thesis
 	pdflatex $<
 	pdflatex $<
 
