@@ -40,16 +40,16 @@
 \newtheorem{obs}[thm]{Observation}
 \newtheorem{goodsit}{Good Situation}
 \newtheorem{gengoodsit}{Good Situation} % to avoid pdftex warning about duplicate labels
-
-\theoremstyle{definition}
-\newtheorem{dfn}{Definition} \numberwithin{dfn}{chapter}
-\newtheorem{prb}{Problem} \numberwithin{prb}{chapter}
-
-\theoremstyle{remark}
 \newtheorem{cor}[thm]{Corollary}
 \newtheorem{rem}[thm]{Remark}
 \newtheorem*{example}{Example}
 
+
+\theoremstyle{definition}
+\newtheorem{dfn}[thm]{Definition} % \numberwithin{dfn}{chapter}
+\newtheorem{prb}[thm]{Problem} % \numberwithin{prb}{chapter}
+
+\theoremstyle{remark}
 %%% An environment for proofs
 
 %%% FIXME %%% \newenvironment{proof}{
@@ -96,8 +96,11 @@
 \newcommand\binstretch{{\sc Online Bin Stretching}\xspace}
 \newcommand\binpacking{{\sc Bin Packing}\xspace}
 \newcommand\scheduling{\textsc{Online Scheduling}\xspace}
-\newcommand\Nat{\mathbb{N}}
+\newcommand\schedulingtptshort{\textsc{Onl. Scheduling with Known Total Processing Time}\xspace}
+\newcommand\schedulingtpt{\textsc{Online Scheduling with Known Total Processing Time}\xspace}
 
+\newcommand\Nat{\mathbb{N}}
+ 
 \newcommand\eps\varepsilon
 \newcommand\calA{{\mathcal A}}
 \newcommand\Cprime{{\mathcal C'}}

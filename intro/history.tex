@@ -58,14 +58,13 @@ Both of these algorithms actually achieve a stretching factor of $5/3$
 combination of the two leads to an algorithm with stretching factor
 $1.625$.
 
-\todo{Fix section references.}
-
 The next algorithmic progress came as a consequence of the work of
-Cheng, Kellerer and Kotov in 2003~\cite{cheng2003}. They design an
+Cheng, Kellerer and Kotov in 2005~\cite{cheng05}. They design an
 online algorithm with a competitive ratio of 1.6 for a more general
-problem that also encompasses \binstretch (see Section~\ref{X} for the
-definition of the problem). The same algorithm therefore achieves a
-stretching factor of 1.6 for \binstretch.
+problem that also encompasses \binstretch (called \textsc{Semi-Online
+Scheduling With Given Total Processing Time} and defined below as
+Problem~\ref{prb:schedulingtpt}). The same algorithm therefore
+achieves a stretching factor of 1.6 for \binstretch.
 
 \paragraph{Classification and bunching techniques.} The next decrease
 of the upper bound on the stretching factor appeared ten years later
@@ -82,7 +81,7 @@ size, which in \cite{kellerer2013} are selected as follows:
 \begin{center}
   \begin{tabular}{ l | c | c | r }
     Class: & Small items & Medium items   & Large items \\ \hline
-    Sizes: & $(0,4/7]$   & $(4/7, 11/14]$ & $(11/14,1]$ \\ 
+    Size: & $(0,4/7]$   & $(4/7, 11/14]$ & $(11/14,1]$ \\ 
   \end{tabular}
 \end{center}
 
@@ -94,8 +93,10 @@ always fits together -- in fact, the upper bound for medium items is
 the largest value for which it is true. Plus, when we pack two of them
 together, we get a load of at least $8/7$, which is allowed for the
 algorithm while these items need to be in separate bins in the optimal
-packing \footnote{This is true for any size above $1/2$, so there must be
-another reason for selecting the lower bound to be $4/7$.}.
+packing.
+
+%  \footnote{This is true for any size above $1/2$, so there must be
+% another reason for selecting the lower bound to be $4/7$.}.
 
 Similarly to item classes, Kellerer and Kotov also classify bins based
 on their current load, including one more class that is defined in a
@@ -116,8 +117,8 @@ different way:
 \end{center}
 
 
-The algorithm works in two phases. The algorithm for the \emph{first phase} is the following
-one:
+The algorithm works in two phases. The algorithm for the \emph{first
+phase} is the following one:
 
 \begin{algorithm}
 \caption{First phase of Kellerer and Kotov}
@@ -156,8 +157,23 @@ a fourth big item arrives for this bunch (and fits into the one empty
 bin) or there were more than $4$ units of items put in all four bins
 together and the algorithm must finish correctly.
 
-\todo{Explain the next algorithmic improvement of Gabay, Brauner and
-Kotov.}
+\smallskip
+
+The next algorithmic improvement came from a 2013 paper of Gabay,
+Brauner and Kotov~\cite{gabay2013}. Building upon the classification
+and bunching technique, they form the following item classes:
+
+\begin{center}
+  \begin{tabular}{ r | c | c | c | l }
+    Class: & Tiny items & Small items & Medium items & Large items \\ \hline
+    Size: & $(0,9/34]$  & $(9/34, 9/17]$ & $(9/17, 13/17]$  & $(13/17,1]$  
+  \end{tabular}
+\end{center}
+
+Their key step is an observation that an algorithm can pack not only
+medium items together with only other medium items, but it can also do
+the same for small (non-tiny) items. Along with a more careful case
+analysis, they reach the stretching factor of $26/17 \approx 1.529$.
 
 \paragraph{Computer lower bounds.} Interestingly, the setting with a
 small fixed number of bins allows better lower bounds on the
@@ -165,11 +181,11 @@ stretching factor. Gabay, Brauner and Kotov~\cite{gabay2013lbv2} give
 a new lower bound of $19/14$ for the setting where there are exactly
 three bins, i.e. $m=3$. \footnote{Subsequently to our work, the
 preprint \cite{gabay2013lbv2} was updated to include the lower bound
-of $19/14$ for $m=4$ as well~\cite{gabay2013lbv3}.}
+of $19/14$ for $m=4$ as well~\cite{gabay2015lbv3}.}
 
 They create the lower bound instance using a computer search based on
-the ideas which we have described in Section~X and which we will see
-in full detail in Chapter~4, where we also show our extensions to
+the ideas which we have described in Section~\ref{sec:1:game} and which we will see
+in full detail in Chapter~\ref{chap:lb}, where we also show our extensions to
 their approach.
 
 The lower bounds for $m=3$ cannot be easily translated into a lower
@@ -193,14 +209,15 @@ classical \textsc{Bin Packing} and its variants.
 
 Alongside \binpacking, \scheduling is probably the other most
 well-known problem for the online computational model. The first
-algorithm for \scheduling was given by Graham~\cite{Graham66},
-achieving a competitive ratio of $2-\frac{1}{m}$ for $m$ machines.
+algorithm for \scheduling that minimizes the makespan was given by
+Graham~\cite{graham66} in the 1960s, achieving a competitive ratio of
+$2-\frac{1}{m}$ for $m$ machines.
 
 This ratio was later improved to a constant factor independent on $m$;
 the currently best online algorithm for \scheduling is
-$1.9201$-competitive \cite{}, and there is a lower bound showing that
-no online algorithm for \scheduling can be better than
-$1.88$-competitive \cite{}.
+$1.9201$-competitive \cite{fleischerwahl}, and there is a lower bound
+showing that no online algorithm for \scheduling can be better than
+$1.88$-competitive \cite{rudinthesis}.
 
 Since \scheduling clearly belongs to the greater research area of
 scheduling theory, there are incredibly many variants that study
@@ -213,48 +230,125 @@ problems in the area.
 
 We have already learned that \binstretch can be formulated as online
 scheduling on $m$ identical machines with known optimal makespan
-(Problem~\label{prb:binstretchscheduling}). Algorithms for the semi-online
-setting are often essential in designing constant-competitive
-algorithms without the additional knowledge, e.g., for scheduling in
-the more general model of uniformly related
+(Problem~\ref{prb:binstretchscheduling}). Algorithms for the
+semi-online setting are often essential in designing
+constant-competitive algorithms without the additional knowledge,
+e.g., for scheduling in the more general model of uniformly related
 machines~\cite{AsAFPW97,BeChKa00,EbJaSg09}.
 
 For scheduling, other types of semi-online algorithms are
 studied as well. Historically first is the study of ordered sequences with
-non-decreasing processing times~\cite{Graham69}. Most closely related
-is the variant with known sum of all processing times studied
-in~\cite{KeKoST97}. If we know the optimal makespan, we can always pad
-the instance by small items at the end so that the optimal makespan
-remains the same and the sum of processing time equals $m$ times the
-optimal makespan. Thus one could expect that these two quantities are
-interchangeable. However, when the sum of all processing times is
-known, the currently best results are a lower bound of $1.585$ and an
-algorithm with ratio $1.6$, both
-from~\cite{DBLP:journals/tcs/AlbersH12}. This shows, somewhat
-surprisingly, that knowing the actual optimum gives a significantly
-bigger advantage to the semi-online algorithm over knowing just the
-sum of the processing times. See Pruhs et al.~\cite{PST04} for a
-survey of other results on (semi-)online scheduling.
+non-decreasing processing times~\cite{Graham69}.
+
+There are two variants which can be considere the closest to \binstretch.
+
+The first is scheduling with known sum of all processing times:
+
+\begin{prb}[\schedulingtptshort]~
+\label{prb:schedulingtpt}
+
+\smallskip
+
+\noindent\textbf{Input:}
+
+\begin{itemize}
+\item An integer $m$ -- a number of identical machines that are available;
+\item A non-zero value $T$ which represents the advice given to the algorithm in advance;
+\item A sequence of jobs $I=i_1, i_2, \ldots$ given online one by one. Each job has
+a \textit{processing time} $s(i) \in [0,1]$ and must be assigned immediately and irrevocably
+to one of the machines. The jobs cannot be paused or reassigned later.
+\end{itemize}
+
+\noindent\textbf{Output:} A schedule assigning all input jobs to machines.
+
+\noindent\textbf{Guarantee:} The sum of processing times of all jobs is equal to the value
+$T$ given to the algorithm in advance.
+
+\noindent\textbf{Goal:} As in Problem~\ref{prb:binstretchscheduling}, we aim to minimize the
+makespan (the load of the busiest machine).
+
+\noindent
+\smallskip
+\end{prb}
+
+Scheduling with known total processing time can be considered a
+sibling to \binstretch, as it is one of the problems also investigated
+by Kellerer, Kotov, Speranza and Tuza in~\cite{KeKoST97} in their
+paper which contains the very first algorithm for \binstretch.
+
+\schedulingtpt is also the aforementioned problem investigated by
+Cheng, Kellerer and Kotov~\cite{cheng05}. They design a $1.6$-competitive
+algorithm for it which has implications for \binstretch, as we will
+see in the following paragraph.
+
+Let us now briefly consider the relationship of \binstretch and
+\schedulingtpt. If we know the optimal makespan (as we do in
+\binstretch), we can always pad the instance by small items at the end
+so that the optimal makespan remains the same and the sum of
+processing times equals $m$ times the optimal makespan. This means
+that any algorithm which is $c$-competitive for \schedulingtpt has
+stretching factor $c$ for \binstretch. Thus, one could conjecture that
+\binstretch and \schedulingtpt might be equivalent.
+
+However, when the sum of all processing times is known, the currently
+best results are a lower bound of $1.585$ and an algorithm with ratio
+$1.6$, both from~\cite{DBLP:journals/tcs/AlbersH12}. This shows,
+somewhat surprisingly, that knowing the actual optimum gives a
+significantly bigger advantage to the semi-online algorithm over
+knowing just the sum of the processing times.
+
+The second semi-online problem related to \binstretch has the same
+guarantee, but the machines have varying speeds:
+
+\begin{prb}[\textsc{Semi-Online Scheduling on Two Related Machines}]~
+\label{prb:schedulingtpt}
+
+\smallskip
+
+\noindent\textbf{Input:}
+
+\begin{itemize}
+\item An number $S_1 \ge 1$ denoting the speed of the first machine;
+the second machine has speed $S_2 = 1$.
+\item A sequence of jobs $I=i_1, i_2, \ldots$ given online one by one. Each job has
+a processing time $s(i) \in [0,1]$ and must be assigned immediately and irrevocably
+to one of the machines. When a job $i$ is assigned to a machine $j$, its \emph{actual processing
+time} is $s(i)/S_j$.
+\end{itemize}
+
+\noindent\textbf{Output:} A schedule assigning all input jobs to machines.
+
+\noindent\textbf{Guarantee:} There exists a schedule which assigns all
+jobs so that the makespan (maximum of total actual processing times
+per each machine) is at most $1$.
+
+\noindent\textbf{Goal:} Minimize the makespan (the total actual
+processing time of the busiest machine).
+
+\noindent
+\smallskip
+\end{prb}
+
+We could think about the aforementioned problem as \binstretch on two
+bins where the two bins have two different \emph{compression factors}.
+This problem was first studied by Epstein~\cite{epsteinrevisited}
+indeed as a variant of bin stretching; the paper gives upper and lower
+bounds on the competitive ratio (stretching factor) as a function of
+$S_1$.  The upper and lower bounds of Epstein were later tightened by
+Dósa, Fügenschuh, Tan, Tuza and Węsek~\cite{dosastretching}.
+
+Curiously, the relation between the speed $S_1$ and the optimal
+stretching factor is quite complicated and non-monotone; contrast this
+with the fact that on uniform machines of equal speed, the optimal
+stretching factor can be easily shown to be $4/3$.
+
+See Pruhs et al.~\cite{PST04} for a survey of other results on
+(semi-)online scheduling, as well as a very recent survey by
+Epstein~\cite{epstein18} that discusses \binstretch as well as all the
+semi-online problems mentioned above.
 
 % \subsection{Stochastic optimization}
 
 % \subsection{Online algorithms with advice}
 
 % \todo{Add more semi-online results, stochastic optimization and advice optimization.}
-
-% \begin{algorithm}
-% \caption{Algorithm $\chase_{d,r}$ for $r$-bounded instances with $v_0 = 0$}
-% \label{alg:bounded}
-% \begin{algorithmic}[1]
-%   \If {$\hp_k \cap F_i = \emptyset$ for all $k \in [d]$}
-%   \State Let $B(s,r)$ be the minimum-volume ball containing $F_i$
-%   \State Update $B_i \leftarrow B(s,r)$ and $v_i \leftarrow s$
-%   \State Recenter so that $s = 0$
-%   \State Let $v_k(i)$ be location of $\chase_{d-1}(0,r,\hp_k)$ for each $k \in [d]$
-%   \Else
-%   \State Let $k$ be smallest index such that $\hp_k \cap F_i \neq \emptyset$
-%   \State Update $B_i \leftarrow B_{i-1}$ and $v_i \leftarrow v_k(i)$
-%   \EndIf  
-% \end{algorithmic}
-% \end{algorithm}
-

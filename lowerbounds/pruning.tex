@@ -46,8 +46,6 @@ there exists an online algorithm that packs all remaining items into
 $m$ bins of capacity $R-1$.
 \end{goodsit}
 
-% \todo{Fix good situations 3 and 4.}
-
 \begin{goodsit}\label{lem:gs3generic}
 Consider a bin configuration $(\calL,\calI)$. Define the following
 sizes:
@@ -84,25 +82,42 @@ Define the following sizes:
 \item Let $r$ be the last bin load requirement as above.
 \item Let $c$ (\emph{critical value for $B_{m-1}$}) be equal to $r - s(B_{m-1})$.
 In other words, if an item of size in $[c,S]$ is packed into $B_{m-1}$, GS\ref{lem:gs1generic}
-is reached.
+is reached (with $B_{m}$ as the last bin).
 \end{enumerate}
 
-Then, for every item size in the interval $[1,c-1]$, we check the following
-constraint:
+Next, for every item size $i$ in $[1,c-1]$, define the following values
 
-Then, if it is true that for every item size in the interval $[1,c-1]$
-we can pack enough of these items into $B_{m}$ such that
-$GS\ref{lem:gs1generic}$ is reached on all bins except $B_{m-1}$,
+\begin{enumerate}
+
+\item For every bin $B_1, B_2, \ldots, B_{m-2}$, define the
+\emph{virtual gain} on this bin $B_k$ as $S+\alpha - (i-1) - s(B_k)$.
+
+\item For the last bin $B_m$, define the \emph{virtual gain} on $B_m$
+as the greater value of $i$ and $S+\alpha - (c-2) - s(B_m)$.
+\end{enumerate}
+
+Finally, if it is true that for every item size in the interval
+$[1,c-1]$ the total virtual gain on all bins is such that
+$GS\ref{lem:gs1generic}$ is reached with $B_{m-1}$ as the last bin,
 there exists an online algorithm that packs all remaining items into
 $m$ bins of capacity $R-1$.
-
 \end{goodsit}
 
-Interestingly, the last good situation (Good Situation
-\ref{lem:gs4generic} above) has no fixed threshold like its original
-form (GS\ref{lem:gs4}) but is \emph{algorithmic} in the sense that we
-can check it for each item size separately with an algorithm and gain
-a good situation if all its conditions are met.
+We do realize that the last good situation is slightly more
+complicated than the rest; we now briefly comment on it.
+
+First, the central idea of GS\ref{lem:gs4generic} is that we do not
+need to reach the total load as required by GS\ref{lem:gs1generic} as
+long as we are guaranteed that either the load requirement will be met
+or another good situation is reached (such as GS\ref{lem:gs1generic}
+on a different set of bins). Thus we compute with the virtual load as
+if it is already packed in the bins.
+
+Second, the good situation GS\ref{lem:gs4generic} is the first good
+situation with no fixed threshold, unlike its original form
+(GS\ref{lem:gs4}). Instead, it is \emph{algorithmic} in the sense that
+we can check it for a bin configuration algorithmically and reach a
+good situation if all of its conditions are met.
 
 \subsection{Adversarial pruning}\label{sec:4:advpruning}
 

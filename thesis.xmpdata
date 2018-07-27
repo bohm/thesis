@@ -3,5 +3,29 @@
 \Author{Martin Böhm}
 \Title{Online Bin Stretching: Algorithms and Computer Lower Bounds}
 \Keywords{bin stretching\sep online scheduling\sep bin packing\sep online algorithms\sep computer search}
-\Subject{Abstract of thesis}
+\Subject{
+We investigate a problem in semi-online algorithm design, called
+Online Bin Stretching. The problem can be understood as an online
+repacking problem: the goal of the algorithm is to repack items of
+various sizes into $m$ containers of identical size R>1. The input
+items arrive one by one and the algorithm must assign an item to a
+container before the next item arrives.
+A speciality of this problem is that there is a specific guarantee
+made to the algorithm: the algorithm learns at the start of the input
+that there exists a packing of all input items into m containers of
+capacity 1.
+Our goal is to design algorithms for this problem which successfully
+pack the entire incoming sequence one by one while requiring the
+lowest container capacity R possible.
+In this thesis, we show several new results about Online Bin
+Stretching: First, we design an algorithm that is able to pack the
+entire input into m containers of capacity 1.5 regardless of what
+the vale of m will be. Second, we show a specialized algorithm for
+the setting of just 3 containers; this algorithm is able to pack
+into 3 bins of capacity 1.375. Finally, we design and implement an
+involved search algorithm which is able to find lower bounds for
+Online Bin Stretching -- and in fact we show the best known lower
+bounds for 3 <= m <= 9.}
+
 \Publisher{Charles University}
+
