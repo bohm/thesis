@@ -28,7 +28,6 @@ size of items in the instance is at most $3\cdot 16=48$. If two bins
 have size $s(A) + s(B) \geq 26$, all the remaining items (including
 the ones already placed on $C$) have size at most $22$.  Thus we can
 pack them all into bin $C$.
-\qed
 \end{proof}
 
 \begin{goodsit}\label{lem:gs2}
@@ -44,7 +43,6 @@ other bins (choose arbitrarily). Put all the items greedily into
 $B$. When an item $x$ does not fit, put it into $A$, where it fits, as
  $s(A_{\before x})\le 6$. Now $s(B_{\before x})+s(x)>22$. In addition, $s(A_{\before x})\ge 4$ by the assumption.  Together we
 have $s(A_{\before x}) + s(B_{\before x})+s(x) \geq 26$, which is \gs1.
-\qed
 \end{proof}
 
 From now on, we assume that each bin $X\in\{A,B,C\}$ satisfies $s(X) \not\in [4,6]$, otherwise we are in \gs2.
@@ -68,7 +66,7 @@ $A$ and $B$ or on bins $A$ and $C$. %Else, if $s(C)<4$, w
 assume $s(B) < 11$ and we cannot continue packing into $B$ any
 further. This implies that an item $i$ arrives such that $s(i) >
 11$. As $s(C_{\before i})<4$, we pack $i$ into it and apply \gs1 on
-bins $A$ and $C$.\qed
+bins $A$ and $C$.
 \end{proof}
 
 \begin{goodsit}\label{lem:gs4}
@@ -104,7 +102,7 @@ Note that $I \subseteq (7,11)$ and that the lower bound of $I$ may decrease
 during the course of the algorithm.
 
 The first two items with size in $I$ will fit together,
-since $2(11-\frac{1}{2}c) + c = 22$. With two such items packed into $C$, we know that the load $s(A) + s(C)$ is at least $s(A) + 2(22-s(A)) = 44 - s(A) > 29$ and we have reached \gs1, finishing the analysis. \qed
+since $2(11-\frac{1}{2}c) + c = 22$. With two such items packed into $C$, we know that the load $s(A) + s(C)$ is at least $s(A) + 2(22-s(A)) = 44 - s(A) > 29$ and we have reached \gs1, finishing the analysis.
 
 \end{proof}
 
@@ -137,7 +135,6 @@ We therefore have three items $i,x,y$ with $s(i),s(x),s(y)>10$ and
 an item $s(a) > 6$ from our initial conditions. These four items
 cannot be packed together by any offline algorithm into three bins of
 capacity 16, and so we have a contradiction with $s(x), s(y) > 10$.
-\qed
 \end{proof}
 
 \begin{goodsit}\label{lem:gs6} 
@@ -151,7 +148,6 @@ fit.  At this point $s(A_{\before x})+s(x)>22$.  If $x$ fits on $B$, we put it t
 and reach \gs1 because $s(B_{\before x})>6$. Otherwise, $x$ definitely fits on $C$
 because $s(C_{\before x})<4$ by assumption.  By the condition on $s(A)$, we have % $s(A)+s(C)-4+x \ge s(B)+x > 22$, so 
 $s(x) + s(A_{\before x})+ s(C) \ge s(x) + s(B)+4>26$, and we are in \gs1 again.
-\qed
 \end{proof}
 
 %\begin{cor}\label{cor:gs6}
@@ -165,7 +161,6 @@ $s(x) + s(A_{\before x})+ s(C) \ge s(x) + s(B)+4>26$, and we are in \gs1 again.
 %\begin{proof}
 %A large enough item can be assigned to $C$ (or $B$) and will bring us to the situation of the
 %last lemma. A small enough item can be placed on $C$.
-%\qed
 %\end{proof}
 
 \begin{goodsit}\label{lem:gs7}
@@ -189,7 +184,6 @@ s(x) > 22-s(B_{\before x}) &\ge 13 - \frac{1}{2}(s(A_{\before x})+s(C_{\before x
 
 Placing $x$ on $A$ we increase $s(A)$ to at least $s(B_{\before x})+4-s(C_{\before x})$
 and we reach \gs6. % by Corollary~\ref{cor:gs6}.
-\qed
 \end{proof}
 
 

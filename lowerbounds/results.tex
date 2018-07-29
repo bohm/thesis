@@ -47,8 +47,7 @@ Some fractions below $112/82$ are omitted; our lower bound computation
 has not found a lower bound on those.
 
 The linear results were computed on a server with an AMD Opteron 6134
-CPU and 64496 MB RAM. The size of the hash table was set to $2^{25}$
-with chain length $4$.
+CPU and 64496 MB RAM. The size of the hash table was set to $2^{25}$.
 
 The parallel results were computed using OpenMPI on a heterogenous
 cluster with $109$ worker processes running.
@@ -74,9 +73,9 @@ $8$  & $19/14$ &  $1.3571$ & \textbf{Yes} & Unk. (1) & & (1h. 14s.)  \\
 $9$  & $19/14$ &  $1.3571$ & \textbf{Yes} & Unk. (1) & &  \\
 \end{tabular}
 \end{center}
-\caption{Results produced by our minimax algorithm in the case of $4$
-and $5$ bins.  Tested on the same machine and with the same parameters
-as in Table~\ref{table:results3}, both for linear and parallel
+\caption{Results produced by our minimax algorithm for more than $3$ bins.
+Tested on the same machine and with the same parameters
+as in Table~\ref{tab:results3}, both for linear and parallel
 computations. In columns \textit{Mon.} and \textit{Parallel}, we list
 in brackets monotonicity and elapsed time of computation for an input
 having an item of size 5 at the start. Monotonicity is measured only

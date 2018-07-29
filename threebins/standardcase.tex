@@ -32,7 +32,7 @@ have size in $(6-s(A),4)$.
 Any item with size in $[4-s(A),6-s(A)]\cup[4,6]$ leads to \gs2. 
 Any item with size more than 6 is assigned to $B$ if it fits there,
 reaching \gs5, and else to $A$ or $C$, reaching \gs7 since $s(B)\le9+\frac{1}{2}(s(A)+s(C))$. The only remaining
-possible sizes of items that are not packed into $A$ are $(6-s(A),4)$.\qed
+possible sizes of items that are not packed into $A$ are $(6-s(A),4)$.
 \end{proof}
 
 \begin{cor}
@@ -42,7 +42,7 @@ After Step {\rm \step{qstep}}, $C$ contains exactly one item $r$ and $s(A)+s(C)>
 
 \begin{proof}
 From the previous observation it is clear that $C$ receives at least one item $r$ in Step \step{qstep}. No second
-item $r_2$ can be packed into $C|_4$ in Step~\step{qstep} as $s(r) + s(r_2)$ would be at least $2(6 - s(A)) > 4$. \qed
+item $r_2$ can be packed into $C|_4$ in Step~\step{qstep} as $s(r) + s(r_2)$ would be at least $2(6 - s(A)) > 4$.
 \end{proof}
 
 
@@ -336,7 +336,7 @@ We create an LP from \eq{1}, \eq{2}, \eq{4}, \eq{6}, \eq{9}, $s(r) < 4$,
 $s(A_{\before j_2}) \le s(A_{\before r}) \le s(A_{\before x})$,
 and $s(B_{\before x}) = s(B_{\before r}) = s(B_{\before j}) + s(j) + s(j_2)$
 (the last two are only true here in Case 2, where $r$ arrived later than $j_2$).
-The resulting LP2 is infeasible.\qed
+The resulting LP2 is infeasible.
 \end{proof}
 
 Having established that only one item $j$ is packed into $B$ during
@@ -363,7 +363,7 @@ or $s(B_{\before j}) \le s(A_{\before j}) = s(e)$. Thus it is sufficient to prov
 $s(B_{\before j}) + s(r) > 6.8$.
 
 We use \eq{3}, \eq{7}, \eq{8}, $s(j) < 4$, \[s(B_{\before j}) \le s(A_{\before j}) \le s(A_{\before r}) \le s(A_{\before x}),\]
-and a converse of the claim and obtain LP3 with the optimal value equal to 0. \qed
+and a converse of the claim and obtain LP3 with the optimal value equal to 0.
 \end{proof}
 
 \begin{lem}\label{lem:eplusj}
@@ -377,7 +377,7 @@ The same argument as in Lemma \ref{lem:eplusr} gives us $s(e) + s(j) \ge  s(B_{\
 We therefore aim to prove $s(B_{\before j}) + s(j) > 7.6$. 
 We create LP4 from \eq{7}, \eq{9b}, $s(B_{\before j}) + s(r) > 6.8$ by Lemma \ref{lem:eplusr},
 and $s(B_{\before j} \leq s(A_{\before x})$ for which 0 is the optimum again.
-\qed
+
 \end{proof}
 
 \begin{lem}\label{lem:rplusj}
@@ -391,7 +391,7 @@ Starting with \eq{3}:
 and using $s(B_{\before j})\le s(A_{\before j})\le s(A_{\before r})$ with $s(B_{\before j}) < 4$, we have:
 \begin{align*}
 s(j) + s(r) &> 9 + \left( \frac{s(A_{\before r})}{2} - s(B_{\before j}) \right) \\
-            & \ge  9 - \frac{s(B_{\before j})}{2} > 7. \qquad \qed 
+            & \ge  9 - \frac{s(B_{\before j})}{2} > 7. \qquad 
 \end{align*}
 \end{proof}
 
@@ -410,7 +410,7 @@ $s(B_{\before x}) + s(x) > q \geq 12$.
 Since the sizes of the remaining three items $\{e,r,j\}$ are bounded from above
 by $4$ but their pairwise sums are always at least $6.8$, we have
 that $\min\{e,r,j\} > 2.8$, which along with $s(x) > 4$ gives us the
-required bound.\qed
+required bound.
 \end{proof}
 
 From Lemmas \ref{lem:eplusr}, \ref{lem:eplusj}, \ref{lem:rplusj} and
@@ -435,7 +435,7 @@ bound. As we have argued above, Lemma \ref{lem:eplusr} gives us that
 $s(r) > 2.8$. We also use inequalities \eq{6}, \eq{9b},
 $s(B_{\before j}) \le s(A_{\before j}) \le s(A_{\before x})$
 (this is true because we reorder the bins $B$, $A$ in Step~\step{rename}),
-and $s(j) < 4$ to get LP5 with 0 being the optimal value.\qed
+and $s(j) < 4$ to get LP5 with 0 being the optimal value.
 \end{proof}
 
 With Lemma \ref{lem:boundonB} proven, we have finished the proof of Claim \ref{clm:nobigitems}

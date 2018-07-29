@@ -37,7 +37,7 @@ It follows that $s(A_{\before j})\in(3,4)$ and $s(B_{\before j}) + s(j) \in (6,8
 
 Since any item that is put into $B$ during Step~\step{initial} must have size
 of more than two (otherwise it fits into $A|_6$), only one such item can be packed into $B$
-which proves the last statement.\qed
+which proves the last statement.
 \end{proof}
 
 Contrast the preceding observation with the next one, which considers $s(j) > 6$:
@@ -50,7 +50,7 @@ Assume that $s(j) > 6$. Then, $s(A_{\before j}) < 3$, $s(B_{\before j}) = 0$.
 \begin{proof} If $s(A_{\before j}) \ge 3$ we reach \gs5 by packing
 $j$ into $B$.  However, if $s(A_{\before j}) < 3$ then $s(A_{\before j}) + s(B_{\before j}) < 6$
 which can be true only if $s(B_{\before j}) = 0$; indeed, we would have never packed an item $z$ into
- a previously empty bin $B$ if it were true that $s(A_{\before z}) + s(z) < 6$, $s(z) < 3$ and $s(A_{\before z}) < 3$. \qed
+ a previously empty bin $B$ if it were true that $s(A_{\before z}) + s(z) < 6$, $s(z) < 3$ and $s(A_{\before z}) < 3$. 
 \end{proof}
 
 Both the analysis and the algorithm differ quite a lot based on the
