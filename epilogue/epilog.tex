@@ -35,7 +35,7 @@ the best possible value of the stretching factor:
 \begin{itemize}
 \item For the case of arbitrary many bins, the lower bound/upper bound interval is now $[1.\overline{3}, 1.5]$; 
 \item For the case of $m = 3$, it is $[1.369, 1.375]$;
-\item For the case of $4 \le m \le 9$, we have a new lower bound of $1.357$.
+\item For the case of $4 \le m \le 8$, we have a new lower bound of $1.357$.
 \end{itemize}
 
 Unfortunately (or fortunately for the future researchers in the area),
@@ -105,14 +105,14 @@ bins.} It is still true that the lower bound of $4/3$ is the best
 known lower bound for the stretching factor of \binstretch with $m$
 bins ($m$ being part of the input). Our experimental results seem to
 indicate that $19/14$ is a good candidate, as it holds for $m \in
-\{3,4,\ldots,9\}$. 
+\{3,4,\ldots,8\}$. 
 
 \noindent\textbf{Why isn't it included in this thesis?} This problem was the
 main motivation for our extensions to the lower bound search
 algorithm. As it stands, the fact that we can get results for $m \le
-9$ is promising, but we need many more adversarial cuts and
+8$ is promising, but we need many more adversarial cuts and
 simplifications of the game tree before the lower bound tree for $m =
-9$ became human-readable. Even then, we expect more fresh ideas to be
+8$ became human-readable. Even then, we expect more fresh ideas to be
 needed before the general lower bound can be shown.
 
 \item \textit{Apply the same lower bound minimax approach to more

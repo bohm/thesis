@@ -9,6 +9,20 @@ though none was found with this denominator; for example, some lower
 bound may reach $41/30$ using item sizes that are not multiples of
 $1/30$.
 
+\paragraph{A note on 9 bins.} We have produced a verifiable lower
+bound of $19/14$ for the setting of 4-8 bins. The setting of $9$
+bins lies at the threshold of the computational power of our
+implementation -- we have been able to successfully run the lower
+bound search without producing any output for $m=9$, but as of the
+submission date we were not able to generate the verifiable lower
+bound tree.
+
+Still, based on estimating the partial progress of the algorithm, we
+are convinced that we will be able to produce a verifiable lower bound
+of $19/14$ for $9$ bins within a few days. If that happens, we will
+update our data set at \url{https://github.com/bohm/binstretch/} to
+include it as well.
+
 \begin{table}[H]
 \begin{center}
 % \begin{tabular}{ c | @{\hskip 2em} l | @{\hskip 2em} l | @{\hskip 2em} l }\label{tab:results}
@@ -70,7 +84,7 @@ $5$  & $19/14$ &  $1.3571$ & \textbf{Yes} & 2 (1) & & 10s. \\
 $6$  & $19/14$ &  $1.3571$ & \textbf{Yes} & 0 (0) & & 11s. \\
 $7$  & $19/14$ &  $1.3571$ & \textbf{Yes} & 1 (0) & & 2m. 13s. (16s.) \\
 $8$  & $19/14$ &  $1.3571$ & \textbf{Yes} & Unk. (1) & & (1h. 14s.)  \\
-$9$  & $19/14$ &  $1.3571$ & \textbf{Yes} & Unk. (1) & &  \\
+% $9$  & $19/14$ &  $1.3571$ & \textbf{Yes} & Unk. (1) & &  \\
 \end{tabular}
 \end{center}
 \caption{Results produced by our minimax algorithm for more than $3$ bins.

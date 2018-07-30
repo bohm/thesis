@@ -74,13 +74,13 @@ $m$ bins of capacity $R-1$.
 \begin{goodsit}\label{lem:gs4generic}
 
 Suppose that for a bin configuration $(\calL, \calI)$ it holds that
-the last two bins are loaded up to $\alpha$. 
+the last two bins have load at most $\alpha$. 
 
 Define the following sizes:
 
 \begin{enumerate}
-\item Let $r$ be the last bin load requirement as above.
-\item Let $c$ (\emph{critical value for $B_{m-1}$}) be equal to $r - s(B_{m-1})$.
+\item Let $g = (m-1)\cdot S - \alpha$ be the limit for GS\ref{lem:gs1generic}.
+\item Let $c$ (\emph{critical value for $B_{m-1}$}) be equal to $g - (s(\calI) - s(B_m))$.
 In other words, if an item of size in $[c,S]$ is packed into $B_{m-1}$, GS\ref{lem:gs1generic}
 is reached (with $B_{m}$ as the last bin).
 \end{enumerate}
@@ -90,28 +90,31 @@ Next, for every item size $i$ in $[1,c-1]$, define the following values
 \begin{enumerate}
 
 \item For every bin $B_1, B_2, \ldots, B_{m-2}$, define the
-\emph{virtual gain} on this bin $B_k$ as $S+\alpha - (i-1) - s(B_k)$.
+\emph{virtual load} on a bin $B_k$ as $\max(s(B_k), S+\alpha - (i-1))$.
 
-\item For the last bin $B_m$, define the \emph{virtual gain} on $B_m$
-as the greater value of $i$ and $S+\alpha - (c-2) - s(B_m)$.
+\item For the last bin $B_m$, define the virtual load $v$ on it
+as follows: If $S+\alpha - (c-2) \ge s(B_m) + s(i)$, we set $v = S + \alpha - (c-2)$.
+Otherwise, we set $v = s(B_m) + 2\cdot s(i)$.
 \end{enumerate}
 
-Finally, if it is true that for every item size in the interval
-$[1,c-1]$ the total virtual gain on all bins is such that
-$GS\ref{lem:gs1generic}$ is reached with $B_{m-1}$ as the last bin,
-there exists an online algorithm that packs all remaining items into
-$m$ bins of capacity $R-1$.
+Finally, if it is true that for every item size $i$ in the interval
+$[1,c-1]$ the sum of virtual loads of bins $1,2,\ldots, m-2, m$ is at
+least $g$, there exists an online algorithm that packs all remaining
+items into $m$ bins of capacity $R-1$.
+
 \end{goodsit}
 
 We do realize that the last good situation is slightly more
 complicated than the rest; we now briefly comment on it.
 
-First, the central idea of GS\ref{lem:gs4generic} is that we do not
-need to reach the total load as required by GS\ref{lem:gs1generic} as
-long as we are guaranteed that either the load requirement will be met
-or another good situation is reached (such as GS\ref{lem:gs1generic}
-on a different set of bins). Thus we compute with the virtual load as
-if it is already packed in the bins.
+First, the central idea of GS\ref{lem:gs4generic} is that we can delay
+the computation of the total load as required by
+GS\ref{lem:gs1generic} until there is an item that (seemingly) cannot
+be packed into any bin. If we can prove that at that time,
+GS\ref{lem:gs1generic} is reached, we reach a contradiction and are
+able to finalize the packing. This motivates the definition of the
+virtual loads.
+
 
 Second, the good situation GS\ref{lem:gs4generic} is the first good
 situation with no fixed threshold, unlike its original form
@@ -153,16 +156,22 @@ described in Section~\ref{subsec:test}.
 
 \paragraph{Five/nine heuristic.} We use a specific heuristic for the
 case of $19/14$, as it is a good candidate for a general lower
-bound. This heuristic was observed to slightly compress the size of
-the output tree in this setting.
+bound. This heuristic was experimentally observed to slightly compress
+the size of the output tree in this setting.
 
 This heuristic comes into play once there is a bin of load at least
-$5$. The item sizes $5$ and $9$ are complementary in the sense that
-one of each can fit together in the optimal packing of capacity 14,
-but the two of them cannot be packed together into a bin that already
-has load at least $5$. Additionally, if there are too many bins of
-load at least $5$ but not much more, a subsequent input of several
-items of size $14$ will again force a bin of load at least $19$.
+$5$ and once all bins are non-empty (even load $1$ is sufficient). The
+item sizes $5$ and $9$ are complementary in the sense that one of each
+can fit together in the optimal packing of capacity 14, but the two of
+them cannot be packed together into a bin that already has load at
+least $5$.
+
+A pair of items of size $9$ also cannot fit together into any other
+bin -- as all the bins have already load at least $1$.
+
+Finally, if there are too many bins of load at least $5$ but not much
+more, a subsequent input of several items of size $14$ will again
+force a bin of load at least $19$.
 
 We apply this heuristic only when it is true that at all times, $m$
 items of size $9$ can arrive on input without breaking the adversarial

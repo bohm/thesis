@@ -7,7 +7,7 @@ evaluated bin configuration $C$ (as a hash) with its value.
 \paragraph{Hash table properties.} We store a large hash table of
 fixed size with each entry being a 64-bit integer corresponding to
 $63$ bits of hash and a binary value. The hash table is addressed
-by a prefix of the hash, usually between $20-30$ digits (depending
+by a prefix of the hash, usually between $20-30$ bits (depending
 on the computer used).
 
 We solve the collisions by a simple linear probing scheme of a fixed
@@ -20,12 +20,19 @@ occupied, we replace one value at random.
 hashing \cite{zobrist}, which we now describe.
 
 For each bin configuration, we count occurences of items, creating
-pairs $(i,f)$ belonging to $\{1,\ldots,S\} \times \{0,1\ldots,m\cdot S\}$, where $i$ is the item type
-and $f$ its frequency (the number of items of this size packed in all $m$ bins).
+pairs $(i,f)$ belonging to $\{1,\ldots,S\} \times \{0,1\ldots,m\cdot
+S\}$, where $i$ is the item type and $f$ its frequency (the number of
+items of this size packed in all $m$ bins).
+
+As for the loads of the $m$ bins, we maintain that they are sorted in
+descending order. We also think of them as ordered pairs $(j,g)$, with
+$j$ being the position of the bin in the ordering (e.g. $1$ --
+largest, $m$ -- smallest) and $g$ the actual value of the load.
 
 For example, we can think of bin configuration
-$((3,2,3),\{1,1,1,1,2,3\})$ as a $3$-tuple $(3,2,3)$ along with pairs
-$(1,4)$, $(2,1)$, $(3,1)$, $(4,0)$, $(5,0)$ and so on.
+$((3,3,2),\{1,1,1,1,2,3\})$ as a set of load pairs $(1,3)$, $(2,3)$,
+$(3,2)$ along with pairs for items: $(1,4)$, $(2,1)$, $(3,1)$,
+$(4,0)$, $(5,0)$ and so on.
 
 At the start of our program, we associate a $64$-bit number with each
 pair $(i,f)$. We also associate a $64$-bit number for each possible
@@ -39,10 +46,14 @@ The main advantage of this approach is fast computation of new hash
 values.  Suppose that we have a bin configuration $m$ with hash
 $H$. After one round of the player \adversary and one round of the
 player \algo, a new bin configuration $B'$ is formed, with one new
-item placed. Calculating the hash $H'$ of $B'$ can be done in time
-$\O(1)$, provided we remember the hash $H$ -- the new hash is
-calculated by applying XOR to $H$, the new associated values, and the
-previous associated values which have changed.
+item placed.
+
+Calculating the hash $H'$ of $B'$ can be done in time $\O(m)$,
+provided we remember the hash $H$; the new hash is calculated by
+applying XOR to $H$, the new associated values, and the previous
+associated values which have changed.
+
+
 
 \paragraph{Caching of the procedure \MaxFeas.} We use essentially the
 same approach for caching results in the procedure \MaxFeas, except

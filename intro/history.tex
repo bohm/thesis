@@ -86,7 +86,7 @@ size, which in \cite{kellerer2013} are selected as follows:
 \end{center}
 
 Just looking at the sizes alone, we can infer some properties that may
-be useful: for instance, the upper bound $4/7$ for small items is
+be useful; for instance, the upper bound $4/7$ for small items is
 precisely the value of $\alpha$ for an algorithm with stretching
 factor $11/7$. As for the medium items, we can see that a pair of them
 always fits together -- in fact, the upper bound for medium items is
@@ -146,9 +146,9 @@ phase} is the following one:
 \end{algorithm}
 
 We have so far employed just the bin classification; only in the
-\emph{second phase} comes the bunching technique into play. Since the
-first phase ends when the ratio of small and medium bins to non-empty
-bins is higher than $3:1$, the algorithm creates groups (bunches) of 4
+\emph{second phase} comes the bunching technique into play. The first
+phase ends when the ratio of small and medium bins to non-empty bins
+is higher than $3:1$. The algorithm then creates groups (bunches) of 4
 bins and packs incoming items one group at a time; the next group is
 used only when it is impossible to pack into the previous one.
 
@@ -301,7 +301,7 @@ The second semi-online problem related to \binstretch has the same
 guarantee, but the machines have varying speeds:
 
 \begin{prb}[\textsc{Semi-Online Scheduling on Two Related Machines}]~
-\label{prb:schedulingtpt}
+\label{prb:binstretchingspeeds}
 
 \smallskip
 

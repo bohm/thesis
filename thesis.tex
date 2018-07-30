@@ -60,12 +60,27 @@
 
 \usepackage[noend]{algpseudocode}
 \usepackage{algorithm}
+\usepackage{listings}
+\usepackage{microtype}
+
+% \usepackage{showframe}
 %\usepackage{thmtools, thm-restate}
 \algnewcommand{\IIf}[1]{\State\algorithmicif\ #1 \algorithmicthen}
 \algnewcommand{\EndIIf}{\unskip\ \algorithmicend\ \algorithmicif}
 
+% Set better font for listings.
+\lstset{
+basicstyle=\ttfamily,
+%basicstyle=\small\sffamily,
+numbers=left,
+% numberstyle=\tiny,
+% frame=tb,
+columns=fullflexible,
+showstringspaces=false
+}
 
-%%% Basic information on the thesis
+
+%%%% Basic information on the thesis
 
 % Thesis title in English (exactly as in the formal assignment)
 \def\ThesisLargeTitle{Online Bin Stretching:\\ \mbox{Algorithms and Computer Lower Bounds}}
@@ -125,7 +140,7 @@ rest of my family: all four of my grandparents, all four of my aunts
 and uncles, and all four of my cousins.
 
 I am grateful to all my friends: Petr Onderka, Lukáš Lánský, Lukáš
-Mach, David Marek, Jiří Maršík, Josef Kakrda and many more. Special
+Mach, David Marek, Jirka Maršík, Josef Kakrda and many more. Special
 thanks to Petr and Tereza for proofreading parts of this thesis.
 
 Finally, I would like to thank my life partner Tereza Hulcová for
@@ -136,14 +151,14 @@ everything.
 % Abstract (recommended length around 80-200 words; this is not a copy of your thesis assignment!)
 \def\Abstract{%
 
-We investigate a problem in semi-online algorithm design, called
+We investigate a problem in semi-online algorithm design called
 Online Bin Stretching. The problem can be understood as an online
 repacking problem: the goal of the algorithm is to repack items of
 various sizes into $m$ containers of identical size $R>1$. The input
 items arrive one by one and the algorithm must assign an item to a
 container before the next item arrives.
 
-A speciality of this problem is that there is a specific guarantee
+A specialty of this problem is that there is a specific guarantee
 made to the algorithm: the algorithm learns at the start of the input
 that there exists a packing of all input items into $m$ containers of
 capacity $1$.
@@ -160,7 +175,7 @@ the setting of just $3$ containers; this algorithm is able to pack
 into 3 bins of capacity $1.375$. Finally, we design and implement an
 involved search algorithm which is able to find lower bounds for
 Online Bin Stretching -- and in fact we show the best known lower
-bounds for $3 \le m \le 9$.
+bounds for $3 \le m \le 8$.
 }
 
 % 3 to 5 keywords (recommended), each enclosed in curly braces

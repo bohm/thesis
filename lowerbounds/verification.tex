@@ -1,6 +1,7 @@
-\subsection{Verification}
+\newpage
+\section{Verification}\label{sec:4:verification}
 
-For our lower bounds of $19/14$ for $4 \le m \le 9$ we do not have a
+For our lower bounds of $19/14$ for $4 \le m \le 8$ we do not have a
 printable version of the game tree, as it contains too many vertices.
 
 However, we include the lower bounds in the \texttt{graphviz}
@@ -8,9 +9,9 @@ representation as part of our software appendix. We have published the
 lower bound software and the lower bound data at
 \url{https://github.com/bohm/binstretch/}.
 
-Our lower bound implementation is extremely large in terms of number
-of lines of code and we cannot in good faith vouch for it to not
-contain any errors. At the same time, we do not expect the reader
+Our lower bound implementation is quite large in terms of number of
+lines of code (8174 lines) and we cannot in good faith vouch for it to
+not contain any errors. At the same time, we do not expect the reader
 to check all the lower bound trees by hand, even though it is possible
 for a smaller tree such as the one in the next section.
 
@@ -21,3 +22,90 @@ are present. While verifying our lower bound manually may be
 laborious, erifying the correctness of the C++ program should be
 manageable. The verifier is available along with the lower bound
 search code and lower bound data.
+
+
+\subsection{Game tree format}\label{sec:4:outputformat}
+
+We now describe our output format for the lower bound directed acyclic
+graph that our implementation produces. This may be of use to those
+who wish to write an independent verification software.
+
+The output format is a valid \texttt{graphviz} file format, which
+means it can be converted directly into a graphical representation
+using the open-source graphviz library using a command such as:
+\begin{lstlisting}[language=bash,numbers=none]
+$ dot -Tpdf 45_33_3bins.dot > 45_33_3bins.pdf
+\end{lstlisting}
+The starting lines of the lower bound tree are the following:
+
+\begin{lstlisting}
+strict digraph sapling1 {
+overlap = none;
+// 6: 5 1 1 1 1 1
+\end{lstlisting}
+
+The third line is technically a comment in the \texttt{graphviz}
+format; it contains the number of items already packed into the root
+of the game tree (or sapling, see Section~\ref{sec:4:advpruning}).  The
+number of items is then followed by an enumeration of such items.
+
+The rest of the graph is the description of vertices (game states) and
+edges (transitions between game states). Every vertex in the output
+graph corresponds to a game state for the player \adversary; the game
+states for the player \algo correspond to outgoing edges.
+
+A typical vertex representation (in this case, a root) might be:
+
+\begin{lstlisting}
+66 [label="5 2 1 1 1 0 0 0 n:4"];
+66 -> 41530
+66 -> 41529
+66 -> 41528
+66 -> 41248
+\end{lstlisting}
+
+The first number on each line is an \emph{id} of the vertex. As these
+come from our lower bound algorithm (which will inevitably prune some
+vertices), the numbers might not be contiguous or starting from
+0.
+
+Notice that the root can also have an arbitrary id number as well; we
+assume that the root is always the first listed vertex in any output
+tree.
+
+The first line of the vertex defines the loads of the bins of player
+\algo along with the next item to be sent (4 in our case).
+
+The following lines define all outgoing edges from the vertex; as
+mentioned above, these correspond to the possible packings of the next
+item by the player \algo. It is guaranteed that the target vertex for
+every edge exists in the output description.
+
+If the vertex is a heuristic vertex, its description may be one of the
+following:
+
+\begin{lstlisting}
+107982 [label="9 5 5 4 4 4 2 1 h:FN (1)"];
+107981 [label="9 5 5 5 4 4 2 0 h:(14,5)"];
+\end{lstlisting}
+
+These are the only two adversarial pruning heuristics present in the
+tree; see Section~\ref{sec:4:advpruning} for their specification. In
+the example above, the next move for the first vertex describes a
+\emph{five-nine} heuristic that will send 1 item of size 5 and after
+that items of size either 9 or 14, as explained in
+Section~\ref{sec:4:advpruning}).
+
+The strategy listed in the vertex on line 2 is the \emph{large item
+heuristic}.  The two numbers describe the size of the incoming items
+and their amount. In our example, we see that sending 5 items of size
+14 will force one bin to be loaded to at least 19.
+
+As can be expected, the final line of the input is closing the curly
+bracket at the start.
+
+Our output format is inherently designed for converting to a graphical
+form. A consequence of that is that there are no item lists in any of
+the vertices, only the next item that will be sent. Any verification
+algorithm is required to reconstruct the item lists from the tree
+structure.
