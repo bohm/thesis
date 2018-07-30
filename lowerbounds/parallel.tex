@@ -84,7 +84,7 @@ imply a shorter running time and a similar amount of tasks.
 \paragraph{Saplings.} Our implementation also allows us to pre-select
 some initial strategy for the player \adversary in advance. This way
 we can use our (so far limited) intuitive understanding of what is a
-good initial move and decrease the time needed to evalate the whole
+good initial move and decrease the time needed to evaluate the whole
 tree.
 
 A particularly good strategy for the lower bound of $19/14$ seems to
@@ -140,7 +140,7 @@ When the generating process reaches a fixed vertex with outdegree
 non-zero, it will just move along the created out-edges and will not
 create a new ones.
 
-Once it reaches a vertex with oudegree zero (a task in the previous
+Once it reaches a vertex with outdegree zero (a task in the previous
 iteration) it will again start generating all possible items allowed
 to be sent by the player \adversary, up until the new task thresholds
 are reached. We send these tasks are sent to the worker processes
@@ -160,5 +160,5 @@ computer; this functionality is present in the latest version of the
 MPI standard, MPI-3.0. However, after implementing the shared memory
 functionality, we have noticed some slowdown of the worker processes
 when the shared memory was large (more than 1 gigabyte). This forced
-us into the heterogenous model that we use right now.
+us into the heterogeneous model that we use right now.
 
